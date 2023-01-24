@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Website Builder Template</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"    content="width=device-width, initial-scale=1">
+    <meta name="description" content="Website Builder Template">
+    <!-- Chrome, Firefox OS and Opera -->
+    <meta name="theme-color" content="#fff">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#fff">
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Website Builder Template">
+    <link rel="apple-touch-icon" href="imgs/logo.png">
+    <link rel="icon" type="image/vnd.microsoft.icon" href="favicon.ico">
+    <link rel="shortcut icon" href="imgs/logo.svg" type="image/x-icon">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="libraries/pico/docs/js/modal.min.js" defer></script>
+    <script src="libraries/panzoom/panzoom.mod.js" defer></script>
+    <script src="js/zoompan.js" defer></script>
+    <script src="js/theme.js" defer></script>
+    <script src="js/dialogs.js" defer></script>
+    <script src="js/components.js" defer></script>
+    <script src="js/app.js" defer></script>
+    <script src="js/palette.js" defer></script>
+  </head>
+  <body data-theme="dark">
+    <!-- Slide Menus -->
+    <dialog class="sidemenu left" data-dialog="leftmenu">
+      <article>
+        <a class="close"></a>
+
+        <h5>
+          Meta
+
+          <img class="icon" src="imgs/logo.svg">
+        </h5>
+        <input type="text" placeholder="Title..." value="" data-title>
+        <textarea placeholder="Description..." data-description></textarea>
+        
+        <strong>Palette</strong><br><br>
+        <div class="palette">
+          <section id="customization"></section>
+        </div>
+
+        <nav>
+          <ul>
+            <li>
+              <a href="javascript:clearData()" role="button" class="outline">
+                New
+              </a>
+              &nbsp;
+              <a href="javascript:exportSite()" role="button" class="outline contrast">
+                Export
+              </a>
+            </li>
+            <li>
+              <button data-href="https://michaelsboost.com/donate/">
+                Donate
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </article>
+    </dialog>
+    <dialog class="sidemenu right" data-dialog="rightmenu">
+      <article>
+        <a class="close"></a>
+
+        <input type="search" placeholder="Search..." list="componentstoadd" onkeyup="searchFunction()" onchange="searchFunction()" onfocus="this.select()">
+        <datalist id="componentstoadd"></datalist>
+
+        <ul data-navcontainer></ul>
+      </article>
+    </dialog>
+    
+    <!-- Modal That Just Fills Vertical Screen -->
+    <dialog class="fillmodal" data-dialog="fillmodal">
+      <article>
+        <a class="close"></a>
+
+        <div data-modal="assets">
+          <h3>Session Assets</h3>
+          <p>
+            <input type="file" data-file multiple>
+            <label for="deleteimgs">
+              <input type="checkbox" id="deleteimgs">
+              Delete Images
+            </label>
+            <div data-assets></div>
+          </p>
+        </div>
+        <div data-modal="help">
+          <h3>FAQ</h3>
+          <p>
+            <div style="text-align: center;">
+              <a href="#faq1">About</a> - 
+              <a href="#faq2">Learn</a> - 
+              <a href="#faq3">Features</a> - 
+              <a href="#faq4">Video</a>
+            </div>
+
+            <p>
+              <strong>About</strong>
+              <article id="faq1">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et quaerat voluptates ducimus laudantium a officia vitae vel voluptatibus recusandae expedita quasi animi voluptatem aperiam pariatur, facere omnis molestiae reprehenderit sunt!
+              </article>
+              <article>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Amet, commodi. Quo, doloribus! Ullam aperiam amet atque sequi corporis. Voluptatibus autem sit dolores illum, error modi. Tempora nobis voluptate vero voluptatem!
+              </article>
+              <article>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Blanditiis voluptatum quasi quibusdam beatae qui, ab ipsa tenetur officiis nemo nesciunt perferendis debitis aspernatur praesentium quas obcaecati voluptates eum dicta tempore!`
+              </article>
+              <article>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Suscipit ad at dignissimos dolorum eveniet tenetur deserunt, dolores placeat necessitatibus accusamus unde consequuntur pariatur voluptates repellat quia deleniti illum corrupti voluptatum.
+              </article>
+            </p>
+            <p>
+              <strong>Learn</strong>
+              <article id="faq2">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et quaerat voluptates ducimus laudantium a officia vitae vel voluptatibus recusandae expedita quasi animi voluptatem aperiam pariatur, facere omnis molestiae reprehenderit sunt!
+              </article>
+              <article>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Amet, commodi. Quo, doloribus! Ullam aperiam amet atque sequi corporis. Voluptatibus autem sit dolores illum, error modi. Tempora nobis voluptate vero voluptatem!
+              </article>
+              <article>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Blanditiis voluptatum quasi quibusdam beatae qui, ab ipsa tenetur officiis nemo nesciunt perferendis debitis aspernatur praesentium quas obcaecati voluptates eum dicta tempore!`
+              </article>
+              <article>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Suscipit ad at dignissimos dolorum eveniet tenetur deserunt, dolores placeat necessitatibus accusamus unde consequuntur pariatur voluptates repellat quia deleniti illum corrupti voluptatum.
+              </article>
+            </p>
+            <p>
+              <strong>Features</strong>
+              <article id="faq3">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et quaerat voluptates ducimus laudantium a officia vitae vel voluptatibus recusandae expedita quasi animi voluptatem aperiam pariatur, facere omnis molestiae reprehenderit sunt!
+              </article>
+              <article>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Amet, commodi. Quo, doloribus! Ullam aperiam amet atque sequi corporis. Voluptatibus autem sit dolores illum, error modi. Tempora nobis voluptate vero voluptatem!
+              </article>
+              <article>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Blanditiis voluptatum quasi quibusdam beatae qui, ab ipsa tenetur officiis nemo nesciunt perferendis debitis aspernatur praesentium quas obcaecati voluptates eum dicta tempore!`
+              </article>
+              <article>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Suscipit ad at dignissimos dolorum eveniet tenetur deserunt, dolores placeat necessitatibus accusamus unde consequuntur pariatur voluptates repellat quia deleniti illum corrupti voluptatum.
+              </article>
+            </p>
+            <p>
+              <strong>Video</strong>
+              <article id="faq4">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et quaerat voluptates ducimus laudantium a officia vitae vel voluptatibus recusandae expedita quasi animi voluptatem aperiam pariatur, facere omnis molestiae reprehenderit sunt!
+              </article>
+              <article>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Amet, commodi. Quo, doloribus! Ullam aperiam amet atque sequi corporis. Voluptatibus autem sit dolores illum, error modi. Tempora nobis voluptate vero voluptatem!
+              </article>
+              <article>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Blanditiis voluptatum quasi quibusdam beatae qui, ab ipsa tenetur officiis nemo nesciunt perferendis debitis aspernatur praesentium quas obcaecati voluptates eum dicta tempore!`
+              </article>
+              <article>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Suscipit ad at dignissimos dolorum eveniet tenetur deserunt, dolores placeat necessitatibus accusamus unde consequuntur pariatur voluptates repellat quia deleniti illum corrupti voluptatum.
+              </article>
+            </p>
+          </p>
+        </div>
+      </article>
+    </dialog>
+
+    <!-- canvas -->
+    <div class="canvas-container">
+      <div class="canvas" data-canvas data-theme="light" data-generatedtheme="generated">
+        <!-- Slide Menus -->
+        <dialog id="left" class="sidemenu left">
+          <article>
+            <a href="#close"
+              aria-label="Close"
+              class="close"
+              data-target="left">
+            </a>
+    
+            <img src="imgs/image.jpeg" alt="Image">
+    
+            <nav>
+              <ul>
+                <li>
+                  <a href="#">
+                    Link
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    Link
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    Link
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    Link
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    Link
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    Link
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    Link
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    Link
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    Link
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    Link
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    Link
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    Link
+                  </a>
+                </li>
+                <li>
+                  <a href="#" role="button">
+                    Button
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </article>
+        </dialog>
+        <dialog id="right" class="sidemenu right">
+          <article>
+            <a href="#close"
+              aria-label="Close"
+              class="close"
+              data-target="right">
+            </a>
+    
+            <img src="imgs/image.jpeg" alt="Image">
+            
+            <nav>
+              <ul>
+                <li>
+                  <a href="#">
+                    Link
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    Link
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    Link
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    Link
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    Link
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    Link
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    Link
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    Link
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    Link
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    Link
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    Link
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    Link
+                  </a>
+                </li>
+                <li>
+                  <a href="#" role="button">
+                    Button
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </article>
+        </dialog>
+    
+        <!-- Modal -->
+        <dialog id="modal">
+          <article>
+            <a href="#close"
+              aria-label="Close"
+              class="close"
+              data-target="mainmodal">
+            </a>
+            <h3>Confirm your action!</h3>
+            <p>
+              Cras sit amet maximus risus. 
+              Pellentesque sodales odio sit amet augue finibus pellentesque. 
+              Nullam finibus risus non semper euismod.
+            </p>
+            <footer>
+              <a href="#cancel"
+                role="button"
+                class="secondary"
+                data-target="modal"
+                onClick="toggleModal(event)">
+                Cancel
+              </a>
+              <a href="#confirm"
+                role="button"
+                data-target="modal"
+                onClick="toggleModal(event)">
+                Confirm
+              </a>
+            </footer>
+          </article>
+        </dialog>
+        
+        <!-- Modal That Just Fills Vertical Screen -->
+        <dialog id="fillmodal" class="fillmodal">
+          <article>
+            <a href="#close"
+              aria-label="Close"
+              class="close"
+              data-target="fillmainmodal">
+            </a>
+            <h3>Confirm your action!</h3>
+            <p>
+              Cras sit amet maximus risus. 
+              Pellentesque sodales odio sit amet augue finibus pellentesque. 
+              Nullam finibus risus non semper euismod.
+            </p>
+            <p class="fr">
+              <a href="#cancel"
+                role="button"
+                class="secondary"
+                data-target="fillmodal"
+                onClick="toggleModal(event)">
+                Cancel
+              </a>
+              <a href="#confirm"
+                role="button"
+                data-target="fillmodal"
+                onClick="toggleModal(event)">
+                Confirm
+              </a>
+            </p>
+          </article>
+        </dialog>
+    
+        <!-- Fullscreen Modal -->
+        <dialog id="fullmodal" class="fullmodal">
+          <article>
+            <a href="#close"
+              aria-label="Close"
+              class="close"
+              data-target="fullmainmodal">
+            </a>
+            <h3>Confirm your action!</h3>
+            <p>
+              Cras sit amet maximus risus. 
+              Pellentesque sodales odio sit amet augue finibus pellentesque. 
+              Nullam finibus risus non semper euismod.
+            </p>
+            <p class="fr">
+              <a href="#cancel"
+                role="button"
+                class="secondary"
+                data-target="fullmodal"
+                onClick="toggleModal(event)">
+                Cancel
+              </a>
+              <a href="#confirm"
+                role="button"
+                data-target="fullmodal"
+                onClick="toggleModal(event)">
+                Confirm
+              </a>
+            </p>
+          </article>
+        </dialog>
+        
+        <div class="container-fluid head"></div>
+        <div class="container-fluid body"></div>
+        <div class="container-fluid footer"></div>
+      </div>
+    </div>
+
+    <!-- top left menu -->
+    <div class="topleft menu">
+      <button data-opendialog="leftmenu">
+          <i class="fa fa-bars"></i>
+      </button>
+    </div>
+
+    <!-- top right menu -->
+    <div class="topright menu">
+      <button class="active" data-zoom>
+        <i class="fa fa-light fa-magnifying-glass-plus"></i>
+      </button>
+      <button data-rotate>
+        <i class="fa fa-rotate"></i>
+      </button>
+      <button data-device="mobile">
+        <i class="fa fa-mobile"></i>
+      </button>
+      <button data-toggletheme="light">
+        <i class="fa fa-light fa-sun"></i>
+      </button>
+    </div>
+
+    <!-- bottom menu -->
+    <div class="bottomright menu">
+      <div class="elements">
+        <button data-opendialog="rightmenu">
+            <i class="fa fa-plus"></i>
+        </button>
+        <button data-open="assets" data-opendialog="fillmodal">
+            <i class="fa fa-image"></i>
+        </button>
+        <button data-open="help" data-opendialog="fillmodal">
+            <i class="fa fa-question"></i>
+        </button>
+        <a href="https://michaelsboost.com/donate/" target="_blank">
+          <button>
+            <i class="fa fa-heart"></i>
+          </button>
+        </a>
+      </div>
+    </div>
+  </body>
+</html>
