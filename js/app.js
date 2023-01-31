@@ -27,7 +27,7 @@ clearData = () => {
 
 // export
 exportSite = () => {
-  alert('Stricktly for demo purposes only!')
+  alert('Strictly for demo purposes only!')
 }
 
 // check localStorage
