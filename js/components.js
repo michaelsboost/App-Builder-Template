@@ -1,107 +1,207 @@
-// variables
-let cardText, componentCard, componentImgs, elmCode = [];
-const componentHead       = document.querySelectorAll('[data-dialog=rightmenu] h5')
-const componentsContainer = document.querySelectorAll('[data-component]')
-const componentsHome      = document.querySelector('[data-navcontainer]')
-const searchElm           = document.querySelector('input[list=componentstoadd]')
+initComponents = () => {
+  // variables
+  let cardText, componentCard, componentImgs, elmCode = [];
+  const componentHead       = document.querySelectorAll('[data-dialog=rightmenu] h5')
+  const componentsContainer = document.querySelectorAll('[data-component]')
+  const componentsHome      = document.querySelector('[data-navcontainer]')
+  const searchElm           = document.querySelector('input[list=componentstoadd]')
+  const canvas              = document.querySelector('[data-canvas]')
 
-// components are stored in this object
-let componentsArr = ['components', 'layout'];
-let components = {
-  components: [
-    {
-      text: 'navigation',
-      image: 'imgs/image.jpeg',
-      code: '<nav class="container-fluid">\n      <ul>\n        <li>\n          Company name\n        </li>\n      </ul>\n      <ul>\n        <li>\n          <a href="#">\n            Examples\n          </a>\n        </li>\n        <li>\n          <a href="#">\n            Docs\n          </a>\n        </li>\n        <li>\n          <a href="#">\n            <i class="fa-brands fa-github-alt"></i>\n          </a>\n        </li>\n      </ul>\n    </nav>'
-    }
-  ],
-  layout: [
-    {
-      text: 'hero',
-      image: 'imgs/image.jpeg',
-      code: '<header>\n      <div class="container">\n        <hgroup>\n          <h1 class="animated slideInLeft">My Awesome Heading</h1>\n          <h3 class="animated zoomInDown">My awesome sub-heading</h3>\n        </hgroup>\n        <p class="animated zoomInUp">\n          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorum, nesciunt.\n        </p>\n        <p>\n          <a href="#" role="button" class="secondary animated bounce">Link</a>\n          <a href="#" role="button" class="contrast outline animated bounce">Link</a>\n        </p>\n      </div>\n    </header>'
-    },
-    {
-      text: 'grid',
-      image: 'imgs/image.jpeg',
-      code: '<main class="animated fadeIn">\n      <section>\n        <div class="container">\n          <hgroup>\n            <h1>My Awesome Heading</h1>\n            <h3>My awesome sub-heading</h3>\n          </hgroup>\n          <div class="grid">\n            <div>\n              <i class="fa fa-star"></i>\n              <h4>My awesome title</h4>\n              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus, autem.</p>\n            </div>\n            <div>\n              <i class="fa fa-star"></i>\n              <h4>My awesome title</h4>\n              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus, autem.</p>\n            </div>\n            <div>\n              <i class="fa fa-star"></i>\n              <h4>My awesome title</h4>\n              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus, autem.</p>\n            </div>\n            <div>\n              <i class="fa fa-star"></i>\n              <h4>My awesome title</h4>\n              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus, autem.</p>\n            </div>\n          </div>\n        </div>\n      </section>\n    </main>'
-    }
-  ]
-}
-
-// first append the components array
-for (i = 0; i < componentsArr.length; i++) {
-  document.querySelector('[data-navcontainer]').innerHTML += '<li><div><h5>'+ componentsArr[i] +'</h5><section data-component="'+ componentsArr[i] +'"></section></div></li>'
-
-  // first add image
-  let search = components[componentsArr[i]]
-  str = ''
-  for (num = 0; num < search.length; num++) {
-    str += '<article><p><a href="#"><img src="'+ search[num].image +'"></a></p><p>'+ search[num].text +'</p></article>'
-    componentCard = document.querySelector('[data-component='+ componentsArr[i] +']')
-    componentCard.innerHTML = str
-    componentImgs = document.querySelector('[data-navcontainer]').querySelectorAll('img')
-
-    // if image is clicked append code
-    elmCode.push(search[num].code)
-
-    // update searchbox datalist
-    document.getElementById('componentstoadd').innerHTML += '<option value="'+ search[num].text +'"></option>'
-  }
-}
-componentImgs.forEach((e, index) => {
-  e.onclick = () => {
-    // add to the canvas
-    canvas.querySelector('.body').innerHTML += elmCode[index]
-    updateStorage()
-  }
-})
-
-// search
-searchFunction = () => {
-  cardText = componentsHome.querySelectorAll('li > div > section > article > p:last-child')
-  let val = searchElm.value.toLowerCase()
-
-  // display all components if there's no value
-  if (!val) {
-    for (i = 0; i < cardText.length; i++) {
-      let a = cardText[i]
-
-      let categoryContainer = a.parentElement.parentElement.parentElement
-      let componentsContainer = componentsHome.querySelectorAll('li > div')
-
-      a.parentElement.style.display = ''
-      for (num = 0; num < componentsContainer.length; num++) {
-        componentsContainer[num].style.display = ''
+  // components are stored in this object
+  let componentsArr = ['basic', 'advanced', 'input', 'components'];
+  let components = {
+    basic: [
+      {
+        text: 'button',
+        image: 'imgs/image.jpeg',
+        code: '<button>Button</button>'
+      },
+      {
+        text: 'text',
+        image: 'imgs/image.jpeg',
+        code: '<span>text</span>'
+      },
+      {
+        text: 'video',
+        image: 'imgs/image.jpeg',
+        code: '<iframe width="923" height="519" src="https://www.youtube.com/embed/YI0a_PzIZk0" title="Introducing TouchDrawer - a free and open source svg vector drawing app" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>'
       }
-    }
-    return false
+    ],
+    advanced: [
+      {
+        text: 'badge',
+        image: 'imgs/image.jpeg',
+        code: '<span>text</span>'
+      },
+      {
+        text: 'card',
+        image: 'imgs/image.jpeg',
+        code: '<span>card</span>'
+      },
+      {
+        text: 'audio player',
+        image: 'imgs/image.jpeg',
+        code: '<span>audio player</span>'
+      },
+      {
+        text: 'audio player progress indicator',
+        image: 'imgs/image.jpeg',
+        code: '<span>audio player progress indicator</span>'
+      },
+      {
+        text: 'audio player volume indicator',
+        image: 'imgs/image.jpeg',
+        code: '<span>audio player volume indicator</span>'
+      }
+    ],
+    input: [
+      {
+        text: 'checkbox',
+        image: 'imgs/image.jpeg',
+        code: '<input type="checkbox" name="checkbox">'
+      },
+      {
+        text: 'radio buttons',
+        image: 'imgs/image.jpeg',
+        code: '<input id="radio1" type="radio" name="radio"> <label for="radio1">Item 1</label>\n<input id="radio2" type="radio" name="radio"> <label for="radio2">Item 2</label>\n<input id="radio3" type="radio" name="radio"> <label for="radio3">Item 3</label>'
+      },
+      {
+        text: 'text field',
+        image: 'imgs/image.jpeg',
+        code: '<input id="text" type="text" name="text">'
+      },
+      {
+        text: 'search field',
+        image: 'imgs/image.jpeg',
+        code: '<input id="search" type="search" name="search">'
+      },
+      {
+        text: 'file',
+        image: 'imgs/image.jpeg',
+        code: '<input id="file" type="file" name="file">'
+      },
+      {
+        text: 'range',
+        image: 'imgs/image.jpeg',
+        code: '<input id="range" type="range" name="range" min="0" max="100" value="50">'
+      },
+      {
+        text: 'date',
+        image: 'imgs/image.jpeg',
+        code: '<input id="date" type="date" name="date">'
+      },
+      {
+        text: 'time',
+        image: 'imgs/image.jpeg',
+        code: '<input id="time" type="time" name="time">'
+      },
+      {
+        text: 'number',
+        image: 'imgs/image.jpeg',
+        code: '<input id="number" type="number" name="number">'
+      },
+      {
+        text: 'color picker',
+        image: 'imgs/image.jpeg',
+        code: '<input type="color" name="color" value="#00f">'
+      }
+    ],
+    components: [
+      {
+        text: 'Top Navbar',
+        image: 'imgs/image.jpeg',
+        code: '<span>top navbar</span>'
+      }
+    ]
   }
 
-  // only show elements that match search critera
-  for (i = 0; i < cardText.length; i++) {
-    let a = cardText[i]
-    txtValue = a.textContent;
+  // first append the components array
+  for (i = 0; i < componentsArr.length; i++) {
+    document.querySelector('[data-navcontainer]').innerHTML += '<li><div><h5 class="mt-12 mb-6 text-2xl">'+ componentsArr[i] +'</h5><section data-component="'+ componentsArr[i] +'" class="grid grid-cols-2"></section></div></li>'
 
-    // check if component text matches search value
-    if (txtValue.toLowerCase().indexOf(val) > -1) {
-      // filtered item category (div)
-      let categoryContainer = a.parentElement.parentElement.parentElement
-      let componentsContainer = componentsHome.querySelectorAll('li > div')
+    // first add image
+    let search = components[componentsArr[i]]
+    str = ''
+    for (num = 0; num < search.length; num++) {
+      str += '<article class="m-4 p-4 text-center rounded-lg bg-[#18232c] shadow-lg"><p><a href="#"><img class="w-full rounded-lg" src="'+ search[num].image +'"></a></p><p class="mt-2">'+ search[num].text +'</p></article>'
+      componentCard = document.querySelector('[data-component='+ componentsArr[i] +']')
+      componentCard.innerHTML = str
+      componentImgs = document.querySelector('[data-navcontainer]').querySelectorAll('img')
 
-      // only show filtered item
-      a.parentElement.style.display = ''
+      // if image is clicked append code
+      elmCode.push(search[num].code)
 
-      // handles display of the parent category name
-      for (num = 0; num < componentsContainer.length; num++) {
-        componentsContainer[num].style.display = 'none'
-        categoryContainer.style.display = ''
+      // update searchbox datalist
+      document.getElementById('componentstoadd').innerHTML += '<option value="'+ search[num].text +'"></option>'
+    }
+  }
+  componentImgs.forEach((e, index) => {
+    e.onclick = () => {
+      // add to the canvas
+      canvas.innerHTML += elmCode[index]
+      updateStorage()
+    }
+  })
+
+  // search
+  searchFunction = () => {
+    const labelBtn =  document.querySelector('label[for=searchcomponentstoadd')
+
+    if (searchcomponentstoadd.value) {
+      labelBtn.innerHTML = '<i class="fa fa-times text-xl -ml-9 cursor-pointer"></i>'
+      labelBtn.querySelector('.fa-times').onclick = () => {
+        searchcomponentstoadd.value = ''
+        labelBtn.innerHTML = '<i class="fa fa-search -ml-9 cursor-text"></i>'
       }
     } else {
-      a.parentElement.style.display = 'none'
-      for (num = 0; num < componentsContainer.length; num++) {
-        componentsContainer[num].style.display = 'none'
+      labelBtn.innerHTML = '<i class="fa fa-search -ml-9 cursor-text"></i>'
+    }
+
+    cardText = componentsHome.querySelectorAll('li > div > section > article > p:last-child')
+    let val = searchElm.value.toLowerCase()
+
+    // display all components if there's no value
+    if (!val) {
+      for (i = 0; i < cardText.length; i++) {
+        let a = cardText[i]
+
+        let categoryContainer = a.parentElement.parentElement.parentElement
+        let componentsContainer = componentsHome.querySelectorAll('li > div')
+
+        a.parentElement.style.display = ''
+        for (num = 0; num < componentsContainer.length; num++) {
+          componentsContainer[num].style.display = ''
+        }
+      }
+      return false
+    }
+
+    // only show elements that match search critera
+    for (i = 0; i < cardText.length; i++) {
+      let a = cardText[i]
+      txtValue = a.textContent;
+
+      // check if component text matches search value
+      if (txtValue.toLowerCase().indexOf(val) > -1) {
+        // filtered item category (div)
+        let categoryContainer = a.parentElement.parentElement.parentElement
+        let componentsContainer = componentsHome.querySelectorAll('li > div')
+
+        // only show filtered item
+        a.parentElement.style.display = ''
+
+        // handles display of the parent category name
+        for (num = 0; num < componentsContainer.length; num++) {
+          componentsContainer[num].style.display = 'none'
+          categoryContainer.style.display = ''
+        }
+      } else {
+        a.parentElement.style.display = 'none'
+        for (num = 0; num < componentsContainer.length; num++) {
+          componentsContainer[num].style.display = 'none'
+        }
       }
     }
   }
 }
+initComponents()
