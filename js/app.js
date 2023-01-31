@@ -31,11 +31,11 @@ exportSite = () => {
 }
 
 // check localStorage
-if (!localStorage.getItem('BrikzBuildr')) {
+if (!localStorage.getItem('AppDesignerTemplate')) {
   document.querySelector('[data-title]').value       = appJSON.title
   document.querySelector('[data-description]').value = appJSON.description
 } else {
-  appJSON = JSON.parse(localStorage.getItem('BrikzBuildr'))
+  appJSON = JSON.parse(localStorage.getItem('AppDesignerTemplate'))
   
   document.querySelector('[data-title]').value       = appJSON.title
   document.querySelector('[data-description]').value = appJSON.description
