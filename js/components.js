@@ -22,6 +22,11 @@ initComponents = () => {
         code: '<span>text</span>'
       },
       {
+        text: 'image',
+        image: 'imgs/image.jpeg',
+        code: '<img src="imgs/image.jpeg">'
+      },
+      {
         text: 'video',
         image: 'imgs/image.jpeg',
         code: '<iframe width="923" height="519" src="https://www.youtube.com/embed/YI0a_PzIZk0" title="Introducing TouchDrawer - a free and open source svg vector drawing app" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>'
@@ -31,7 +36,7 @@ initComponents = () => {
       {
         text: 'badge',
         image: 'imgs/image.jpeg',
-        code: '<span>text</span>'
+        code: '<span>card</span>'
       },
       {
         text: 'card',
@@ -108,7 +113,7 @@ initComponents = () => {
     ],
     components: [
       {
-        text: 'Top Navbar',
+        text: 'top navbar',
         image: 'imgs/image.jpeg',
         code: '<span>top navbar</span>'
       }
@@ -140,6 +145,9 @@ initComponents = () => {
       // add to the canvas
       canvas.innerHTML += elmCode[index]
       updateStorage()
+
+      // close dialog
+      document.querySelector('[data-dialog].block').classList.remove('block')
     }
   })
 
