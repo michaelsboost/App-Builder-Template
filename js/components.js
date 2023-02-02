@@ -153,7 +153,7 @@ initComponents = () => {
 
   // search
   searchFunction = () => {
-    const labelBtn =  document.querySelector('label[for=searchcomponentstoadd')
+    const labelBtn = document.querySelector('label[for=searchcomponentstoadd')
 
     // toggle clear and search icon actions
     if (searchcomponentstoadd.value) {
@@ -168,14 +168,20 @@ initComponents = () => {
     }
 
     cardText = componentsHome.querySelectorAll('li > div > section > article > p:last-child')
-    let val = searchElm.value.toLowerCase()
+    let val  = searchElm.value.toLowerCase()
 
     // display all components if there's no value
     if (!val) {
+      // show all lists
+      document.querySelectorAll('[data-navcontainer] > li').forEach(child => {
+        child.style.display = ''
+      })
+
+      // show all component containers
       for (i = 0; i < cardText.length; i++) {
         let a = cardText[i]
 
-        let categoryContainer = a.parentElement.parentElement.parentElement
+        let categoryContainer   = a.parentElement.parentElement.parentElement
         let componentsContainer = componentsHome.querySelectorAll('li > div')
 
         a.parentElement.style.display = ''
@@ -188,23 +194,30 @@ initComponents = () => {
 
     // only show elements that match search critera
     for (i = 0; i < cardText.length; i++) {
-      let a = cardText[i]
+      let a    = cardText[i]
       txtValue = a.textContent;
 
       // check if component text matches search value
       if (txtValue.toLowerCase().indexOf(val) > -1) {
         // filtered item category (div)
-        let categoryContainer = a.parentElement.parentElement.parentElement
-        let componentsContainer = componentsHome.querySelectorAll('li > div')
+        let categoryContainer   = a.parentElement.parentElement.parentElement
+        let componentsContainer = componentsHome.querySelectorAll('li > div > section > article')
 
         // only show filtered item
         a.parentElement.style.display = ''
 
-        // handles display of the parent category name
-        for (num = 0; num < componentsContainer.length; num++) {
-          componentsContainer[num].style.display = 'none'
-          categoryContainer.style.display = ''
-        }
+        // hide all lists
+        document.querySelectorAll('[data-navcontainer] > li').forEach(child => {
+          child.style.display = 'none'
+        })
+
+        // only show list for the item that's visible 
+        const elm = document.querySelectorAll('[data-navcontainer] > li > div > section > article')
+        elm.forEach(child => {
+          if (child.style.display === '') {
+            child.parentElement.parentElement.parentElement.style.display = ''
+          }
+        })
       } else {
         a.parentElement.style.display = 'none'
         for (num = 0; num < componentsContainer.length; num++) {
