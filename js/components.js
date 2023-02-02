@@ -122,7 +122,7 @@ initComponents = () => {
 
   // first append the components array
   for (i = 0; i < componentsArr.length; i++) {
-    document.querySelector('[data-navcontainer]').innerHTML += '<li><div><h5 class="mt-12 mb-6 text-2xl">'+ componentsArr[i] +'</h5><section data-component="'+ componentsArr[i] +'" class="grid grid-cols-2"></section></div></li>'
+    document.querySelector('[data-navcontainer]').innerHTML += '<li class="mb-12"><div><h5 class="mb-6 text-2xl">'+ componentsArr[i] +'</h5><section data-component="'+ componentsArr[i] +'" class="grid grid-cols-2"></section></div></li>'
 
     // first add image
     let search = components[componentsArr[i]]
@@ -155,11 +155,13 @@ initComponents = () => {
   searchFunction = () => {
     const labelBtn =  document.querySelector('label[for=searchcomponentstoadd')
 
+    // toggle clear and search icon actions
     if (searchcomponentstoadd.value) {
       labelBtn.innerHTML = '<i class="fa fa-times text-xl -ml-9 cursor-pointer"></i>'
       labelBtn.querySelector('.fa-times').onclick = () => {
         searchcomponentstoadd.value = ''
         labelBtn.innerHTML = '<i class="fa fa-search -ml-9 cursor-text"></i>'
+        searchcomponentstoadd.onchange()
       }
     } else {
       labelBtn.innerHTML = '<i class="fa fa-search -ml-9 cursor-text"></i>'
