@@ -17,6 +17,7 @@
     <link rel="apple-touch-icon" href="imgs/logo.svg">
     <link rel="shortcut icon" href="imgs/logo.svg" type="image/x-icon">
     <link rel="stylesheet" href="css/style.css">
+    <!-- <script src="js/import.js" defer></script> -->
     <script src="libraries/tailwind/tailwind.min.js" defer></script>
     <script src="libraries/panzoom/panzoom.mod.js" defer></script>
     <script src="js/zoompan.js" defer></script>
@@ -37,10 +38,18 @@
 
           <img class="cursor-pointer w-10 h-10 float-right" src="imgs/logo.svg">
         </h5>
-        <input class="block w-full mb-5 p-3 bg-[#11191f] text-white border border-solid border-[#374956] rounded-md text-lg outline-none outline-offset-0 focus:outline-2 focus:outline-[#1095c140]" type="text" placeholder="Title..." value="" data-title onkeyup="updateStorage()" onchange="updateStorage()">
-        <textarea class="block w-full h-44 mb-5 p-3 bg-[#11191f] text-white border border-solid border-[#374956] rounded-md text-lg resize-y outline-none outline-offset-0 focus:outline-2 focus:outline-[#1095c140]" placeholder="Description..." data-description onkeyup="updateStorage()" onchange="updateStorage()"></textarea>
-        <input class="block w-full mb-5 p-3 bg-[#11191f] text-white border border-solid border-[#374956] rounded-md text-lg outline-none outline-offset-0 focus:outline-2 focus:outline-[#1095c140]" type="text" placeholder="https://yourwebsite.com/" value="" data-website onkeyup="updateStorage()" onchange="updateStorage()">
-        <textarea class="block w-full h-44 mb-5 p-3 bg-[#11191f] text-white border border-solid border-[#374956] rounded-md text-lg resize-y outline-none outline-offset-0 focus:outline-2 focus:outline-[#1095c140]" placeholder="Paste your Google Analytics code snippet here or paste any other code that you want to have on every page immediately after the opening <body> tag." data-googleanalytics onkeyup="updateStorage()" onchange="updateStorage()"></textarea>
+
+        <div class="h-[calc(100%-12rem)] overflow-auto">
+          <input class="block w-full mb-5 p-3 bg-[#11191f] text-white border border-solid border-[#374956] rounded-md text-lg outline-none outline-offset-0 focus:outline-2 focus:outline-[#1095c140]" type="text" placeholder="Title..." value="" data-title onkeyup="updateStorage()" onchange="updateStorage()">
+          <textarea class="block w-full h-44 mb-5 p-3 bg-[#11191f] text-white border border-solid border-[#374956] rounded-md text-lg resize-none outline-none outline-offset-0 focus:outline-2 focus:outline-[#1095c140]" placeholder="Description..." data-description onkeyup="updateStorage()" onchange="updateStorage()"></textarea>
+          <input class="block w-full mb-5 p-3 bg-[#11191f] text-white border border-solid border-[#374956] rounded-md text-lg outline-none outline-offset-0 focus:outline-2 focus:outline-[#1095c140]" type="text" placeholder="https://yourwebsite.com/" value="" data-website onkeyup="updateStorage()" onchange="updateStorage()">
+          <textarea class="block w-full h-44 mb-5 p-3 bg-[#11191f] text-white border border-solid border-[#374956] rounded-md text-lg resize-none outline-none outline-offset-0 focus:outline-2 focus:outline-[#1095c140]" placeholder="Paste your Google Analytics code snippet here or paste any other code that you want to have on every page immediately after the opening <body> tag." data-googleanalytics onkeyup="updateStorage()" onchange="updateStorage()"></textarea>
+
+          <h5 class="mt-12 mb-6 text-2xl">
+            Scratchpad
+          </h5>
+          <textarea class="block w-full h-44 p-3 bg-[#11191f] text-white border border-solid border-[#374956] rounded-md text-lg resize-none outline-none outline-offset-0 focus:outline-2 focus:outline-[#1095c140]" placeholder="Type something..." data-scratchpad onkeyup="updateStorage()" onchange="updateStorage()"></textarea>
+        </div>
 
         <div class="text-center mt-10 text-3xl">
           <a class="inline-block w-1/4 float-left" href="javascript:clearData()">
@@ -62,7 +71,7 @@
         </a>
 
         <div class="flex flex-start items-center">
-          <input class="inline-block w-[calc(100%-4rem)] py-3 pl-4 bg-[#11191f] text-white border border-solid border-[#374956] rounded-md text-lg outline-none outline-offset-0 focus:outline-2 focus:outline-[#1095c140]" id="searchcomponentstoadd" type="search" placeholder="Search..." list="componentstoadd" onkeyup="searchFunction()" onchange="searchFunction()" onfocus="this.select()">
+          <input class="inline-block w-[calc(100%-4rem)] py-3 pl-4 bg-[#11191f] text-white border border-solid border-[#374956] rounded-md text-lg outline-none outline-offset-0 focus:outline-2 focus:outline-[#1095c140]" id="searchcomponentstoadd" type="search" placeholder="Search" list="componentstoadd" onkeyup="searchFunction()" onchange="searchFunction()" onfocus="this.select()">
           <label for="searchcomponentstoadd">
             <i class="fa fa-search -ml-9 cursor-text"></i>
           </label>
@@ -80,11 +89,29 @@
           <i class="fa fa-times" data-close="fillmodal"></i>
         </a>
 
+        <div data-modal="properties">
+          <h5 class="mt-12 mb-6 text-2xl">
+            Properties
+          </h5>
+          <p>Customize attributes/properties coming soon...</p>
+        </div>
+        <div data-modal="icons">
+          <h5 class="mt-12 mb-6 text-2xl">
+            Icons
+          </h5>
+          <p>Icons coming soon...</p>
+        </div>
         <div data-modal="data">
           <h5 class="mt-12 mb-6 text-2xl">
             Data
           </h5>
           <p>Your data is empty...</p>
+        </div>
+        <div data-modal="actions">
+          <h5 class="mt-12 mb-6 text-2xl">
+            Actions
+          </h5>
+          <p>Your javascript actions are empty...</p>
         </div>
         <div data-modal="help">
           <h5 class="mt-12 mb-6 text-2xl">
@@ -99,7 +126,9 @@
 
     <!-- canvas -->
     <div class="absolute inset-0 p-0 overflow-hidden">
-      <div data-canvas class="relative overflow-auto bg-white" style="width: 360px; height: 740px;"></div>
+      <div data-canvas class="relative overflow-auto" style="width: 360px; height: 740px;" data-theme="light">
+        
+      </div>
     </div>
 
     <!-- top left menu -->
@@ -110,25 +139,40 @@
     </div>
 
     <!-- top right menu -->
-    <div class="absolute top-0 right-0 p-4 text-white">
+    <div class="absolute top-0 right-0 p-4 text-white whitespace-nowrap overflow-auto w-auto max-w-full">
       <button class="w-12 h-12 -mx-1 rounded-l-full bg-gray-800 text-blue-500" data-zoom="true">
         <i class="fa fa-light fa-magnifying-glass-plus"></i>
       </button>
       <button class="w-12 h-12 -mx-1 bg-gray-800" data-rotate>
         <i class="fa fa-rotate"></i>
       </button>
-      <button class="w-12 h-12 -mx-1 bg-gray-800 rounded-r-full" data-device="mobile">
+      <button class="w-12 h-12 -mx-1 bg-gray-800" data-device="mobile">
         <i class="fa fa-mobile"></i>
+      </button>
+      <button class="w-12 h-12 -mx-1 bg-gray-800 rounded-r-full" data-toggletheme="light">
+        <i class="fa fa-sun"></i>
       </button>
     </div>
 
     <!-- bottom menu -->
-    <div class="absolute bottom-0 right-0 py-0 px-4 mb-4 text-white">
+    <div class="absolute bottom-0 right-0 py-0 px-4 mb-4 text-white whitespace-nowrap overflow-auto w-auto max-w-full">
       <button class="w-12 h-12 -mx-1 rounded-l-full bg-gray-800" data-opendialog="rightmenu">
         <i class="fa fa-plus"></i>
       </button>
+      <button class="w-12 h-12 -mx-1 bg-gray-800 hidden" data-delete>
+        <i class="fa fa-times"></i>
+      </button>
+      <button class="w-12 h-12 -mx-1 bg-gray-800 hidden" data-properties>
+        <i class="fa fa-cog"></i>
+      </button>
+      <button class="w-12 h-12 -mx-1 bg-gray-800 hidden" data-open="icons" data-opendialog="fillmodal">
+        <i class="fa fa-icons"></i>
+      </button>
       <button class="w-12 h-12 -mx-1 bg-gray-800" data-open="data" data-opendialog="fillmodal">
         <i class="fa fa-database"></i>
+      </button>
+      <button class="w-12 h-12 -mx-1 bg-gray-800" data-open="actions" data-opendialog="fillmodal">
+        <i class="fa fa-bolt-lightning"></i>
       </button>
       <button class="w-12 h-12 -mx-1 bg-gray-800" data-open="help" data-opendialog="fillmodal">
         <i class="fa fa-question"></i>
