@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en-US" data-theme="light">
+  <head>
+    <title>App Builder Template</title>
+    <meta charset="utf-8" />
+    <meta name="description" content="Just an app builder template!">
+    <meta name="author" content="Michael Schwartz">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="manifest" href="manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="App Builder Template">
+    <meta name="apple-mobile-web-app-title" content="App Builder Template">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="hsl(207, 31%, 11%)">
+    <meta name="msapplication-navbutton-color" content="hsl(207, 31%, 11%)">
+    <meta name="msapplication-starturl" content="./index.html">
+    <link rel="apple-touch-icon" href="imgs/logo.png">
+    <link rel="icon" href="imgs/logo.svg" type="image/x-icon" />
+    <link rel="stylesheet" href="css/style.css">
+    
+    <script src="libraries/panzoom/panzoom.mod.js" defer></script>
+    <script src="libraries/quill/quill.min.js" defer></script>
+    <script src="libraries/jszip/Blob.js" defer></script>
+    <script src="libraries/jszip/FileSaver.js" defer></script>
+    <script src="libraries/jszip/jszip-utils.js" defer></script>
+    <script src="libraries/jszip/jszip.min.js" defer></script>
+    <script src="js/app.js" defer></script>
+  </head>
+  <body>
+    <!-- side Menus -->
+    <span class="hidden">
+      <input type="checkbox" id="theme">
+    </span>
+    <dialog data-opened="settings">
+      <article class="absolute inset-y-0 right-0 m-0 p-4 w-full max-w-xl max-h-full rounded-none overflow-auto">
+        <button aria-close role="button" class="p-0 w-auto max-h-full rounded-full border-0 float-right text-current bg-transparent">
+          <i class="fa fa-times"></i>
+        </button>
+
+        <h5 class="capitalize text-3xl">
+          settings
+        </h5>
+
+        <div class="hidden">
+          <input id="import"     type="file" accept="application/json" onchange="loadFile(this)">
+          <input id="importlogo" type="file" accept="image/png, image/jpeg, image/svg+xml" onchange="loadLogo(this)">
+        </div>
+
+        <h5 class="capitalize mt-10">
+          meta
+
+          <label for="importlogo" class="cursor-pointer float-right">
+            <img id="logo" class="h-10" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgoKPHN2ZwogICB3aWR0aD0iNTEyIgogICBoZWlnaHQ9IjUxMiIKICAgdmlld0JveD0iMCAwIDEzNS40NjY2NiAxMzUuNDY2NjciCiAgIHZlcnNpb249IjEuMSIKICAgaWQ9InN2ZzUiCiAgIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICAgeG1sbnM6c3ZnPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPGRlZnMKICAgICBpZD0iZGVmczIiIC8+CiAgPGcKICAgICBpZD0ibGF5ZXIxIj4KICAgIDxyZWN0CiAgICAgICBzdHlsZT0iZmlsbDojZmZmZmZmO3N0cm9rZS13aWR0aDowLjQyMzQ2MztzdHJva2UtbGluZWNhcDpyb3VuZDtzdHJva2UtbGluZWpvaW46cm91bmQiCiAgICAgICBpZD0icmVjdDIzNCIKICAgICAgIHdpZHRoPSI4MS4xODA0NDMiCiAgICAgICBoZWlnaHQ9IjgxLjQyOTMyMSIKICAgICAgIHg9IjI3LjE0MzEwOCIKICAgICAgIHk9IjI2Ljg5NDIyNCIgLz4KICAgIDxyZWN0CiAgICAgICBzdHlsZT0iZmlsbDojZmYzMzMzO2ZpbGwtb3BhY2l0eToxO3N0cm9rZS13aWR0aDowLjE0MTM3MTtzdHJva2UtbGluZWNhcDpyb3VuZDtzdHJva2UtbGluZWpvaW46cm91bmQiCiAgICAgICBpZD0icmVjdDIzNC0zLTYiCiAgICAgICB3aWR0aD0iMjcuMTQzMTA4IgogICAgICAgaGVpZ2h0PSIyNy4xNDMxMDgiCiAgICAgICB4PSItMy41NTI3MTM3ZS0xNSIKICAgICAgIHk9Ii0zLjU1MjcxMzdlLTE1IiAvPgogICAgPHJlY3QKICAgICAgIHN0eWxlPSJmaWxsOiNmZjY0MzM7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlLXdpZHRoOjAuMTQxMzcxO3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZCIKICAgICAgIGlkPSJyZWN0Mzk4IgogICAgICAgd2lkdGg9IjI3LjE0MzEwOCIKICAgICAgIGhlaWdodD0iMjcuMTQzMTA4IgogICAgICAgeD0iLTMuNTUyNzEzN2UtMTUiCiAgICAgICB5PSIyNi44OTQyMjQiIC8+CiAgICA8cmVjdAogICAgICAgc3R5bGU9ImZpbGw6I2ZmODEzMztmaWxsLW9wYWNpdHk6MTtzdHJva2Utd2lkdGg6MC4xNDEzNzE7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kIgogICAgICAgaWQ9InJlY3Q5NTQiCiAgICAgICB3aWR0aD0iMjcuMTQzMTA4IgogICAgICAgaGVpZ2h0PSIyNy4xNDMxMDgiCiAgICAgICB4PSItMy41NTI3MTM3ZS0xNSIKICAgICAgIHk9IjU0LjAzNzMzNCIgLz4KICAgIDxyZWN0CiAgICAgICBzdHlsZT0iZmlsbDojZmZjYzMzO2ZpbGwtb3BhY2l0eToxO3N0cm9rZS13aWR0aDowLjE0MTM3MTtzdHJva2UtbGluZWNhcDpyb3VuZDtzdHJva2UtbGluZWpvaW46cm91bmQiCiAgICAgICBpZD0icmVjdDk1NiIKICAgICAgIHdpZHRoPSIyNy4xNDMxMDgiCiAgICAgICBoZWlnaHQ9IjI3LjE0MzEwOCIKICAgICAgIHg9Ii0zLjU1MjcxMzdlLTE1IgogICAgICAgeT0iODEuMTgwNDM1IiAvPgogICAgPHJlY3QKICAgICAgIHN0eWxlPSJmaWxsOiNlNGZmMzM7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlLXdpZHRoOjAuMTQxMzcxO3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZCIKICAgICAgIGlkPSJyZWN0OTU4IgogICAgICAgd2lkdGg9IjI3LjE0MzEwOCIKICAgICAgIGhlaWdodD0iMjcuMTQzMTA4IgogICAgICAgeD0iLTMuNTUyNzEzN2UtMTUiCiAgICAgICB5PSIxMDguMzIzNTUiIC8+CiAgICA8cmVjdAogICAgICAgc3R5bGU9ImZpbGw6Izk5MzNmZjtmaWxsLW9wYWNpdHk6MTtzdHJva2Utd2lkdGg6MC4xNDEzNzE7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kIgogICAgICAgaWQ9InJlY3Q5NjIiCiAgICAgICB3aWR0aD0iMjcuMTQzMTA4IgogICAgICAgaGVpZ2h0PSIyNy4xNDMxMDgiCiAgICAgICB4PSIxMDguMzIzNTUiCiAgICAgICB5PSIwIiAvPgogICAgPHJlY3QKICAgICAgIHN0eWxlPSJmaWxsOiM0ZTMzZmY7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlLXdpZHRoOjAuMTQxMzcxO3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZCIKICAgICAgIGlkPSJyZWN0OTY0IgogICAgICAgd2lkdGg9IjI3LjE0MzEwOCIKICAgICAgIGhlaWdodD0iMjcuMTQzMTA4IgogICAgICAgeD0iMTA4LjMyMzU1IgogICAgICAgeT0iMjYuODk0MjI0IiAvPgogICAgPHJlY3QKICAgICAgIHN0eWxlPSJmaWxsOiMzMzY2ZmY7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlLXdpZHRoOjAuMTQxMzcxO3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZCIKICAgICAgIGlkPSJyZWN0OTY2IgogICAgICAgd2lkdGg9IjI3LjE0MzEwOCIKICAgICAgIGhlaWdodD0iMjcuMTQzMTA4IgogICAgICAgeD0iMTA4LjMyMzU1IgogICAgICAgeT0iNTQuMDM3MzM0IiAvPgogICAgPHJlY3QKICAgICAgIHN0eWxlPSJmaWxsOiMzM2I0ZmY7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlLXdpZHRoOjAuMTQxMzcxO3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZCIKICAgICAgIGlkPSJyZWN0OTY4IgogICAgICAgd2lkdGg9IjI3LjE0MzEwOCIKICAgICAgIGhlaWdodD0iMjcuMTQzMTA4IgogICAgICAgeD0iMTA4LjMyMzU1IgogICAgICAgeT0iODEuMTgwNDM1IiAvPgogICAgPHJlY3QKICAgICAgIHN0eWxlPSJmaWxsOiMzM2ZmZmY7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlLXdpZHRoOjAuMTQxMzcxO3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZCIKICAgICAgIGlkPSJyZWN0OTcwIgogICAgICAgd2lkdGg9IjI3LjE0MzEwOCIKICAgICAgIGhlaWdodD0iMjcuMTQzMTA4IgogICAgICAgeD0iMTA4LjMyMzU1IgogICAgICAgeT0iMTA4LjMyMzU1IiAvPgogICAgPHJlY3QKICAgICAgIHN0eWxlPSJmaWxsOiNmZjMzODE7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlLXdpZHRoOjAuMTQwNzIxO3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZCIKICAgICAgIGlkPSJyZWN0OTcyIgogICAgICAgd2lkdGg9IjI3LjE0MzEwOCIKICAgICAgIGhlaWdodD0iMjYuODk0MjI0IgogICAgICAgeD0iMjcuMTQzMTA4IgogICAgICAgeT0iLTMuNTUyNzEzN2UtMTUiIC8+CiAgICA8cmVjdAogICAgICAgc3R5bGU9ImZpbGw6I2ZmMzNjYztmaWxsLW9wYWNpdHk6MTtzdHJva2Utd2lkdGg6MC4xNDA3MjE7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kIgogICAgICAgaWQ9InJlY3Q5NzQiCiAgICAgICB3aWR0aD0iMjcuMTQzMTA4IgogICAgICAgaGVpZ2h0PSIyNi44OTQyMjQiCiAgICAgICB4PSI1NC4yODYyMTciCiAgICAgICB5PSItMy41NTI3MTM3ZS0xNSIgLz4KICAgIDxyZWN0CiAgICAgICBzdHlsZT0iZmlsbDojZTQzM2ZmO2ZpbGwtb3BhY2l0eToxO3N0cm9rZS13aWR0aDowLjE0MDcyMTtzdHJva2UtbGluZWNhcDpyb3VuZDtzdHJva2UtbGluZWpvaW46cm91bmQiCiAgICAgICBpZD0icmVjdDk3NiIKICAgICAgIHdpZHRoPSIyNy4xNDMxMDgiCiAgICAgICBoZWlnaHQ9IjI2Ljg5NDIyNCIKICAgICAgIHg9IjgxLjQyOTMyMSIKICAgICAgIHk9Ii0zLjU1MjcxMzdlLTE1IiAvPgogICAgPHJlY3QKICAgICAgIHN0eWxlPSJmaWxsOiM5OWZmMzM7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlLXdpZHRoOjAuMTQxMzcxO3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZCIKICAgICAgIGlkPSJyZWN0OTc4IgogICAgICAgd2lkdGg9IjI3LjE0MzEwOCIKICAgICAgIGhlaWdodD0iMjcuMTQzMTA4IgogICAgICAgeD0iMjcuMTQzMTA4IgogICAgICAgeT0iMTA4LjMyMzU1IiAvPgogICAgPHJlY3QKICAgICAgIHN0eWxlPSJmaWxsOiM0ZWZmMzM7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlLXdpZHRoOjAuMTQxMzcxO3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZCIKICAgICAgIGlkPSJyZWN0OTgwIgogICAgICAgd2lkdGg9IjI3LjE0MzEwOCIKICAgICAgIGhlaWdodD0iMjcuMTQzMTA4IgogICAgICAgeD0iNTQuMjg2MjE3IgogICAgICAgeT0iMTA4LjMyMzU1IiAvPgogICAgPHJlY3QKICAgICAgIHN0eWxlPSJmaWxsOiMzM2ZmYjQ7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlLXdpZHRoOjAuMTQxMzcxO3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZCIKICAgICAgIGlkPSJyZWN0OTgyIgogICAgICAgd2lkdGg9IjI3LjE0MzEwOCIKICAgICAgIGhlaWdodD0iMjcuMTQzMTA4IgogICAgICAgeD0iODEuNDI5MzIxIgogICAgICAgeT0iMTA4LjMyMzU1IiAvPgogICAgPGcKICAgICAgIGlkPSJnMzE0IgogICAgICAgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC43MDUwMDY4MywtMi4wNTg5NzA0KSI+CiAgICAgIDxwYXRoCiAgICAgICAgIHN0eWxlPSJmaWxsOm5vbmU7c3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjEuNTtzdHJva2UtbGluZWNhcDpyb3VuZDtzdHJva2UtbGluZWpvaW46cm91bmQ7c3Ryb2tlLWRhc2hhcnJheTpub25lO3N0cm9rZS1vcGFjaXR5OjEiCiAgICAgICAgIGQ9Im0gMzQuMDA1ODYzLDYyLjk2MTEzMyBjIDAsMCA2LjI1NjkzMiwtMTYuMjcwOTAyIDEzLjQxNzYsMCIKICAgICAgICAgaWQ9InBhdGgxNDkzNCIgLz4KICAgICAgPHBhdGgKICAgICAgICAgc3R5bGU9ImZpbGw6bm9uZTtzdHJva2U6IzAwMDAwMDtzdHJva2Utd2lkdGg6MS41O3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZDtzdHJva2UtZGFzaGFycmF5Om5vbmU7c3Ryb2tlLW9wYWNpdHk6MSIKICAgICAgICAgZD0ibSA4Ni42MzMxODksNjIuOTYxMTMzIGMgMCwwIDYuMjU2OTMyLC0xNi4yNzA5MDIgMTMuNDE3NjAxLDAiCiAgICAgICAgIGlkPSJwYXRoMTQ5MzQtNyIgLz4KICAgICAgPHBhdGgKICAgICAgICAgc3R5bGU9ImZpbGw6bm9uZTtzdHJva2U6IzAwMDAwMDtzdHJva2Utd2lkdGg6MS42ODEzODtzdHJva2UtbGluZWNhcDpyb3VuZDtzdHJva2UtbGluZWpvaW46cm91bmQ7c3Ryb2tlLWRhc2hhcnJheTpub25lO3N0cm9rZS1vcGFjaXR5OjEiCiAgICAgICAgIGQ9Im0gODQuNTc2LDQ4LjMwOTU5MSBjIDAsMCA4Ljc2NTk4OSwtMTAuMjEyMDAyIDE3LjUzMTk4LDAiCiAgICAgICAgIGlkPSJwYXRoMTQ5MzQtNy01IiAvPgogICAgICA8cGF0aAogICAgICAgICBzdHlsZT0iZmlsbDpub25lO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjY4MTM4O3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZDtzdHJva2UtZGFzaGFycmF5Om5vbmU7c3Ryb2tlLW9wYWNpdHk6MSIKICAgICAgICAgZD0ibSAzMS45NDg2NzMsNDguMzA5NTkxIGMgMCwwIDguNzY1OTg5LC0xMC4yMTIwMDIgMTcuNTMxOTc5LDAiCiAgICAgICAgIGlkPSJwYXRoMTQ5MzQtNy01LTMiIC8+CiAgICAgIDxwYXRoCiAgICAgICAgIGlkPSJyZWN0MTUxNjUiCiAgICAgICAgIHN0eWxlPSJzdHJva2Utd2lkdGg6MS41ODAwNjtzdHJva2UtbGluZWNhcDpyb3VuZDtzdHJva2UtbGluZWpvaW46cm91bmQiCiAgICAgICAgIGQ9Im0gNDkuMTE5OTk5LDcxLjk4NTQ0NyBjIC00LjY1NjY1MSwwIC04LjQwNTE3MiwzLjc0ODUyMSAtOC40MDUxNzIsOC40MDUxNzEgLTEuNjRlLTQsNy4yMTI3OTQgMjAuMjc1MDIzLDE2LjIzMzE0MSAyNi4zMTM2NCwxNi4yMzMxNDEgNi4wMzg2MTcsMCAyNi4zMTM2MzksLTguODM2OTk4IDI2LjMxMzYzOSwtMTYuMjMzMTQxIDAsLTQuNjU2NjUgLTMuNzQ5MDM4LC04LjQwNTE3MSAtOC40MDU2ODgsLTguNDA1MTcxIEggNjcuMDI4NDY3IFoiIC8+CiAgICA8L2c+CiAgPC9nPgo8L3N2Zz4K">
+          </label>
+        </h5>
+
+        <input    id="title"   type="text"   placeholder="Application name..."      onkeyup="app.updateStorage()" onchange="app.updateStorage()">
+        <textarea id="description"           placeholder="Description..."           onkeyup="app.updateStorage()" onchange="app.updateStorage()" class="h-40 resize-none"></textarea>
+        <input    id="version" type="number" placeholder="0.1" min="0.1" step="0.1" onkeyup="app.updateStorage()" onchange="app.updateStorage()">
+        <input    id="author"  type="text"   placeholder="author name"              onkeyup="app.updateStorage()" onchange="app.updateStorage()">
+        <input    id="website" type="text"   placeholder="https://yourwebsite.com/" onkeyup="app.updateStorage()" onchange="app.updateStorage()">
+        <textarea id="googleanalytics"       placeholder="Paste your Google Analytics code snippet here or paste any other code that you want to have on every page immediately after the opening <body> tag." onkeyup="app.updateStorage()" onchange="app.updateStorage()" class="h-40 resize-none"></textarea>
+
+        <h5 class="capitalize">
+          scratchpad
+        </h5>
+        <textarea id="scratchpad"            placeholder="Type something..."        onkeyup="app.updateStorage()" onchange="app.updateStorage()" class="h-40 resize-none"></textarea>
+
+        <div class="grid grid-cols-2 justify-between capitalize">
+
+          <span>
+            console
+          </span>
+
+          <div class="mb-4">
+            <label for="toggleconsole" class="float-right">
+              <input type="checkbox" id="toggleconsole" name="switch" role="switch" onchange="app.toggleConsole()" checked>
+            </label>
+          </div>
+
+          <span>
+            chartjs
+          </span>
+
+          <div class="mb-4">
+            <label for="charts" class="float-right">
+              <input type="checkbox" id="charts" name="switch" role="switch">
+            </label>
+          </div>
+        </div>
+      </article>
+    </dialog>
+    <dialog data-opened="sitemap" open>
+      <article class="absolute inset-0 m-0 p-0 m-auto max-w-full max-h-full rounded-none overflow-auto">
+
+      <nav class="pl-2 pr-4">
+        <ul>
+          <li>
+            <button aria-close role="button" class="border-0 text-current bg-transparent">
+              <i class="fa fa-angle-left"></i>
+            </button>
+          </li>
+          <li>
+            App Name
+          </li>
+        </ul>
+        <ul data-richtext class="hidden">
+          <li>
+            <button class="p-2 text-current bg-transparent border-none">
+              <i class="fa fa-bold"></i>
+            </button>
+          </li>
+          <li>
+            <button class="p-2 text-current bg-transparent border-none">
+              <i class="fa fa-italic"></i>
+            </button>
+          </li>
+          <li>
+            <button class="p-2 text-current bg-transparent border-none">
+              <i class="fa fa-underline"></i>
+            </button>
+          </li>
+          <li>
+            <button class="p-2 text-current bg-transparent border-none">
+              <i class="fa fa-strikethrough"></i>
+            </button>
+          </li>
+          <li>
+            <button class="p-2 text-current bg-transparent border-none">
+              <i class="fa fa-link"></i>
+            </button>
+          </li>
+          <li>
+            <button class="p-2 text-current bg-transparent border-none">
+              <i class="fa fa-unlink"></i>
+            </button>
+          </li>
+          <li>
+            <button class="p-2 text-current bg-transparent border-none">
+              <i class="fa fa-image"></i>
+            </button>
+          </li>
+          <li>
+            <label for="theme" class="cursor-pointer p-2 text-current bg-transparent border-none">
+              <i class="fa fa-lightbulb"></i>
+            </label>
+          </li>
+          <li>
+            <button data-sitemap class="p-2 text-current bg-transparent border-none">
+              <i class="fa fa-sitemap"></i>
+            </button>
+          </li>
+        </ul>
+        <ul data-treeicons>
+          <li data-addchild>
+            <button class="p-2 text-current bg-transparent border-none">
+              <i class="fa fa-plus-square"></i>
+            </button>
+          </li>
+          <li data-addsibling>
+            <button class="p-2 text-current bg-transparent border-none">
+              <i class="fa fa-plus"></i>
+            </button>
+          </li>
+          <li data-edit>
+            <button class="p-2 text-current bg-transparent border-none">
+              <i class="fa fa-edit"></i>
+            </button>
+          </li>
+          <li data-open="elmSettings">
+            <button class="p-2 text-current bg-transparent border-none">
+              <i class="fa fa-cog"></i>
+            </button>
+          </li>
+          <li data-open="function">
+            <button class="p-2 text-current bg-transparent border-none">
+              <i class="fa fa-bolt-lightning"></i>
+            </button>
+          </li>
+          <li data-group class="hidden">
+            <button class="p-2 text-current bg-transparent border-none">
+              <i class="fa fa-object-group"></i>
+            </button>
+          </li>
+          <li>
+            <label for="theme" class="cursor-pointer p-2 text-current bg-transparent border-none">
+              <i class="fa fa-lightbulb"></i>
+            </label>
+          </li>
+        </ul>
+      </nav>
+
+        <!-- edit your site here -->
+        <div data-body contenteditable class="hidden absolute inset-x-4 top-20 bottom-4 border border-gray-200 border-solid"></div>
+        <!-- tree view here -->
+        <div data-treeview class="absolute inset-x-4 top-20 bottom-4 border border-gray-200 border-solid overflow-auto">
+          <!-- <ul>
+            <li class="list-none flex">
+              <button class="inline-block w-auto bg-green-500 rounded-full">
+                element
+              </button>
+              <ul>
+                <li class="list-none flex">
+                  <button class="inline-block w-auto rounded-full">
+                    p
+                  </button>
+                </li>
+                <li class="list-none flex">
+                  <button class="inline-block w-auto rounded-full">
+                    footer
+                  </button>
+                  <ul>
+                    <li class="list-none flex">
+                      <button class="inline-block w-auto rounded-full">
+                        element
+                      </button>
+                      <ul>
+                        <li class="list-none flex">
+                          <button class="inline-block w-auto rounded-full">
+                            p
+                          </button>
+                        </li>
+                        <li class="list-none flex">
+                          <button class="inline-block w-auto rounded-full">
+                            footer
+                          </button>
+                        </li>
+                      </ul>
+                    </li>
+                    <li class="list-none flex">
+                      <button class="inline-block w-auto rounded-full">
+                        element
+                      </button>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li class="list-none flex">
+              <button class="inline-block w-auto rounded-full">
+                element
+              </button>
+            </li>
+          </ul> -->
+        </div>
+      </article>
+    </dialog>
+    <dialog data-opened="elmSettings">
+      <article class="absolute inset-0 m-0 p-4 m-auto max-w-full max-h-full rounded-none overflow-auto">
+        <button aria-close role="button" class="p-0 w-auto max-h-full rounded-full border-0 float-right text-current bg-transparent">
+          <i class="fa fa-times"></i>
+        </button>
+
+        <h5 class="capitalize text-3xl">
+          element settings
+        </h5>
+        
+        <h5 class="capitalize m-0 font-normal">
+          global styles
+        </h5>
+        <figure class="pt-4 mb-0">
+          <div class="text-center">
+            <span class="opacity-50">empty</span>
+          </div>
+        </figure>
+
+        <nav>
+          <ul>
+            <li>
+              <h5 class="font-normal m-0">
+                <span class="capitalize">
+                  styles
+                </span>
+              </h5>
+            </li>
+          </ul>
+          <ul>
+            <li>
+              <a href="javascript:void(0)" class="ml-1 p-1 uppercase text-xs">
+                cheat sheet 
+                <i class="fa fa-up-right-from-square"></i>
+              </a>
+
+              <button class="w-auto inline-block bg-transparent text-current border-none">
+                <i class="fa fa-plus"></i>
+              </button>
+            </li>
+          </ul>
+        </nav>
+        <input type="text" placeholder="tailwind css classes are used for styling">
+        
+        <h5 class="capitalize m-0 font-normal">
+          actions
+        </h5>
+        <figure class="pt-4 mb-0">
+
+        </figure>
+        <button class="capitalize">
+          add action
+        </button>
+
+      </article>
+    </dialog>
+    <dialog data-opened="about">
+      <article class="w-2/3 text-center">
+        <p>
+          <img class="w-52" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgoKPHN2ZwogICB3aWR0aD0iNTEyIgogICBoZWlnaHQ9IjUxMiIKICAgdmlld0JveD0iMCAwIDEzNS40NjY2NyAxMzUuNDY2NjciCiAgIHZlcnNpb249IjEuMSIKICAgaWQ9InN2ZzUiCiAgIGlua3NjYXBlOmV4cG9ydC1maWxlbmFtZT0iaW1hZ2Uuc3ZnIgogICBpbmtzY2FwZTpleHBvcnQteGRwaT0iOTYiCiAgIGlua3NjYXBlOmV4cG9ydC15ZHBpPSI5NiIKICAgeG1sbnM6aW5rc2NhcGU9Imh0dHA6Ly93d3cuaW5rc2NhcGUub3JnL25hbWVzcGFjZXMvaW5rc2NhcGUiCiAgIHhtbG5zOnNvZGlwb2RpPSJodHRwOi8vc29kaXBvZGkuc291cmNlZm9yZ2UubmV0L0RURC9zb2RpcG9kaS0wLmR0ZCIKICAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICB4bWxuczpzdmc9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8c29kaXBvZGk6bmFtZWR2aWV3CiAgICAgaWQ9Im5hbWVkdmlldzciCiAgICAgcGFnZWNvbG9yPSIjNTA1MDUwIgogICAgIGJvcmRlcmNvbG9yPSIjZmZmZmZmIgogICAgIGJvcmRlcm9wYWNpdHk9IjEiCiAgICAgaW5rc2NhcGU6c2hvd3BhZ2VzaGFkb3c9IjAiCiAgICAgaW5rc2NhcGU6cGFnZW9wYWNpdHk9IjAiCiAgICAgaW5rc2NhcGU6cGFnZWNoZWNrZXJib2FyZD0iMSIKICAgICBpbmtzY2FwZTpkZXNrY29sb3I9IiM1MDUwNTAiCiAgICAgaW5rc2NhcGU6ZG9jdW1lbnQtdW5pdHM9Im1tIgogICAgIHNob3dncmlkPSJmYWxzZSIgLz4KICA8ZGVmcwogICAgIGlkPSJkZWZzMiIgLz4KICA8ZwogICAgIGlua3NjYXBlOmxhYmVsPSJMYXllciAxIgogICAgIGlua3NjYXBlOmdyb3VwbW9kZT0ibGF5ZXIiCiAgICAgaWQ9ImxheWVyMSI+CiAgICA8Y2lyY2xlCiAgICAgICBzdHlsZT0iZmlsbDojY2NjY2NjO2ZpbGwtb3BhY2l0eTowLjk4MDQ2O3N0cm9rZS13aWR0aDoxLjAxMjM1O3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZCIKICAgICAgIGlkPSJwYXRoNzM0IgogICAgICAgY3g9IjY3LjczMzMzIgogICAgICAgY3k9IjUwLjc5OTk5NSIKICAgICAgIHI9IjMzLjUyNjQ5MyIgLz4KICAgIDxwYXRoCiAgICAgICBpZD0icmVjdDc4OC0zIgogICAgICAgc3R5bGU9ImZpbGw6I2NjY2NjYztmaWxsLW9wYWNpdHk6MC45ODA0NjtzdHJva2Utd2lkdGg6MC43MjM3ODc7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kIgogICAgICAgZD0iTSAzMy44NjY2NjcsMTAxLjYgQyAxNS4xMDQ1NTEsMTAxLjYgMCwxMTYuNzA0NTUgMCwxMzUuNDY2NjcgSCAxMzUuNDY2NjcgQyAxMzUuNDY2NjcsMTE2LjcwNDU1IDEyMC4zNjIxMiwxMDEuNiAxMDEuNiwxMDEuNiBaIiAvPgogIDwvZz4KPC9zdmc+Cg==">
+        </p>
+        <div class="mt-8 text-2xl">
+          About App Builder Template
+        </div>
+        <div class="my-2">
+          <small>Version 0.0.1</small>
+        </div>
+        <div>
+          <a href="javascript:void(0)">
+            Open Source License
+          </a>
+        </div>
+      </article>
+    </dialog>
+    
+    <!-- canvas -->
+    <div class="absolute inset-0 p-0 overflow-hidden bg-repeat" style="background-image: url('imgs/bg.svg');">
+      <div id="previewElm" data-canvas data-theme="light" class="border border-solid" style="width: 360px; height: 740px;"></div>
+      <div id="fill" class="absolute inset-0"></div>
+    </div>
+
+    <!-- top iconbar -->
+    <nav class="absolute inset-x-0 pl-6 pr-2">
+      <ul>
+        <a data-open="about" class="cursor-pointer py-0 my-0 border-none bg-transparent text-current">
+          <img class="h-10" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgoKPHN2ZwogICB3aWR0aD0iNTEyIgogICBoZWlnaHQ9IjUxMiIKICAgdmlld0JveD0iMCAwIDEzNS40NjY2NyAxMzUuNDY2NjciCiAgIHZlcnNpb249IjEuMSIKICAgaWQ9InN2ZzUiCiAgIGlua3NjYXBlOmV4cG9ydC1maWxlbmFtZT0iaW1hZ2Uuc3ZnIgogICBpbmtzY2FwZTpleHBvcnQteGRwaT0iOTYiCiAgIGlua3NjYXBlOmV4cG9ydC15ZHBpPSI5NiIKICAgeG1sbnM6aW5rc2NhcGU9Imh0dHA6Ly93d3cuaW5rc2NhcGUub3JnL25hbWVzcGFjZXMvaW5rc2NhcGUiCiAgIHhtbG5zOnNvZGlwb2RpPSJodHRwOi8vc29kaXBvZGkuc291cmNlZm9yZ2UubmV0L0RURC9zb2RpcG9kaS0wLmR0ZCIKICAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICB4bWxuczpzdmc9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8c29kaXBvZGk6bmFtZWR2aWV3CiAgICAgaWQ9Im5hbWVkdmlldzciCiAgICAgcGFnZWNvbG9yPSIjNTA1MDUwIgogICAgIGJvcmRlcmNvbG9yPSIjZmZmZmZmIgogICAgIGJvcmRlcm9wYWNpdHk9IjEiCiAgICAgaW5rc2NhcGU6c2hvd3BhZ2VzaGFkb3c9IjAiCiAgICAgaW5rc2NhcGU6cGFnZW9wYWNpdHk9IjAiCiAgICAgaW5rc2NhcGU6cGFnZWNoZWNrZXJib2FyZD0iMSIKICAgICBpbmtzY2FwZTpkZXNrY29sb3I9IiM1MDUwNTAiCiAgICAgaW5rc2NhcGU6ZG9jdW1lbnQtdW5pdHM9Im1tIgogICAgIHNob3dncmlkPSJmYWxzZSIgLz4KICA8ZGVmcwogICAgIGlkPSJkZWZzMiIgLz4KICA8ZwogICAgIGlua3NjYXBlOmxhYmVsPSJMYXllciAxIgogICAgIGlua3NjYXBlOmdyb3VwbW9kZT0ibGF5ZXIiCiAgICAgaWQ9ImxheWVyMSI+CiAgICA8Y2lyY2xlCiAgICAgICBzdHlsZT0iZmlsbDojY2NjY2NjO2ZpbGwtb3BhY2l0eTowLjk4MDQ2O3N0cm9rZS13aWR0aDoxLjAxMjM1O3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZCIKICAgICAgIGlkPSJwYXRoNzM0IgogICAgICAgY3g9IjY3LjczMzMzIgogICAgICAgY3k9IjUwLjc5OTk5NSIKICAgICAgIHI9IjMzLjUyNjQ5MyIgLz4KICAgIDxwYXRoCiAgICAgICBpZD0icmVjdDc4OC0zIgogICAgICAgc3R5bGU9ImZpbGw6I2NjY2NjYztmaWxsLW9wYWNpdHk6MC45ODA0NjtzdHJva2Utd2lkdGg6MC43MjM3ODc7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kIgogICAgICAgZD0iTSAzMy44NjY2NjcsMTAxLjYgQyAxNS4xMDQ1NTEsMTAxLjYgMCwxMTYuNzA0NTUgMCwxMzUuNDY2NjcgSCAxMzUuNDY2NjcgQyAxMzUuNDY2NjcsMTE2LjcwNDU1IDEyMC4zNjIxMiwxMDEuNiAxMDEuNiwxMDEuNiBaIiAvPgogIDwvZz4KPC9zdmc+Cg==">
+        </a>
+      </ul>
+      <ul>
+        <li>
+          <button data-zoom="true" class="py-0 my-0 border-none bg-transparent text-current">
+            <i class="fa fa-light fa-magnifying-glass-plus"></i>
+          </button>
+        </li>
+        <li>
+          <button onclick="location.reload()" class="py-0 my-0 border-none bg-transparent text-current">
+            <i class="fa fa-rotate"></i>
+          </button>
+        </li>
+        <li>
+          <button id="rotateCanvas" class="py-0 my-0 border-none bg-transparent text-current">
+            <i class="fa fa fa-rotate-right"></i>
+          </button>
+        </li>
+        <li>
+          <button data-device="mobile" class="py-0 my-0 border-none bg-transparent text-current">
+            <i class="fa fa-mobile"></i>
+          </button>
+        </li>
+        <li>
+          <label for="theme" role="button" class="py-0 my-0 border-none bg-transparent text-current">
+            <i class="fa fa-sun"></i>
+          </label>
+        </li>
+      </ul>
+      <ul>
+        <li>
+          <button data-open="settings" class="py-0 my-0 border-none bg-transparent text-current">
+            <i class="fa fa-cog"></i>
+          </button>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- bottom iconbar -->
+    <nav class="absolute bottom-0 inset-x-0 px-2 block">
+      <ul class="justify-evenly">
+        <li>
+          <button data-open="sitemap" class="py-0 my-0 border-none bg-transparent text-current">
+            <i class="fa fa-sitemap"></i>
+          </button>
+        </li>
+        <li>
+          <button data-open="data" class="py-0 my-0 border-none bg-transparent text-current">
+            <i class="fa fa-database"></i>
+          </button>
+        </li>
+        <li>
+          <button data-open="help" class="py-0 my-0 border-none bg-transparent text-current">
+            <i class="fa fa-question"></i>
+          </button>
+        </li>
+        <li>
+          <button onclick="app.shareProject()" class="py-0 my-0 border-none bg-transparent text-current">
+            <i class="fa fa-share"></i>
+          </button>
+        </li>
+        <li>
+          <a href="https://michaelsboost.com/donate/" target="_blank">
+            <button class="py-0 my-0 border-none bg-transparent text-current">
+              <i class="fa fa-heart"></i>
+            </button>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- <script>
+      // service worker for progressive web app
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js');
+        });
+      }
+    </script> -->
+  </body>
+</html>

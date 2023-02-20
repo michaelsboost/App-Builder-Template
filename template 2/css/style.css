@@ -1,0 +1,8 @@
+/* imports */
+@import url('../libraries/pico/pico.classless.min.css');
+@import url('../libraries/tailwind/tailwind-mod.min.css');
+@import url('../libraries/font-awesome/css/all.min.css');
+
+[contenteditable] [data-selected] {
+  outline: 2px dashed hsl(195, 85%, 41%)!important;
+}
