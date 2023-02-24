@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en-US" data-theme="light">
+  <head>
+    <title>App Builder Template</title>
+    <meta charset="utf-8" />
+    <meta name="description" content="Just an app builder template!">
+    <meta name="author" content="Michael Schwartz">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="manifest" href="manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="BrikzBuildr">
+    <meta name="apple-mobile-web-app-title" content="BrikzBuildr">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="hsl(207, 31%, 11%)">
+    <meta name="msapplication-navbutton-color" content="hsl(207, 31%, 11%)">
+    <meta name="msapplication-starturl" content="./index.html">
+    <link rel="apple-touch-icon" href="imgs/logo.png">
+    <link rel="icon" href="imgs/logo.svg" type="image/x-icon" />
+    <link rel="stylesheet" href="css/style.css">
+    
+    <script src="libraries/panzoom/panzoom.mod.js" defer></script>
+    <script src="libraries/quill/quill.min.js" defer></script>
+    <script src="libraries/jszip/Blob.js" defer></script>
+    <script src="libraries/jszip/FileSaver.js" defer></script>
+    <script src="libraries/jszip/jszip-utils.js" defer></script>
+    <script src="libraries/jszip/jszip.min.js" defer></script>
+    <script src="js/app.js" defer></script>
+  </head>
+  <body>
+    <!-- side Menus -->
+    <span class="hidden">
+      <input type="checkbox" id="theme">
+    </span>
+    <dialog data-opened="settings" class="cursor-pointer">
+      <article class="absolute inset-y-0 right-0 m-0 p-4 w-full max-w-xl max-h-full rounded-none overflow-auto cursor-default">
+        <button aria-close role="button" class="p-0 w-auto max-h-full rounded-full border-0 float-right text-current bg-transparent">
+          <i class="fa fa-times"></i>
+        </button>
+
+        <h5 class="capitalize text-3xl">
+          settings
+        </h5>
+
+        <div class="hidden">
+          <input id="import"     type="file" accept="application/json" onchange="loadFile(this)">
+          <input id="importlogo" type="file" accept="image/png, image/jpeg, image/svg+xml" onchange="loadLogo(this)">
+        </div>
+
+        <h5 class="capitalize mt-10">
+          meta
+
+          <label for="importlogo" class="cursor-pointer float-right">
+            <img id="logo" class="h-10" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgoKPHN2ZwogICB3aWR0aD0iNTEyIgogICBoZWlnaHQ9IjUxMiIKICAgdmlld0JveD0iMCAwIDEzNS40NjY2NyAxMzUuNDY2NjciCiAgIHZlcnNpb249IjEuMSIKICAgaWQ9InN2ZzUiCiAgIGlua3NjYXBlOmV4cG9ydC1maWxlbmFtZT0iaW1hZ2Uuc3ZnIgogICBpbmtzY2FwZTpleHBvcnQteGRwaT0iOTYiCiAgIGlua3NjYXBlOmV4cG9ydC15ZHBpPSI5NiIKICAgeG1sbnM6aW5rc2NhcGU9Imh0dHA6Ly93d3cuaW5rc2NhcGUub3JnL25hbWVzcGFjZXMvaW5rc2NhcGUiCiAgIHhtbG5zOnNvZGlwb2RpPSJodHRwOi8vc29kaXBvZGkuc291cmNlZm9yZ2UubmV0L0RURC9zb2RpcG9kaS0wLmR0ZCIKICAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICB4bWxuczpzdmc9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8c29kaXBvZGk6bmFtZWR2aWV3CiAgICAgaWQ9Im5hbWVkdmlldzciCiAgICAgcGFnZWNvbG9yPSIjNTA1MDUwIgogICAgIGJvcmRlcmNvbG9yPSIjZmZmZmZmIgogICAgIGJvcmRlcm9wYWNpdHk9IjEiCiAgICAgaW5rc2NhcGU6c2hvd3BhZ2VzaGFkb3c9IjAiCiAgICAgaW5rc2NhcGU6cGFnZW9wYWNpdHk9IjAiCiAgICAgaW5rc2NhcGU6cGFnZWNoZWNrZXJib2FyZD0iMSIKICAgICBpbmtzY2FwZTpkZXNrY29sb3I9IiM1MDUwNTAiCiAgICAgaW5rc2NhcGU6ZG9jdW1lbnQtdW5pdHM9Im1tIgogICAgIHNob3dncmlkPSJmYWxzZSIgLz4KICA8ZGVmcwogICAgIGlkPSJkZWZzMiIgLz4KICA8ZwogICAgIGlua3NjYXBlOmxhYmVsPSJMYXllciAxIgogICAgIGlua3NjYXBlOmdyb3VwbW9kZT0ibGF5ZXIiCiAgICAgaWQ9ImxheWVyMSI+CiAgICA8Y2lyY2xlCiAgICAgICBzdHlsZT0iZmlsbDojY2NjY2NjO2ZpbGwtb3BhY2l0eTowLjk4MDQ2O3N0cm9rZS13aWR0aDoxLjAxMjM1O3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZCIKICAgICAgIGlkPSJwYXRoNzM0IgogICAgICAgY3g9IjY3LjczMzMzIgogICAgICAgY3k9IjUwLjc5OTk5NSIKICAgICAgIHI9IjMzLjUyNjQ5MyIgLz4KICAgIDxwYXRoCiAgICAgICBpZD0icmVjdDc4OC0zIgogICAgICAgc3R5bGU9ImZpbGw6I2NjY2NjYztmaWxsLW9wYWNpdHk6MC45ODA0NjtzdHJva2Utd2lkdGg6MC43MjM3ODc7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kIgogICAgICAgZD0iTSAzMy44NjY2NjcsMTAxLjYgQyAxNS4xMDQ1NTEsMTAxLjYgMCwxMTYuNzA0NTUgMCwxMzUuNDY2NjcgSCAxMzUuNDY2NjcgQyAxMzUuNDY2NjcsMTE2LjcwNDU1IDEyMC4zNjIxMiwxMDEuNiAxMDEuNiwxMDEuNiBaIiAvPgogIDwvZz4KPC9zdmc+Cg==">
+          </label>
+        </h5>
+
+        <input    id="appname"   type="text"   placeholder="Application Name"      onkeyup="app.updateStorage()" onchange="app.updateStorage()">
+        <input    id="title"   type="text"   placeholder="Title..."      onkeyup="app.updateStorage()" onchange="app.updateStorage()">
+        <textarea id="description"           placeholder="Description..."           onkeyup="app.updateStorage()" onchange="app.updateStorage()" class="h-40 resize-none"></textarea>
+        <input    id="version" type="number" placeholder="0.1" min="0.1" step="0.1" onkeyup="app.updateStorage()" onchange="app.updateStorage()">
+        <input    id="author"  type="text"   placeholder="author name"              onkeyup="app.updateStorage()" onchange="app.updateStorage()">
+        <input    id="website" type="text"   placeholder="https://yourwebsite.com/" onkeyup="app.updateStorage()" onchange="app.updateStorage()">
+        <textarea id="googleanalytics"       placeholder="Paste your Google Analytics code snippet here or paste any other code that you want to have on every page immediately after the opening <body> tag." onkeyup="app.updateStorage()" onchange="app.updateStorage()" class="h-40 resize-none"></textarea>
+
+        <h5 class="capitalize">
+          scratchpad
+        </h5>
+        <textarea id="scratchpad"            placeholder="Type something..."        onkeyup="app.updateStorage()" onchange="app.updateStorage()" class="h-40 resize-none"></textarea>
+
+        <div class="grid grid-cols-2 justify-between capitalize">
+
+          <span>
+            console
+          </span>
+
+          <div class="mb-4">
+            <label for="toggleconsole" class="float-right">
+              <input type="checkbox" id="toggleconsole" name="switch" role="switch" onchange="app.toggleConsole()" checked>
+            </label>
+          </div>
+
+          <span>
+            font awesome
+          </span>
+
+          <div class="mb-4">
+            <label for="fa" class="float-right">
+              <input type="checkbox" id="fa" name="switch" role="switch">
+            </label>
+          </div>
+
+          <span>
+            chartjs
+          </span>
+
+          <div class="mb-4">
+            <label for="charts" class="float-right">
+              <input type="checkbox" id="charts" name="switch" role="switch">
+            </label>
+          </div>
+        </div>
+
+        <nav class="flex justify-around mt-2 leading-9 text-center">
+          <button class="cursor-pointer w-auto p-0 m-0 bg-transparent border-none text-current" onclick="app.newProject()">
+            <i class="fa fa-file-text text-2xl mb-2"></i>
+
+            <div class="text-xs">
+              new project
+            </div>
+          </button>
+          <label for="import" class="cursor-pointer">
+            <span>
+              <i class="fa fa-file-import text-2xl"></i>
+
+              <div class="text-xs">
+                import json
+              </div>
+            </span>
+          </label>
+          <button class="cursor-pointer w-auto p-0 m-0 bg-transparent border-none text-current" onclick="app.exportJSON()">
+            <i class="fa fa-file-export text-2xl mb-2"></i>
+
+            <div class="text-xs">
+              save json
+            </div>
+          </button>
+          <button class="cursor-pointer w-auto p-0 m-0 bg-transparent border-none text-current" onclick="app.exportZip()">
+            <i class="fa fa-download text-2xl mb-2"></i>
+
+            <div class="text-xs">
+              export zip
+            </div>
+          </button>
+          <a href="https://michaelsboost.com/donate/" target="_blank" class="text-red-500">
+            <i class="fa fa-heart text-2xl"></i>
+
+            <div class="text-xs">
+              donate
+            </div>
+          </a>
+        </nav>
+      </article>
+    </dialog>
+    <dialog data-opened="about" class="cursor-pointer">
+      <article class="w-2/3 text-center cursor-default">
+        <div class="mb-2">
+          <a href="https://michaelsboost.com/donate/" target="_blank" role="button" class="border-none bg-transparent text-red-500">
+            <i class="fa fa-heart text-3xl"></i>
+          </a>
+        </div>
+        <p>
+          <img class="w-52" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgoKPHN2ZwogICB3aWR0aD0iNTEyIgogICBoZWlnaHQ9IjUxMiIKICAgdmlld0JveD0iMCAwIDEzNS40NjY2NyAxMzUuNDY2NjciCiAgIHZlcnNpb249IjEuMSIKICAgaWQ9InN2ZzUiCiAgIGlua3NjYXBlOmV4cG9ydC1maWxlbmFtZT0iaW1hZ2Uuc3ZnIgogICBpbmtzY2FwZTpleHBvcnQteGRwaT0iOTYiCiAgIGlua3NjYXBlOmV4cG9ydC15ZHBpPSI5NiIKICAgeG1sbnM6aW5rc2NhcGU9Imh0dHA6Ly93d3cuaW5rc2NhcGUub3JnL25hbWVzcGFjZXMvaW5rc2NhcGUiCiAgIHhtbG5zOnNvZGlwb2RpPSJodHRwOi8vc29kaXBvZGkuc291cmNlZm9yZ2UubmV0L0RURC9zb2RpcG9kaS0wLmR0ZCIKICAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICB4bWxuczpzdmc9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8c29kaXBvZGk6bmFtZWR2aWV3CiAgICAgaWQ9Im5hbWVkdmlldzciCiAgICAgcGFnZWNvbG9yPSIjNTA1MDUwIgogICAgIGJvcmRlcmNvbG9yPSIjZmZmZmZmIgogICAgIGJvcmRlcm9wYWNpdHk9IjEiCiAgICAgaW5rc2NhcGU6c2hvd3BhZ2VzaGFkb3c9IjAiCiAgICAgaW5rc2NhcGU6cGFnZW9wYWNpdHk9IjAiCiAgICAgaW5rc2NhcGU6cGFnZWNoZWNrZXJib2FyZD0iMSIKICAgICBpbmtzY2FwZTpkZXNrY29sb3I9IiM1MDUwNTAiCiAgICAgaW5rc2NhcGU6ZG9jdW1lbnQtdW5pdHM9Im1tIgogICAgIHNob3dncmlkPSJmYWxzZSIgLz4KICA8ZGVmcwogICAgIGlkPSJkZWZzMiIgLz4KICA8ZwogICAgIGlua3NjYXBlOmxhYmVsPSJMYXllciAxIgogICAgIGlua3NjYXBlOmdyb3VwbW9kZT0ibGF5ZXIiCiAgICAgaWQ9ImxheWVyMSI+CiAgICA8Y2lyY2xlCiAgICAgICBzdHlsZT0iZmlsbDojY2NjY2NjO2ZpbGwtb3BhY2l0eTowLjk4MDQ2O3N0cm9rZS13aWR0aDoxLjAxMjM1O3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZCIKICAgICAgIGlkPSJwYXRoNzM0IgogICAgICAgY3g9IjY3LjczMzMzIgogICAgICAgY3k9IjUwLjc5OTk5NSIKICAgICAgIHI9IjMzLjUyNjQ5MyIgLz4KICAgIDxwYXRoCiAgICAgICBpZD0icmVjdDc4OC0zIgogICAgICAgc3R5bGU9ImZpbGw6I2NjY2NjYztmaWxsLW9wYWNpdHk6MC45ODA0NjtzdHJva2Utd2lkdGg6MC43MjM3ODc7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kIgogICAgICAgZD0iTSAzMy44NjY2NjcsMTAxLjYgQyAxNS4xMDQ1NTEsMTAxLjYgMCwxMTYuNzA0NTUgMCwxMzUuNDY2NjcgSCAxMzUuNDY2NjcgQyAxMzUuNDY2NjcsMTE2LjcwNDU1IDEyMC4zNjIxMiwxMDEuNiAxMDEuNiwxMDEuNiBaIiAvPgogIDwvZz4KPC9zdmc+Cg==">
+        </p>
+        <div class="mt-8 text-2xl">
+          About App Builder Template
+        </div>
+        <div class="my-2">
+          <small>Version 0.0.1</small>
+        </div>
+        <div>
+          <a href="#">
+            Open Source License
+          </a>
+        </div>
+      </article>
+    </dialog>
+    
+    <!-- canvas container -->
+    <div class="absolute bottom-1/2 top-0 w-full md:w-1/2 md:bottom-0 md:left-1/2 p-0 overflow-hidden bg-repeat" style="background-image: url('imgs/bg.svg');">
+
+      <!-- top navbar -->
+      <nav class="absolute inset-x-0 pt-0 pl-3 pr-2 z-10">
+        <ul class="flex md:hidden">
+          <a data-open="about" class="cursor-pointer py-0 my-0 border-none bg-transparent text-current">
+            <img class="h-10" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgoKPHN2ZwogICB3aWR0aD0iNTEyIgogICBoZWlnaHQ9IjUxMiIKICAgdmlld0JveD0iMCAwIDEzNS40NjY2NyAxMzUuNDY2NjciCiAgIHZlcnNpb249IjEuMSIKICAgaWQ9InN2ZzUiCiAgIGlua3NjYXBlOmV4cG9ydC1maWxlbmFtZT0iaW1hZ2Uuc3ZnIgogICBpbmtzY2FwZTpleHBvcnQteGRwaT0iOTYiCiAgIGlua3NjYXBlOmV4cG9ydC15ZHBpPSI5NiIKICAgeG1sbnM6aW5rc2NhcGU9Imh0dHA6Ly93d3cuaW5rc2NhcGUub3JnL25hbWVzcGFjZXMvaW5rc2NhcGUiCiAgIHhtbG5zOnNvZGlwb2RpPSJodHRwOi8vc29kaXBvZGkuc291cmNlZm9yZ2UubmV0L0RURC9zb2RpcG9kaS0wLmR0ZCIKICAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICB4bWxuczpzdmc9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8c29kaXBvZGk6bmFtZWR2aWV3CiAgICAgaWQ9Im5hbWVkdmlldzciCiAgICAgcGFnZWNvbG9yPSIjNTA1MDUwIgogICAgIGJvcmRlcmNvbG9yPSIjZmZmZmZmIgogICAgIGJvcmRlcm9wYWNpdHk9IjEiCiAgICAgaW5rc2NhcGU6c2hvd3BhZ2VzaGFkb3c9IjAiCiAgICAgaW5rc2NhcGU6cGFnZW9wYWNpdHk9IjAiCiAgICAgaW5rc2NhcGU6cGFnZWNoZWNrZXJib2FyZD0iMSIKICAgICBpbmtzY2FwZTpkZXNrY29sb3I9IiM1MDUwNTAiCiAgICAgaW5rc2NhcGU6ZG9jdW1lbnQtdW5pdHM9Im1tIgogICAgIHNob3dncmlkPSJmYWxzZSIgLz4KICA8ZGVmcwogICAgIGlkPSJkZWZzMiIgLz4KICA8ZwogICAgIGlua3NjYXBlOmxhYmVsPSJMYXllciAxIgogICAgIGlua3NjYXBlOmdyb3VwbW9kZT0ibGF5ZXIiCiAgICAgaWQ9ImxheWVyMSI+CiAgICA8Y2lyY2xlCiAgICAgICBzdHlsZT0iZmlsbDojY2NjY2NjO2ZpbGwtb3BhY2l0eTowLjk4MDQ2O3N0cm9rZS13aWR0aDoxLjAxMjM1O3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZCIKICAgICAgIGlkPSJwYXRoNzM0IgogICAgICAgY3g9IjY3LjczMzMzIgogICAgICAgY3k9IjUwLjc5OTk5NSIKICAgICAgIHI9IjMzLjUyNjQ5MyIgLz4KICAgIDxwYXRoCiAgICAgICBpZD0icmVjdDc4OC0zIgogICAgICAgc3R5bGU9ImZpbGw6I2NjY2NjYztmaWxsLW9wYWNpdHk6MC45ODA0NjtzdHJva2Utd2lkdGg6MC43MjM3ODc7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kIgogICAgICAgZD0iTSAzMy44NjY2NjcsMTAxLjYgQyAxNS4xMDQ1NTEsMTAxLjYgMCwxMTYuNzA0NTUgMCwxMzUuNDY2NjcgSCAxMzUuNDY2NjcgQyAxMzUuNDY2NjcsMTE2LjcwNDU1IDEyMC4zNjIxMiwxMDEuNiAxMDEuNiwxMDEuNiBaIiAvPgogIDwvZz4KPC9zdmc+Cg==">
+          </a>
+        </ul>
+        <ul class="h-12 justify-evenly w-full">
+          <li>
+            <button data-zoom="true" class="py-0 my-0 border-none bg-transparent text-current">
+              <i class="fa fa-light fa-magnifying-glass-plus"></i>
+            </button>
+          </li>
+          <li>
+            <button onclick="location.reload()" class="py-0 my-0 border-none bg-transparent text-current">
+              <i class="fa fa-rotate"></i>
+            </button>
+          </li>
+          <li>
+            <button id="rotateCanvas" class="py-0 my-0 border-none bg-transparent text-current">
+              <i class="fa fa fa-rotate-right"></i>
+            </button>
+          </li>
+          <li>
+            <button data-device="mobile" class="py-0 my-0 border-none bg-transparent text-current">
+              <i class="fa fa-mobile"></i>
+            </button>
+          </li>
+          <li>
+            <label for="theme" role="button" class="py-0 my-0 border-none bg-transparent text-current">
+              <i class="fa fa-sun"></i>
+            </label>
+          </li>
+          <li>
+            <button data-open="settings" class="py-0 my-0 border-none bg-transparent text-current">
+              <i class="fa fa-cog"></i>
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- preview application here -->
+      <div id="previewElm" data-canvas data-theme="light" class="border border-solid" style="width: 360px; height: 740px;"></div>
+      <div id="fill" class="absolute inset-0"></div>
+    </div>
+
+    <!-- treeview container -->
+    <div class="absolute bottom-0 top-1/2 w-full md:w-1/2 md:top-0 overflow-hidden">
+      <dialog data-opened="functions" class="absolute inset-0">
+        <article class="absolute inset-0 m-0 p-4 m-auto max-w-full max-h-full rounded-none overflow-auto">
+          <button aria-close="" role="button" class="p-0 w-auto max-h-full rounded-full border-0 float-right text-current bg-transparent">
+            <i class="fa fa-times"></i>
+          </button>
+  
+          <h5 class="capitalize text-3xl">
+            functions
+          </h5>
+          
+          <h5 class="capitalize m-0 font-normal">
+            functions
+          </h5>
+          <figure class="pt-4 mb-0">
+  
+          </figure>
+          <button class="capitalize">
+            build a function
+          </button>
+  
+        </article>
+      </dialog>
+      <dialog data-opened="elmSettings" class="absolute inset-0">
+        <article class="absolute inset-0 m-0 p-4 m-auto max-w-full max-h-full rounded-none overflow-auto">
+          <button aria-close="" role="button" class="p-0 w-auto max-h-full rounded-full border-0 float-right text-current bg-transparent">
+            <i class="fa fa-times"></i>
+          </button>
+  
+          <h5 class="capitalize text-3xl">
+            <span>element</span> settings
+          </h5>
+          
+          <h5 class="capitalize m-0 font-normal">
+            reuse styles
+          </h5>
+          <figure class="pt-4 mb-0">
+            <div class="text-center">
+              <span class="opacity-50">empty</span>
+            </div>
+          </figure>
+  
+          <nav>
+            <ul>
+              <li>
+                <h5 class="font-normal m-0">
+                  <span class="capitalize">
+                    styles
+                  </span>
+                </h5>
+              </li>
+            </ul>
+            <ul>
+              <li>
+                <a href="javascript:void(0)" class="ml-1 p-1 uppercase text-xs">
+                  cheat sheet 
+                  <i class="fa fa-up-right-from-square"></i>
+                </a>
+  
+                <button class="w-auto inline-block bg-transparent text-current border-none">
+                  <i class="fa fa-plus"></i>
+                </button>
+              </li>
+            </ul>
+          </nav>
+          <input type="text" placeholder="tailwind css classes are used for styling">
+          
+          <h5 class="capitalize m-0 font-normal">
+            actions
+          </h5>
+          <figure class="pt-4 mb-0">
+  
+          </figure>
+          <button class="capitalize">
+            add action
+          </button>
+          <button class="capitalize text-blue-500 bg-transparent">
+            clone element
+          </button>
+          <button class="capitalize text-red-500 bg-transparent border-red-500">
+            delete element
+          </button>
+          <button class="capitalize text-red-500 bg-transparent border-red-500">
+            delete children
+          </button>
+  
+        </article>
+      </dialog>
+
+      <div data-treeview class="treeview absolute inset-0 p-x-4 pt-4 pb-4 md:pt-16">
+        <ul>
+          <li>
+            <div>
+              <nav>
+                <button data-open="elmSettings">
+                  <i class="fa fa-cog"></i>
+                </button>
+              </nav>
+
+              <div>header</div>
+
+              <nav>
+                <button>
+                  <i class="fa fa-plus"></i>
+                </button>
+              </nav>
+            </div>
+          </li>
+          <li>
+            <div>
+              <nav>
+                <button data-open="elmSettings">
+                  <i class="fa fa-cog"></i>
+                </button>
+              </nav>
+
+              <div>main</div>
+
+              <nav>
+                <button>
+                  <i class="fa fa-plus"></i>
+                </button>
+              </nav>
+            </div>
+            <ul>
+              <li>
+                <div>
+                  <nav>
+                    <button data-open="elmSettings">
+                      <i class="fa fa-cog"></i>
+                    </button>
+                  </nav>
+    
+                  <div>div</div>
+    
+                  <nav>
+                    <button>
+                      <i class="fa fa-plus"></i>
+                    </button>
+                  </nav>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <nav>
+                    <button data-open="elmSettings">
+                      <i class="fa fa-cog"></i>
+                    </button>
+                  </nav>
+    
+                  <div>div</div>
+    
+                  <nav>
+                    <button>
+                      <i class="fa fa-plus"></i>
+                    </button>
+                  </nav>
+                </div>
+                <ul>
+                  <li>
+                    <div>
+                      <nav>
+                        <button data-open="elmSettings">
+                          <i class="fa fa-cog"></i>
+                        </button>
+                      </nav>
+        
+                      <div>div</div>
+        
+                      <nav>
+                        <button>
+                          <i class="fa fa-plus"></i>
+                        </button>
+                      </nav>
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                      <nav>
+                        <button data-open="elmSettings">
+                          <i class="fa fa-cog"></i>
+                        </button>
+                      </nav>
+        
+                      <div>div</div>
+        
+                      <nav>
+                        <button>
+                          <i class="fa fa-plus"></i>
+                        </button>
+                      </nav>
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                      <nav>
+                        <button data-open="elmSettings">
+                          <i class="fa fa-cog"></i>
+                        </button>
+                      </nav>
+        
+                      <div>div</div>
+        
+                      <nav>
+                        <button>
+                          <i class="fa fa-plus"></i>
+                        </button>
+                      </nav>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <div>
+                  <nav>
+                    <button data-open="elmSettings">
+                      <i class="fa fa-cog"></i>
+                    </button>
+                  </nav>
+    
+                  <div>div</div>
+    
+                  <nav>
+                    <button>
+                      <i class="fa fa-plus"></i>
+                    </button>
+                  </nav>
+                </div>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <div>
+              <nav>
+                <button data-open="elmSettings">
+                  <i class="fa fa-cog"></i>
+                </button>
+              </nav>
+
+              <div>footer</div>
+
+              <nav>
+                <button>
+                  <i class="fa fa-plus"></i>
+                </button>
+              </nav>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- top navbar -->
+      <nav class="absolute inset-x-0 pt-2 pl-4 pr-2">
+        <ul class="hidden md:block">
+          <a data-open="about" class="cursor-pointer py-0 my-0 border-none bg-transparent text-current">
+            <img class="h-10" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgoKPHN2ZwogICB3aWR0aD0iNTEyIgogICBoZWlnaHQ9IjUxMiIKICAgdmlld0JveD0iMCAwIDEzNS40NjY2NyAxMzUuNDY2NjciCiAgIHZlcnNpb249IjEuMSIKICAgaWQ9InN2ZzUiCiAgIGlua3NjYXBlOmV4cG9ydC1maWxlbmFtZT0iaW1hZ2Uuc3ZnIgogICBpbmtzY2FwZTpleHBvcnQteGRwaT0iOTYiCiAgIGlua3NjYXBlOmV4cG9ydC15ZHBpPSI5NiIKICAgeG1sbnM6aW5rc2NhcGU9Imh0dHA6Ly93d3cuaW5rc2NhcGUub3JnL25hbWVzcGFjZXMvaW5rc2NhcGUiCiAgIHhtbG5zOnNvZGlwb2RpPSJodHRwOi8vc29kaXBvZGkuc291cmNlZm9yZ2UubmV0L0RURC9zb2RpcG9kaS0wLmR0ZCIKICAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICB4bWxuczpzdmc9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8c29kaXBvZGk6bmFtZWR2aWV3CiAgICAgaWQ9Im5hbWVkdmlldzciCiAgICAgcGFnZWNvbG9yPSIjNTA1MDUwIgogICAgIGJvcmRlcmNvbG9yPSIjZmZmZmZmIgogICAgIGJvcmRlcm9wYWNpdHk9IjEiCiAgICAgaW5rc2NhcGU6c2hvd3BhZ2VzaGFkb3c9IjAiCiAgICAgaW5rc2NhcGU6cGFnZW9wYWNpdHk9IjAiCiAgICAgaW5rc2NhcGU6cGFnZWNoZWNrZXJib2FyZD0iMSIKICAgICBpbmtzY2FwZTpkZXNrY29sb3I9IiM1MDUwNTAiCiAgICAgaW5rc2NhcGU6ZG9jdW1lbnQtdW5pdHM9Im1tIgogICAgIHNob3dncmlkPSJmYWxzZSIgLz4KICA8ZGVmcwogICAgIGlkPSJkZWZzMiIgLz4KICA8ZwogICAgIGlua3NjYXBlOmxhYmVsPSJMYXllciAxIgogICAgIGlua3NjYXBlOmdyb3VwbW9kZT0ibGF5ZXIiCiAgICAgaWQ9ImxheWVyMSI+CiAgICA8Y2lyY2xlCiAgICAgICBzdHlsZT0iZmlsbDojY2NjY2NjO2ZpbGwtb3BhY2l0eTowLjk4MDQ2O3N0cm9rZS13aWR0aDoxLjAxMjM1O3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZCIKICAgICAgIGlkPSJwYXRoNzM0IgogICAgICAgY3g9IjY3LjczMzMzIgogICAgICAgY3k9IjUwLjc5OTk5NSIKICAgICAgIHI9IjMzLjUyNjQ5MyIgLz4KICAgIDxwYXRoCiAgICAgICBpZD0icmVjdDc4OC0zIgogICAgICAgc3R5bGU9ImZpbGw6I2NjY2NjYztmaWxsLW9wYWNpdHk6MC45ODA0NjtzdHJva2Utd2lkdGg6MC43MjM3ODc7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kIgogICAgICAgZD0iTSAzMy44NjY2NjcsMTAxLjYgQyAxNS4xMDQ1NTEsMTAxLjYgMCwxMTYuNzA0NTUgMCwxMzUuNDY2NjcgSCAxMzUuNDY2NjcgQyAxMzUuNDY2NjcsMTE2LjcwNDU1IDEyMC4zNjIxMiwxMDEuNiAxMDEuNiwxMDEuNiBaIiAvPgogIDwvZz4KPC9zdmc+Cg==">
+          </a>
+        </ul>
+      </nav>
+        
+      <!-- bottom navbar -->
+      <nav class="absolute bottom-0 inset-x-0 px-2 block">
+        <ul class="justify-evenly">
+          <li>
+            <button data-open="data" class="py-0 my-0 border-none bg-transparent text-current">
+              <i class="fa fa-database"></i>
+            </button>
+          </li>
+          <li>
+            <button data-open="functions" class="py-0 my-0 border-none bg-transparent text-current">
+              <i class="fa fa-bolt-lightning"></i>
+            </button>
+          </li>
+          <li>
+            <button data-open="help" class="py-0 my-0 border-none bg-transparent text-current">
+              <i class="fa fa-question"></i>
+            </button>
+          </li>
+          <li>
+            <button onclick="app.shareProject()" class="py-0 my-0 border-none bg-transparent text-current">
+              <i class="fa fa-share"></i>
+            </button>
+          </li>
+          <li>
+            <button data-add class="py-0 my-0 border-none bg-transparent text-current">
+              <i class="fa fa-plus"></i>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- <script>
+      // service worker for progressive web app
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js');
+        });
+      }
+    </script> -->
+  </body>
+</html>
