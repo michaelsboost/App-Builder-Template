@@ -1,57 +1,45 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Generator: Adobe Illustrator 18.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   version="1.1"
-   id="Layer_1"
-   x="0px"
-   y="0px"
    width="512"
    height="512"
-   viewBox="0 0 512 512"
-   enable-background="new 0 0 110 40"
-   xml:space="preserve"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
+   viewBox="0 0 135.46667 135.46667"
+   version="1.1"
+   id="svg5"
+   inkscape:export-filename="image.svg"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg"><defs
-   id="defs43"><linearGradient
-     id="SVGID_2_-2"
-     gradientUnits="userSpaceOnUse"
-     x1="1.0391001"
-     y1="20"
-     x2="26.3594"
-     y2="20">
-				<stop
-   offset="0"
-   style="stop-color:#5FCF80"
-   id="stop436" />
-				<stop
-   offset="0.348"
-   style="stop-color:#4FC1A1"
-   id="stop438" />
-				<stop
-   offset="0.7713"
-   style="stop-color:#3FB3C4"
-   id="stop440" />
-				<stop
-   offset="1"
-   style="stop-color:#39ADD1"
-   id="stop442" />
-			</linearGradient><linearGradient
-     xlink:href="#SVGID_2_-2"
-     id="linearGradient1333"
-     x1="0"
-     y1="256"
-     x2="512"
-     y2="256"
-     gradientUnits="userSpaceOnUse" /></defs>
-
-<circle
-   style="opacity:1;fill:url(#linearGradient1333);fill-opacity:1;stroke-width:30;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill"
-   id="path1325"
-   cx="256"
-   cy="256"
-   r="256" /><path
-   style="fill:#ffffff;stroke:none;stroke-width:1.21864px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-   d="M 281.89006,241.0093 322.48504,89.506745 144.30288,267.68891 230.10994,270.9907 189.51496,422.49325 367.69712,244.31109 Z"
-   id="path898-3" /></svg>
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#505050"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="mm"
+     showgrid="false" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <circle
+       style="fill:#cccccc;fill-opacity:0.98046;stroke-width:1.01235;stroke-linecap:round;stroke-linejoin:round"
+       id="path734"
+       cx="67.73333"
+       cy="50.799995"
+       r="33.526493" />
+    <path
+       id="rect788-3"
+       style="fill:#cccccc;fill-opacity:0.98046;stroke-width:0.723787;stroke-linecap:round;stroke-linejoin:round"
+       d="M 33.866667,101.6 C 15.104551,101.6 0,116.70455 0,135.46667 H 135.46667 C 135.46667,116.70455 120.36212,101.6 101.6,101.6 Z" />
+  </g>
+</svg>
