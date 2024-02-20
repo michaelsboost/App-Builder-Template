@@ -26,7 +26,7 @@
     <script src="app.js" defer></script>
   </head>
   <body>
-    <div class="relative flex flex-col h-screen">
+    <div class="relative flex flex-col md:flex-row-reverse h-screen">
       <!-- canvas container -->
       <div id="canvasContainer" class="relative flex-grow bg-repeat overflow-hidden" style="background-image: url('imgs/bg.svg');">
         <nav id="breadcrumbs" class="absolute top-0 inset-x-0 p-4 z-10"></nav>
@@ -42,7 +42,7 @@
       <!-- editor container -->
       <div id="editorContainer" class="relative flex-grow overflow-auto z-10">
         <!-- rich text navigation -->
-        <nav id="wysiwyg" class="absolute top-0 inset-x-0 z-10 flex items-center justify-center hidden">
+        <nav id="wysiwyg" class="absolute top-0 inset-x-0 md:left-20 md:right-8 z-10 flex items-center justify-center hidden">
           <ul class="flex px-4 overflow-x-auto overflow-y-hidden">
             <!-- Button for making text bold -->
             <li>
@@ -568,108 +568,92 @@
             </div>
           </div>
         </div>
-          
+        
         <!-- navbar -->
-        <div>
-          <button 
-            name="toggle the about dialog"
-            onclick="about.setAttribute('open', true)" 
-            class="cursor-pointer py-0 md:pt-4 md:pl-3 my-0 border-none bg-transparent w-auto absolute bottom-3 left-0 md:top-0 md:bottom-auto md:left-2">
-            <img class="h-10" src="imgs/logo.svg">
-          </button>
-            
-            <nav class="absolute bottom-0 inset-x-20 md:inset-x-auto md:left-2 md:inset-y-20 text-center inline-block overflow-auto md:overflow-x-hidden md:block">
-            <ul class="inline-block whitespace-nowrap md:flex md:flex-col md:p-1">
-              <li>
-                <button 
-                  name="toggle menu"
-                  data-toggletab="menu" 
-                  class="py-0 mt-2 md:m-0 border-none bg-transparent text-current">
-                  <i class="text-xl fa fa-bars"></i>
-                </button>
-              </li>
-              <li>
-                <button 
-                  name="toggle app generator"
-                  data-toggletab="random" 
-                  class="py-0 mt-2 md:m-0 border-none bg-transparent text-current text-blue-500">
-                  <i class="text-xl fa fa-compass-drafting"></i>
-                </button>
-              </li>
-              <li>
-                <button 
-                  name="toggle zooming and panning"
-                  data-zoom="true" 
-                  class="py-0 mt-2 md:m-0 border-none bg-transparent text-current">
-                  <i class="text-xl fa fa-light fa-magnifying-glass-plus"></i>
-                </button>
-              </li>
-              <li>
-                <button 
-                  name="toggle pages tab"
-                  data-toggletab="pages" 
-                  class="py-0 mt-2 border-none bg-transparent text-current">
-                  <i class="text-xl fa fa-file"></i>
-                </button>
-              </li>
-              <li>
-                <button 
-                  name="toggle blocks tab"
-                  data-toggletab="blocks" 
-                  class="py-0 mt-2 border-none bg-transparent text-current">
-                  <i class="text-xl fa-solid fa-trowel-bricks"></i>
-                </button>
-              </li>
-              <li>
-                <button 
-                  name="toggle layers tab"
-                  data-toggletab="layers" 
-                  class="py-0 mt-2 border-none bg-transparent text-current">
-                  <i class="text-xl fa-solid fa-layer-group"></i>
-                </button>
-              </li>
-              <li>
-                <button 
-                  name="toggle assets tab"
-                  data-toggletab="assets" 
-                  class="py-0 mt-2 border-none bg-transparent text-current">
-                  <i class="text-xl fa fa-photo-film"></i>
-                </button>
-              </li>
-              <li>
-                <button 
-                  name="toggle data tab"
-                  data-toggletab="data" 
-                  class="py-0 mt-2 border-none bg-transparent text-current">
-                  <i class="text-xl fa fa-database"></i>
-                </button>
-              </li>
-              <li>
-                <button 
-                  name="toggle the history stack tab"
-                  data-toggletab="history" 
-                  class="py-0 mt-2 border-none bg-transparent text-current">
-                  <i class="text-xl fa fa-history"></i>
-                </button>
-              </li>
-              <li>
-                <button 
-                  name="toggle metadata tab"
-                  data-toggletab="metadata" 
-                  class="py-0 mt-2 border-none bg-transparent text-current">
-                  <i class="text-xl fa fa-solid fa-tachograph-digital"></i>
-                </button>
-              </li>
-            </ul>
-          </nav>
-            
-            <button 
-              name="toggle settings tab"
-              data-toggletab="settings" 
-              class="py-0 md:pb-4 md:pl-3 my-0 border-none bg-transparent text-current w-auto absolute bottom-3 md:bottom-0 right-0 md:right-auto md:left-3">
-            <i class="text-3xl fa fa-cog"></i>
-          </button>
-        </div>
+        <nav class="z-10 absolute bottom-0 inset-x-0 md:inset-x-auto md:left-2 md:inset-y-0 justify-between overflow-auto">
+          <ul class="md:flex-col md:overflow-y-auto md:overflow-x-hidden">
+            <li>
+              <button 
+                name="toggle menu"
+                data-toggletab="menu" 
+                class="py-0 mt-2 md:m-0 border-none bg-transparent text-current">
+                <i class="text-xl fa fa-bars"></i>
+              </button>
+            </li>
+            <li>
+              <button 
+                name="toggle app generator"
+                data-toggletab="random" 
+                class="py-0 mt-2 md:m-0 border-none bg-transparent text-current text-blue-500">
+                <i class="text-xl fa fa-compass-drafting"></i>
+              </button>
+            </li>
+            <li>
+              <button 
+                name="toggle zooming and panning"
+                data-zoom="true" 
+                class="py-0 mt-2 md:m-0 border-none bg-transparent text-current">
+                <i class="text-xl fa fa-light fa-magnifying-glass-plus"></i>
+              </button>
+            </li>
+            <li>
+              <button 
+                name="toggle pages tab"
+                data-toggletab="pages" 
+                class="py-0 mt-2 border-none bg-transparent text-current">
+                <i class="text-xl fa fa-file"></i>
+              </button>
+            </li>
+            <li>
+              <button 
+                name="toggle blocks tab"
+                data-toggletab="blocks" 
+                class="py-0 mt-2 border-none bg-transparent text-current">
+                <i class="text-xl fa-solid fa-trowel-bricks"></i>
+              </button>
+            </li>
+            <li>
+              <button 
+                name="toggle layers tab"
+                data-toggletab="layers" 
+                class="py-0 mt-2 border-none bg-transparent text-current">
+                <i class="text-xl fa-solid fa-layer-group"></i>
+              </button>
+            </li>
+            <li>
+              <button 
+                name="toggle assets tab"
+                data-toggletab="assets" 
+                class="py-0 mt-2 border-none bg-transparent text-current">
+                <i class="text-xl fa fa-photo-film"></i>
+              </button>
+            </li>
+            <li>
+              <button 
+                name="toggle data tab"
+                data-toggletab="data" 
+                class="py-0 mt-2 border-none bg-transparent text-current">
+                <i class="text-xl fa fa-database"></i>
+              </button>
+            </li>
+            <li>
+              <button 
+                name="toggle the history stack tab"
+                data-toggletab="history" 
+                class="py-0 mt-2 border-none bg-transparent text-current">
+                <i class="text-xl fa fa-history"></i>
+              </button>
+            </li>
+            <li>
+              <button 
+                name="toggle metadata tab"
+                data-toggletab="metadata" 
+                class="py-0 mt-2 border-none bg-transparent text-current">
+                <i class="text-xl fa fa-solid fa-tachograph-digital"></i>
+              </button>
+            </li>
+          </ul>
+        </nav>
       </div>
     </div>
 
