@@ -168,7 +168,7 @@
         </nav>
         
         <!-- tabs -->
-        <div id="tabsNav" class="absolute top-0 inset-x-0 bottom-16 p-4 overflow-hidden md:left-16 md:bottom-0">
+        <div id="tabsNav" class="absolute top-0 inset-x-0 bottom-16 p-4 overflow-auto md:left-16 md:bottom-0">
           <div data-tabcontent="random" class="h-full grid items-center place-items-center">
             <div class="w-3/4">
               <h4 class="mb-0 text-center">Build me a...</h4>
@@ -249,19 +249,23 @@
             </button>
           </div>
           <div data-tabcontent="blocks" class="hidden">
+            <h5 class="capitalize text-3xl">
+              blocks
+            </h5>
             <!-- blocks content section -->
-            <div data-blockscontent class="absolute inset-0 border-solid border border-l-0 border-r-0 border-t-0">
+            <div data-blockscontent>
               <!-- display blocks section -->
-              <div class="absolute inset-0 p-4 overflow-auto">
+              <div class="absolute top-20 bottom-0 inset-x-0 p-4 overflow-auto">
                 <!-- blocks -->
                 <div data-blocks class="grid grid-cols-2 gap-4">
-                  <button id="draggable" draggable="true" class="inline-block bg-gray-800 w-auto px-4 rounded-md">
+                  <button class="inline-block bg-gray-800 w-auto px-4 rounded-md" data-block-type="navbar" draggable="true">
                     navbar
                   </button>
-                  <button class="inline-block bg-gray-800 w-auto px-4 rounded-md">
+                  <!-- Add draggable class and data-block-type attribute to each draggable button -->
+                  <button class="inline-block bg-gray-800 w-auto px-4 rounded-md" data-block-type="grid" draggable="true">
                     grid
                   </button>
-                  <button class="inline-block bg-gray-800 w-auto px-4 rounded-md">
+                  <button class="inline-block bg-gray-800 w-auto px-4 rounded-md" data-block-type="flexbox" draggable="true">
                     flexbox
                   </button>
                   <button class="inline-block bg-gray-800 w-auto px-4 rounded-md">
@@ -462,8 +466,8 @@
           </div>
           <div data-tabcontent="metadata" class="hidden">
             <h5 class="capitalize text-3xl">
-            metadata
-          </h5>
+              metadata
+            </h5>
   
             <h5 class="capitalize">
               meta

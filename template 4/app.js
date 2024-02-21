@@ -970,14 +970,6 @@ const app = {
 
   // Update iframe preview function
   updatePreview: (initLiveRender = false) => {
-    // Modified draggable code in the parent window
-    draggable.addEventListener("dragstart", event => {
-      event.dataTransfer.setData("text/plain", "dragged");
-      // Send drag data to iframe
-      const iframe = document.getElementById("preview");
-      iframe.contentWindow.postMessage("dragged", "*");
-    });
-
     const generateHtmlCode = () => {
       const showConsole = project.console
         ? `<script type="module" src="js/dom-console.js" defer></script>`
@@ -1039,8 +1031,41 @@ const app = {
 
     // Open, write HTML code, and close the content document
     previewDoc.open();
+    
+    // Modified draggable code in the parent window
+    document.querySelectorAll('[data-block-type]').forEach(draggable => {
+        draggable.addEventListener("dragstart", event => {
+            event.dataTransfer.setData("text/plain", draggable.dataset.blockType); // Set data to block type
+            // Send drag data to iframe
+            previewFrame.contentWindow.postMessage("dragged", "*");
+        });
+    });
     previewDoc.write(generateHtmlCode());
     previewDoc.close();
+    
+    // Listen for console messages from the iframe
+    window.addEventListener('message', event => {
+      const { type, message } = event.data;
+      switch (type) {
+        case 'consoleLog':
+          console.log('Log from iframe:', ...message);
+          break;
+        case 'consoleError':
+          console.error('Error from iframe:', ...message);
+          break;
+        case 'consoleWarn':
+          console.warn('Warning from iframe:', ...message);
+          break;
+        case 'consoleInfo':
+          console.info('Info from iframe:', ...message);
+          break;
+        case 'consoleTable':
+          console.table('Table from iframe:', message.data, message.columns);
+          break;
+        default:
+          break;
+      }
+    });
     
     // Listen for events within the iframe's content window
     const idoc = previewDoc;

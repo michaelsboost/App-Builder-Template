@@ -19,4 +19,36 @@ window.addEventListener('message', event => {
   if (type === 'applyTextStyle') {
     app.applyTextStyle(styleType);
   }
+  
+  // Override console methods to capture all console output
+  const originalConsoleLog = console.log;
+  const originalConsoleError = console.error;
+  const originalConsoleWarn = console.warn;
+  const originalConsoleInfo = console.info;
+  const originalConsoleTable = console.table;
+  
+  console.log = function(...args) {
+    window.parent.postMessage({ type: 'consoleLog', message: args }, '*');
+    originalConsoleLog.apply(console, args);
+  };
+  
+  console.error = function(...args) {
+    window.parent.postMessage({ type: 'consoleError', message: args }, '*');
+    originalConsoleError.apply(console, args);
+  };
+  
+  console.warn = function(...args) {
+    window.parent.postMessage({ type: 'consoleWarn', message: args }, '*');
+    originalConsoleWarn.apply(console, args);
+  };
+  
+  console.info = function(...args) {
+    window.parent.postMessage({ type: 'consoleInfo', message: args }, '*');
+    originalConsoleInfo.apply(console, args);
+  };
+  
+  console.table = function(data, columns) {
+    window.parent.postMessage({ type: 'consoleTable', message: { data, columns } }, '*');
+    originalConsoleTable.apply(console, [data, columns]);
+  };
 });
