@@ -396,8 +396,15 @@
                     </tr>
                   </tbody>
                 </table>
+  
+                <!-- Add data field -->
+                <button>
+                  <i class="fa fa-plus"></i>
+                </button>
+                
+                <!-- Delete data field -->
                 <button 
-                  name="Delete a data table"
+                  name="Delete a data field"
                   class="bg-red-400 border-red-400">
                   <i class="fa fa-trash"></i>
                 </button>
@@ -415,18 +422,6 @@
                 </summary>
                 <textarea id="jsonvalue" onfocus="this.select(true)"></textarea>
               </details>
-    
-              <!-- Add data field -->
-              <button>
-                <i class="fa fa-plus"></i>
-              </button>
-              
-              <!-- Delete data -->
-              <button 
-                name="Delete a data field"
-                class="bg-red-400 border-red-400">
-                <i class="fa fa-trash"></i>
-              </button>
     
               <!-- option for if this new field has multiple entries -->
               <nav>
@@ -448,6 +443,13 @@
                 id="addDataBtn" 
                 class="bg-green-500">
                 <i class="fa fa-plus"></i>
+              </button>
+              
+              <!-- Delete data table -->
+              <button 
+                name="Delete a data table"
+                class="bg-red-400 border-red-400">
+                <i class="fa fa-trash"></i>
               </button>
             </div>
           </div>
