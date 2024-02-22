@@ -109,6 +109,7 @@ const jsonData = {
 const app = {
   appName: "App Builder Template",
   appVersion: "0.0.1",
+  element: "",
   
   // To keep track of the active page
   activePage: 0,
@@ -1184,6 +1185,28 @@ const app = {
 //     });
   },
   
+  // Function to copy element in layers
+  copyElement: elm => {
+    // Clone block
+    let clonedElement = elm.cloneNode(true);
+    app.element = clonedElement;
+  },
+  
+  // Function to paste element in layers
+  pasteElement: elm => {
+    // Insert the cloned element after the original
+    elm.parentNode.insertBefore(app.element, elm.nextSibling);
+  
+    // push changes
+    app.updateHTMLStructure(elm.closest('body').innerHTML);
+        
+    // Update the display content
+    app.updateLayersContent(app.activePage);
+    
+    // update history stack
+    app.addToHistory('Pasted To', blockNameButton.textContent);
+  },
+  
   // Function to update the display tab
   updateLayersContent: activePageIndex => {
     const layersContent = document.querySelector('[data-layerscontent]');
@@ -1205,7 +1228,7 @@ const app = {
     
         // Create navigation bar
         const navBar = document.createElement('nav');
-        navBar.className = 'flex justify-between items-center p-0 h-12 pr-2 overflow-hidden mb-1';
+        navBar.className = 'flex justify-between items-center p-0 h-12 pr-2 mb-1';
     
         // Check if the element has nested children
         const hasNestedChildren = Array.from(element.childNodes).some(child => child.nodeType === Node.ELEMENT_NODE);
@@ -1281,126 +1304,119 @@ const app = {
         });
     
         // Render buttons recursively
-        const renderButtons = () => {
+        const renderButtonsWithDropdown = () => {
           // Create box to group buttons
-          const box = document.createElement('li')
+          const box = document.createElement('li');
+          box.className = "text-white text-xs";
           buttonsContainer.appendChild(box);
-    
-          ['font', 'clone', 'trash', 'eye'].forEach(icon => {
+      
+          // Create font button
+          const fontButton = document.createElement('button');
+          fontButton.classList.add('inline-block', 'w-auto', 'rounded-none', 'm-0', 'py-1', 'px-3', 'border-none', 'bg-transparent');
+          box.appendChild(fontButton);
+          fontButton.addEventListener('click', () => {
+            let newName = prompt('Enter the new name:');
+            // Remove any characters that are not lowercase letters, uppercase letters, or numbers
+            newName = newName.replace(/[^a-zA-Z0-9]/g, '');
+
+            // Set the new name as the text content of the button
+            element.setAttribute('data-name4Polyrise', newName);
+            // Update project HTML with the modified content
+            const updatedHtml = body.innerHTML;
+            project.pages[app.activePage].html = updatedHtml;
+            // Update the display content
+            app.updatePreview();
+            app.updateLayersContent(app.activePage);
+            
+            // Update history stack
+            app.addToHistory('Renamed', newName);
+          });
+      
+          // Create font icon
+          const fontIcon = document.createElement('i');
+          fontIcon.classList.add('fa', 'fa-font');
+          fontButton.appendChild(fontIcon);
+      
+          // Create dropdown container
+          const dropdownContainer = document.createElement('div');
+          dropdownContainer.className = "dropdown dropdown-end";
+          box.appendChild(dropdownContainer);
+      
+          // Create ellipsis button
+          const ellipsisButton = document.createElement('button');
+          ellipsisButton.setAttribute('tabindex', '0');
+          ellipsisButton.classList.add('inline-block', 'w-auto', 'rounded-none', 'm-0', 'py-1', 'px-3', 'border-none', 'bg-transparent');
+          dropdownContainer.appendChild(ellipsisButton);
+      
+          // Create ellipsis icon
+          const ellipsisIcon = document.createElement('i');
+          ellipsisIcon.classList.add('fa', 'fa-ellipsis-vertical');
+          ellipsisButton.appendChild(ellipsisIcon);
+      
+          // Create dropdown menu
+          const dropdownMenu = document.createElement('ul');
+          dropdownMenu.setAttribute('tabindex', '0');
+          dropdownMenu.className = "dropdown-content z-[1] menu menu-horizontal p-2 shadow bg-base-100 rounded-box w-60 text-center";
+          dropdownContainer.appendChild(dropdownMenu);
+          
+          // Add items to dropdown menu
+          const dropdownItems = ['copy', 'paste', 'clone', 'trash'];
+          dropdownItems.forEach(item => {
+            const listItem = document.createElement('li');
+            listItem.className = "p-0 m-auto";
             const button = document.createElement('button');
-            button.classList.add('inline-block', 'w-auto', 'rounded-none', 'm-0', 'py-1', 'px-3', 'border-none', 'bg-transparent');
-            const buttonIcon = document.createElement('i');
-            buttonIcon.classList.add('fa', `fa-${icon}`);
-            button.appendChild(buttonIcon);
-            
-            if (icon === 'font') {
-              // Add event listener for delete button
-              button.addEventListener('click', () => {
-                let newName = prompt('Enter the new name:');
-                // Remove any characters that are not lowercase letters, uppercase letters, or numbers
-                newName = newName.replace(/[^a-zA-Z0-9]/g, '');
-                // Set the new name as the text content of the button
-//                   if (element.classList.contains('activeElm4Polyrise')) {
-//                     let array = element.closest('body').querySelectorAll('.activeElm4Polyrise');
-//                     array.forEach(arr => {
-//                       // Set the new name as the text content of the button
-//                       arr.setAttribute('data-name4Polyrise', newName);
-//                     })
-//                   } else {
-//                     // Set the new name as the text content of the button
-//                     element.setAttribute('data-name4Polyrise', newName);
-//                   }
-
-                // Set the new name as the text content of the button
-                element.setAttribute('data-name4Polyrise', newName);
-                // Update project HTML with the modified content
-                const updatedHtml = body.innerHTML;
-                project.pages[app.activePage].html = updatedHtml;
-                // Update the display content
-                app.updatePreview();
-                app.updateLayersContent(app.activePage);
-                
-                // Update history stack
-                app.addToHistory('Renamed', newName);
-              });
-            }
-            if (icon === 'clone') {
-              // Add event listener for clone button
-              button.addEventListener('click', () => {
-                // if (element.classList.contains('activeElm4Polyrise')) {
-//                   let array = element.closest('body').querySelectorAll('.activeElm4Polyrise');
-//                   array.forEach(arr => {
-//                     // Clone block
-//                     let clonedElement = arr.cloneNode(true);
-//                     // Insert the cloned element after the original
-//                     arr.parentNode.insertBefore(clonedElement, arr.nextSibling);
-//                   })
-//                 } else {
-//                   // Clone block
-//                   let clonedElement = element.cloneNode(true);
-//                   // Insert the cloned element after the original
-//                   element.parentNode.insertBefore(clonedElement, element.nextSibling);
-//                 }
-
-                // Clone block
-                let clonedElement = element.cloneNode(true);
-                // Insert the cloned element after the original
-                element.parentNode.insertBefore(clonedElement, element.nextSibling);
-            
-                // Update project HTML with the modified content
-                const updatedHtml = body.innerHTML;
-                project.pages[app.activePage].html = updatedHtml;
+            button.className = "m-0 border-0 bg-transparent text-current";
+            const icon = document.createElement('i');
+            icon.className = `fa fa-${item}`;
+            button.appendChild(icon);
+            listItem.appendChild(button);
+            dropdownMenu.appendChild(listItem);
+          });
           
-                // Update the display content
-                app.updatePreview();
-                app.updateLayersContent(app.activePage);
-                
-                // update history stack
-                app.addToHistory('Cloned', blockNameButton.textContent);
-              })
+          // Add event listener for dropdown menu items
+          dropdownMenu.addEventListener('click', (event) => {
+            // Handle the selected action based on the button's icon (e.g., copy, paste, clone, delete)
+            const selectedItem = event.target;
+            if (event.target.classList.contains("fa-copy")) {
+              app.copyElement(element);
             }
-            if (icon === 'trash') {
-              // Add event listener for delete button
-              button.addEventListener('click', () => {
-                  // if (element.classList.contains('activeElm4Polyrise')) {
-//                     let array = element.closest('body').querySelectorAll('.activeElm4Polyrise');
-//                     array.forEach(arr => {
-//                       arr.parentNode.removeChild(arr);
-//                     })
-//                   } else {
-//                     element.remove();
-//                   }
-
-                element.remove();
-            
-                // Update project HTML with the modified content
-                const updatedHtml = body.innerHTML;
-                project.pages[app.activePage].html = updatedHtml;
+            if (event.target.classList.contains("fa-paste")) {
+              app.pasteElement(element);
+            }
+            if (event.target.classList.contains("fa-clone")) {
+              // Clone block
+              let clonedElement = element.cloneNode(true);
+              // Insert the cloned element after the original
+              element.parentNode.insertBefore(clonedElement, element.nextSibling);
           
-                // Update the display content
-                app.updatePreview();
-                app.updateLayersContent(app.activePage);
-                
-                // update history stack
-                app.addToHistory('Deleted', blockNameButton.textContent);
-              })
-            }
-            if (icon === 'eye') {
-              if (element.style.display === 'none') {
-                buttonIcon.className = 'fa fa-eye-slash';
-                } else {
-                buttonIcon.className = 'fa fa-eye';
-              }
-            }
+              // Update project HTML with the modified content
+              const updatedHtml = body.innerHTML;
+              project.pages[app.activePage].html = updatedHtml;
         
-            // Bind events to blockButton
-            app.bindBlockButtonEvents(button, element);
-    
-            // Append button to the box
-            box.appendChild(button);
-          })
-        }
-        renderButtons();
+              // Update the display content
+              app.updatePreview();
+              app.updateLayersContent(app.activePage);
+              
+              // update history stack
+              app.addToHistory('Cloned', blockNameButton.textContent);
+            }
+            if (event.target.classList.contains("fa-trash")) {
+              element.remove();
+            
+              // Update project HTML with the modified content
+              const updatedHtml = body.innerHTML;
+              project.pages[app.activePage].html = updatedHtml;
+        
+              // Update the display content
+              app.updatePreview();
+              app.updateLayersContent(app.activePage);
+              
+              // update history stack
+              app.addToHistory('Deleted', blockNameButton.textContent);
+            }
+          });
+        };
+        renderButtonsWithDropdown();
     
         // Append the new block to the display area
         parent.appendChild(newBlock);
@@ -1577,53 +1593,6 @@ const app = {
   clearAttributes: () => {
     const renderAttributesContainer = document.querySelector('[data-renderAttributes]');
     renderAttributesContainer.innerHTML = ''; // Clear existing content
-  },
-
-  // Function to bind event listener to blockNameButton
-  bindBlockButtonEvents: (button, element) => {
-    button.addEventListener('click', () => {
-      let icon = button.querySelector('i');
-      
-      // toggles visibility
-      if (icon.classList.contains('fa-eye') || icon.classList.contains('fa-eye-slash')) {
-        const toggleElement = () => {
-          if (icon.classList.contains('fa-eye')) {
-            icon.classList.add('fa-eye-slash');
-            icon.classList.remove('fa-eye');
-            element.style.display = 'none';
-          } else if (icon.classList.contains('fa-eye-slash')) {
-            icon.classList.add('fa-eye');
-            icon.classList.remove('fa-eye-slash');
-            element.removeAttribute('style');
-          }
-        }
-        
-        // checks if there's an array
-//         if (element.classList.contains('activeElm4Polyrise')) {
-//           // toggle array visibility for element
-//           let array = element.closest('body').querySelectorAll('.activeElm4Polyrise');
-//           array.forEach(arr => {
-//             if (arr.style.display !== 'none') {
-//               arr.style.display = 'none';
-//             } else if (arr.style.display === 'none') {
-//               arr.removeAttribute('style');
-//             }
-//           });
-//           array.forEach(arr => {
-//             arr.classList.remove('activeElm4Polyrise');
-//           });
-//         } else {
-//           toggleElement();
-//         }
-        toggleElement();
-      }
-      
-      // push changes
-      app.updateHTMLStructure(element.closest('body').innerHTML);
-          
-      // Update the display content
-      app.updateLayersContent(app.activePage);
-    })
   },
 
   // Function to add data
@@ -1991,6 +1960,7 @@ const app = {
           // Check if the selected tab is the 'layers' tab
           if (tabName === 'layers') {
             app.updateLayersContent(app.activePage);
+            // navigator.clipboard.writeText(document.querySelector("[data-layerscontent]").innerHTML);
           }
         } else {
           // If the clicked button was already active, show the random tab
