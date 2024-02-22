@@ -21,8 +21,6 @@
     <!-- Must contain only 1 css file -->
     <link rel="stylesheet"    href="css/style.css">
     <!-- Must contain only 1 javascript file -->
-    <script src="js/libraries.js" defer></script>
-    <script src="libraries/sortablejs/Sortable.min.js" defer></script>
     <script src="app.js" defer></script>
   </head>
   <body>
@@ -504,8 +502,11 @@
                 onchange="app.loadLogo(this)">
             </div>
   
-            <h5 class="capitalize">
+            <h5 class="capitalize font-normal m-0 mb-2">
               dark mode <input id="darkmode" type="checkbox" role="switch" class="float-right">
+            </h5>
+            <h5 class="capitalize font-normal m-0 mb-4">
+              page dark mode <input id="pagedarkmode" type="checkbox" role="switch" class="float-right">
             </h5>
   
             <h5 class="capitalize">
@@ -670,7 +671,5 @@
         </nav>
       </div>
     </div>
-
-    <script src="libraries/panzoom/panzoom.mod.js" defer></script>
   </body>
 </html>
