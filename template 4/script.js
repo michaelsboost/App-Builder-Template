@@ -1356,18 +1356,28 @@ const app = {
           // Create dropdown menu
           const dropdownMenu = document.createElement('ul');
           dropdownMenu.setAttribute('tabindex', '0');
-          dropdownMenu.className = "dropdown-content z-[1] menu menu-horizontal p-2 shadow bg-base-100 rounded-box w-60 text-center";
+          dropdownMenu.className = "dropdown-content z-[1] menu menu-horizontal p-2 shadow bg-base-100 rounded-box w-64 text-center";
           dropdownContainer.appendChild(dropdownMenu);
           
           // Add items to dropdown menu
-          const dropdownItems = ['copy', 'paste', 'clone', 'trash'];
+          const dropdownItems = ['copy', 'paste', 'clone', 'trash', 'eye'];
           dropdownItems.forEach(item => {
             const listItem = document.createElement('li');
             listItem.className = "p-0 m-auto";
             const button = document.createElement('button');
-            button.className = "m-0 border-0 bg-transparent text-current";
+            button.className = "m-0 p-2 border-0 bg-transparent text-current text-sm";
             const icon = document.createElement('i');
-            icon.className = `fa fa-${item}`;
+          
+            if (item === 'eye') {
+              if (element.style.display === 'none') {
+                icon.className = `fa fa-eye-slash`;
+              } else {
+                icon.className = `fa fa-eye`;
+              }
+            } else {
+              icon.className = `fa fa-${item}`;
+            }
+            
             button.appendChild(icon);
             listItem.appendChild(button);
             dropdownMenu.appendChild(listItem);
@@ -1377,13 +1387,13 @@ const app = {
           dropdownMenu.addEventListener('click', (event) => {
             // Handle the selected action based on the button's icon (e.g., copy, paste, clone, delete)
             const selectedItem = event.target;
-            if (event.target.classList.contains("fa-copy")) {
+            if (selectedItem.classList.contains("fa-copy")) {
               app.copyElement(element);
             }
-            if (event.target.classList.contains("fa-paste")) {
+            if (selectedItem.classList.contains("fa-paste")) {
               app.pasteElement(element);
             }
-            if (event.target.classList.contains("fa-clone")) {
+            if (selectedItem.classList.contains("fa-clone")) {
               // Clone block
               let clonedElement = element.cloneNode(true);
               // Insert the cloned element after the original
@@ -1400,7 +1410,7 @@ const app = {
               // update history stack
               app.addToHistory('Cloned', blockNameButton.textContent);
             }
-            if (event.target.classList.contains("fa-trash")) {
+            if (selectedItem.classList.contains("fa-trash")) {
               element.remove();
             
               // Update project HTML with the modified content
@@ -1413,6 +1423,22 @@ const app = {
               
               // update history stack
               app.addToHistory('Deleted', blockNameButton.textContent);
+            }
+            if (selectedItem.classList.contains('fa-eye') || selectedItem.classList.contains('fa-eye-slash')) {
+              if (selectedItem.classList.contains('fa-eye')) {
+                selectedItem.className = 'fa fa-eye-slash';
+                element.style.display = 'none';
+              } else if (selectedItem.classList.contains('fa-eye-slash')) {
+                selectedItem.className = 'fa fa-eye';
+                element.removeAttribute('style');
+              }
+              // Update project HTML with the modified content
+              const updatedHtml = body.innerHTML;
+              project.pages[app.activePage].html = updatedHtml;
+        
+              // Update the display content
+              app.updatePreview();
+              return false;
             }
           });
         };
