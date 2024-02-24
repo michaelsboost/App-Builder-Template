@@ -1,6 +1,6 @@
 let project = {
   projectName: "App name",
-  version: "0.0.1",
+  version: "0.0.3",
   settings: {
     theme: false,
     console: false,
@@ -13,7 +13,7 @@ let project = {
   },
   pages: [
     {
-      theme: false,
+      theme: "light",
       name: "index",
       title: "An attractive title",
       description: "The most attractive description ever!",
@@ -34,42 +34,6 @@ let project = {
     <span class="inline-block bg-gray-100 rounded-full px-3 py-1 text-sm font-semibold text-gray-600">#winter</span>
   </div>
 </div>`,
-      actionBlocks: []
-    },
-    {
-      name: "test",
-      title: "An attractive title",
-      description: "The most attractive description ever!",
-      author: "Jane Doe",
-      website: "https://website.com/",
-      analytics: "",
-      html: `<div class="h-screen w-screen bg-indigo-400 overflow-hidden absolute flex items-center">
-  <div class="w-screen h-64 absolute top-0 opacity-50 left-0 -my-40 -mx-64 bg-indigo-300 rounded-full"></div>
-  <div class="w-64 h-64 -mx-32 bg-indigo-300 opacity-50 rounded-full"></div>
-  <div class="w-64 h-64 ml-auto relative opacity-50 -mr-32 bg-indigo-300 rounded-full"></div>
-  <div class="w-screen h-64 absolute opacity-50 bottom-0 right-0 -my-40 -mx-64 bg-indigo-300 rounded-full"></div>
-</div>
-
-<div class="container mx-auto h-screen py-16 px-8 relative">
-  <div class="flex w-full rounded-lg h-full lg:overflow-hidden overflow-auto lg:flex-row flex-col shadow-2xl">
-    <div class="lg:w-1/2 bg-white text-gray-800 flex flex-col">
-      <div class="p-8 shadow-md relative bg-white">
-        <div class="flex items-center">
-          <img src="https://randomuser.me/api/portraits/men/1.jpg" class="w-10 h-10 block rounded object-cover object-top" />
-          <div class="text-indigo-600 font-medium ml-3">Holden Caulfield</div>
-          <button class="bg-indigo-100 text-indigo-400 ml-auto w-8 h-8 flex items-center justify-center rounded">
-            <svg stroke="currentColor" class="w-4 h-4" viewBox="0 0 24 24" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
-          </button>
-        </div>
-        <h1 class="font-medium text-lg mt-6">Contact List</h1>
-        <p class="text-gray-600 text-sm">Fingerstache godard blog, cornhole meh hoodie</p>
-        <div class="mt-6 flex">
-          <button class="bg-indigo-500 text-white py-2 text-sm px-3 rounded focus:outline-none">New Contact</button>
-          <button class="ml-4 text-gray-600 py-2 text-sm px-3 rounded focus:outline-none border border-gray-400">New Task</button>
-          <div class="relative ml-auto flex-1 pl-8 sm:block hidden">
-            <input placeholder="Search" type="text" class="w-full border rounded border-gray-400 h-full focus:outline-none pl-4 pr-8 text-gray-700 text-sm text-gray-500">
-            <svg stroke="currentColor" class="w-4 h-4 absolute right-0 top-0 mt-3 mr-2 text-gray-500" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-              <circle cx="11" cy="11" r="8"/>`,
       actionBlocks: []
     }
   ]
@@ -110,6 +74,43 @@ const app = {
   appName: "App Builder Template",
   appVersion: "0.0.1",
   element: "",
+  activeHTML: "",
+  blocks: [
+    {
+      category: "Navbars",
+      items: [
+        {
+          name: "Simple Navbar",
+          code: `<nav class="flex justify-between px-4 border-gray-500 border-b">
+  <ul>
+    <li class="m-0">
+      <button class="border-0">
+        <i class="fa fa-bars"></i>
+      </button>
+    </li>
+    <li class="ml-2">
+      <button class="border-0">
+        ${project.projectName}
+      </button>
+    </li>
+  </ul>
+  <ul>
+    <li class="m-0">
+      <button class="border-0">
+        <i class="fa fa-search"></i>
+      </button>
+    </li>
+    <li class="m-0">
+      <button class="border-0">
+        <i class="fa fa-cog"></i>
+      </button>
+    </li>
+  </ul>
+</nav>`,
+        }
+      ]
+    }
+  ],
   
   // To keep track of the active page
   activePage: 0,
@@ -678,7 +679,7 @@ const app = {
 
     // push page info to object
     let tempObj = {
-      theme: false,
+      theme: "light",
       name: val,
       title: `${projectTitle.value}`,
       description: `${description.value}`,
@@ -979,10 +980,10 @@ const app = {
     project.pages[app.activePage].html = bodyHtml.innerHTML;
   },
 
-  // Update iframe preview function
+  // Function to update previews
   updatePreview: (initLiveRender = false) => {
     const generateHtmlCode = () => {
-		const theme = project.pages[app.activePage].theme ? 'night' : 'light';
+		const theme = project.pages[app.activePage].theme;
       const showConsole = project.settings.console
         ? `<script type="module" src="js/dom-console.js" defer></script>`
         : "";
@@ -1093,7 +1094,7 @@ const app = {
     }
   },
   renderPagePreviews: () => {
-		const theme = project.pages[app.activePage].theme ? 'night' : 'light';
+		const theme = project.pages[app.activePage].theme;
     const generateHtmlCode = initPage => {
       return `<!DOCTYPE html>
 <html data-theme="${theme}">
@@ -1151,8 +1152,195 @@ const app = {
       setTimeout(() => outputPage(`previewElm${i}`, `preview${i}`, i), 100);
     }
   },
+  renderBlocksDropdown2: () => {
+	  const theme = project.pages[app.activePage].theme;
+    const generateHtmlCode = () => {
+        return `<!DOCTYPE html>
+<html data-theme="${theme}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="libraries/font-awesome/css/all.min.css">
+    <link rel="stylesheet" href="libraries/daisyui/daisyui.css">
+    <link rel="stylesheet" href="libraries/tailwind/tailwind.min.css">
+  </head>
+  <body>
+    
+  </body>
+</html>`;
+    };
+    
+    const container = document.querySelector('[data-blocks]');
+    container.innerHTML = "";
+
+    // Iterate over blocks array
+    blocks.forEach(category => {
+      // Create details element
+      const details = document.createElement('details');
+      // details.setAttribute('open', '');
+      container.appendChild(details);
+
+      // Create summary element with category name
+      const summary = document.createElement('summary');
+      summary.textContent = category.category;
+      details.appendChild(summary);
+
+      // Create div to hold blocks
+      const blockContainer = document.createElement('div');
+      blockContainer.className = "relative grid grid-cols-2 gap-4";
+      details.appendChild(blockContainer);
+      
+      // Create a new HTML document fragment
+      const fragment = document.createDocumentFragment();
+
+      // Iterate over blocks in the category
+      category.items.forEach(block => {
+        // Create article to wrap iframe
+        const wrapper = document.createElement('div');
+        wrapper.className = "h-auto grid items-center place-items-center rounded-md p-0";
+        wrapper.setAttribute('data-theme', theme);
+        blockContainer.appendChild(wrapper);
+        
+        // Create section to center iframe vertically
+        const gridContainer = document.createElement('div');
+        gridContainer.className = "relative w-full h-full m-auto p-0";
+        wrapper.appendChild(gridContainer);
+        
+        // Create span to display block name
+        // const blockName = document.createElement('span');
+//         blockName.className = "text-sm";
+//         blockName.textContent = block.name;
+//         wrapper.appendChild(blockName);
+        
+        // Create iframe for each block preview
+        const iframe = document.createElement('iframe');
+        
+        // Apply Tailwind CSS classes and inline styles to the iframe
+        iframe.className = "transform scale-50 m-auto p-0";
+        iframe.style.width = "200%";
+        iframe.style.height = "200%";
+        iframe.style.transformOrigin = "top left";
+        
+        iframe.setAttribute('frameborder', '0');
+        iframe.setAttribute('scrolling', 'no');
+        gridContainer.appendChild(iframe);
+
+        // Get the content document of the iframe
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+        // Open, write HTML code, and close the content document
+        iframeDoc.open();
+        iframeDoc.write(generateHtmlCode());
+        iframeDoc.close();
+
+        // Add event listener to adjust iframe height once content is loaded
+        iframe.addEventListener('load', () => {
+          // Set the iframe's height to the scroll height of its content
+          const contentDiv = document.createElement('div');
+          contentDiv.className = "h-full grid items-center place-items-center";
+          contentDiv.innerHTML = block.code;
+          contentDiv.style.margin = '0'; // Remove any margin
+          contentDiv.style.padding = '0'; // Remove any padding
+          iframeDoc.body.innerHTML = ''; // Clear existing content
+          iframeDoc.body.appendChild(contentDiv); // Append modified content
+          setTimeout(() => {
+            const contentHeight = contentDiv.offsetHeight; // Use offsetHeight to include margins and paddings
+            iframe.style.height = `${contentHeight}px`;
+          }, 300);
+        });
+
+        // Add click event to iframe to add block to canvas
+        iframe.addEventListener('click', () => {
+          console.log("block clicked");
+        });
+      });
+    });
+  },
+  renderBlocksDropdown: () => {
+    const theme = project.pages[app.activePage].theme;
+    const container = document.querySelector('[data-blocks]');
+    container.innerHTML = "";
+
+    // Iterate over blocks array
+    const blocks = app.blocks;
+    blocks.forEach(category => {
+      // Create details element
+      const details = document.createElement('details');
+      // details.setAttribute('open', '');
+      container.appendChild(details);
+
+      // Create summary element with category name
+      const summary = document.createElement('summary');
+      summary.textContent = category.category;
+      details.appendChild(summary);
+
+      // Create div to hold blocks
+      const blockContainer = document.createElement('div');
+      blockContainer.className = "p-4 grid grid-cols-1 gap-4";
+      details.appendChild(blockContainer);
+
+      // Iterate over blocks in the category
+      category.items.forEach(block => {
+        // Create div to wrap block code
+        const blockWrapper = document.createElement('article');
+        blockWrapper.className = "relative w-full rounded-md grid grid-cols-1 items-center place-items-center";
+        blockWrapper.setAttribute('data-theme', theme);
+        blockContainer.appendChild(blockWrapper);
+
+        // Create header for additional content
+        const header = document.createElement('header');
+        header.className = "bg-transparent";
+        blockWrapper.appendChild(header);
+
+        // Create div to insert block code
+        const blockCode = document.createElement('main');
+        blockCode.className = "w-full h-full m-auto p-0 overflow-auto";
+        blockCode.innerHTML = block.code;
+        blockWrapper.appendChild(blockCode);
+
+        // Create span to display block name
+        const blockName = document.createElement('span');
+        blockName.className = "text-sm";
+        blockName.textContent = block.name;
+        header.appendChild(blockName);
+
+        // Create footer for additional content
+        const footer = document.createElement('footer');
+        footer.className = "block w-full bg-transparent";
+        blockWrapper.appendChild(footer);
+
+        // Create button to add block
+        const addBlockButton = document.createElement('button');
+        addBlockButton.className = "block w-full text-sm";
+        addBlockButton.innerHTML = `<i class="fa fa-plus"></i>`;
+        footer.appendChild(addBlockButton);
+        addBlockButton.onclick = () => {
+          const htmlString = app.activeHTML;
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(htmlString, 'text/html');
+          let body = doc.body;
+          
+          // detect if an active element exists
+          if (doc.querySelector('.activeElm4Polyrise')) {
+            let elm = doc.querySelector('.activeElm4Polyrise');
+            elm.innerHTML += block.code;
+            elm.classList.remove('activeElm4Polyrise');
+            body = elm.closest('body');
+          } else {
+            body.innerHTML += block.code;
+          }
+          
+          // push changes
+          app.updateHTMLStructure(body.innerHTML);
+              
+          // Update the display content
+          app.updateLayersContent(app.activePage);
+        };
+      });
+    });
+  },
   
-  // Function to update HTML structure after sorting
+  // Function to update HTML structure
   updateHTMLStructure: doc => {
     if (doc !== project.pages[app.activePage].html) {
       project.pages[app.activePage].html = doc;
@@ -1165,24 +1353,6 @@ const app = {
   // Toggle active state on blockNameButton click
   toggleActiveState: element => {
     element.classList.toggle('activeElm4Polyrise');
-  },
-  
-  // Function to initialize Sortable for an element
-  initializeSortable: doc => {
-    // Initialize Sortable 
-    // let sortableBlocks = document.querySelectorAll('[data-layersContent] ul')
-//     sortableBlocks.forEach(block => {
-//       sortableContainer = new Sortable(block, {
-//         group: 'nested',
-//         animation: 150,
-//         fallbackOnBody: true,
-//         swapThreshold: 0.65,
-//         onEnd: event => {
-//           // Handle sorting changes
-//           app.updateHTMLStructure(doc.innerHTML);
-//         }
-//       })
-//     });
   },
   
   // Function to copy element in layers
@@ -1247,7 +1417,6 @@ const app = {
         // Button for block name
         const blockNameButton = document.createElement('button');
         blockNameButton.classList.add('inline-block', 'w-auto', 'rounded-none', 'm-0', 'ml-2', 'px-0', 'bg-transparent', 'border-none', 'text-white', 'text-xs');
-        blockNameButton.setAttribute('data-handle', '');
                 
         // Get the element's ID
         const elementId = element.getAttribute('id');
@@ -1310,33 +1479,6 @@ const app = {
           box.className = "text-white text-xs";
           buttonsContainer.appendChild(box);
       
-          // Create font button
-          const fontButton = document.createElement('button');
-          fontButton.classList.add('inline-block', 'w-auto', 'rounded-none', 'm-0', 'py-1', 'px-3', 'border-none', 'bg-transparent');
-          box.appendChild(fontButton);
-          fontButton.addEventListener('click', () => {
-            let newName = prompt('Enter the new name:');
-            // Remove any characters that are not lowercase letters, uppercase letters, or numbers
-            newName = newName.replace(/[^a-zA-Z0-9]/g, '');
-
-            // Set the new name as the text content of the button
-            element.setAttribute('data-name4Polyrise', newName);
-            // Update project HTML with the modified content
-            const updatedHtml = body.innerHTML;
-            project.pages[app.activePage].html = updatedHtml;
-            // Update the display content
-            app.updatePreview();
-            app.updateLayersContent(app.activePage);
-            
-            // Update history stack
-            app.addToHistory('Renamed', newName);
-          });
-      
-          // Create font icon
-          const fontIcon = document.createElement('i');
-          fontIcon.classList.add('fa', 'fa-font');
-          fontButton.appendChild(fontIcon);
-      
           // Create dropdown container
           const dropdownContainer = document.createElement('div');
           dropdownContainer.className = "dropdown dropdown-end";
@@ -1360,7 +1502,7 @@ const app = {
           dropdownContainer.appendChild(dropdownMenu);
           
           // Add items to dropdown menu
-          const dropdownItems = ['copy', 'paste', 'clone', 'trash', 'eye'];
+          const dropdownItems = ['font', 'copy', 'paste', 'clone', 'trash', 'eye'];
           dropdownItems.forEach(item => {
             const listItem = document.createElement('li');
             listItem.className = "p-0 m-auto";
@@ -1387,6 +1529,23 @@ const app = {
           dropdownMenu.addEventListener('click', (event) => {
             // Handle the selected action based on the button's icon (e.g., copy, paste, clone, delete)
             const selectedItem = event.target;
+            if (selectedItem.classList.contains("fa-font")) {
+              let newName = prompt('Enter the new name:');
+              // Remove any characters that are not lowercase letters, uppercase letters, or numbers
+              newName = newName.replace(/[^a-zA-Z0-9]/g, '');
+  
+              // Set the new name as the text content of the button
+              element.setAttribute('data-name4Polyrise', newName);
+              // Update project HTML with the modified content
+              const updatedHtml = body.innerHTML;
+              project.pages[app.activePage].html = updatedHtml;
+              // Update the display content
+              app.updatePreview();
+              app.updateLayersContent(app.activePage);
+              
+              // Update history stack
+              app.addToHistory('Renamed', newName);
+            }
             if (selectedItem.classList.contains("fa-copy")) {
               app.copyElement(element);
             }
@@ -1493,6 +1652,7 @@ const app = {
         element.classList.remove('activeElm4Polyrise');
         blockNameButton.closest('nav').closest('ul').classList.remove('bg-indigo-900');
         app.clearAttributes();
+        app.activeHTML = element.closest('body').innerHTML;
       } else {
         // Toggle on the active state for the clicked block
         const currentActiveBlock = document.querySelector('.bg-indigo-900');
@@ -1504,6 +1664,7 @@ const app = {
         blockNameButton.parentNode.closest('nav').closest('ul').classList.add('bg-indigo-900');
         element.classList.add('activeElm4Polyrise');
         app.renderAttributes(element);
+        app.activeHTML = element.closest('body').innerHTML;
       }
     });
   },
@@ -1946,10 +2107,30 @@ const app = {
         .querySelector("html[data-theme]")
         .setAttribute("data-theme", project.settings.theme ? "dark" : "light");
     };
-    pagedarkmode.onchange = () => {
-      project.pages[app.activePage].theme = pagedarkmode.checked;
-      app.updatePreview(liverender.checked);
-    };
+    const themes = ["light","dark","cupcake","bumblebee","emerald","corporate","synthwave","retro","cyberpunk","valentine","halloween","garden","forest","aqua","lofi","pastel","fantasy","wireframe","black","luxury","dracula","cmyk","autumn","business","acid","lemonade","night","coffee","winter","dim","nord","sunset"];
+    
+    themes.forEach(theme => {
+      let code = `<button class="outline-base-content text-start outline-offset-4 p-0 m-0 bg-transparent border-0" onclick="project.pages[app.activePage].theme = '${theme}'; app.updatePreview(liverender.checked);">
+      <span data-theme="${theme}" class="bg-base-100 rounded-btn text-base-content block w-full cursor-pointer font-sans">
+        <span class="grid grid-cols-5 grid-rows-3">
+          <span class="col-span-5 row-span-3 row-start-1 flex items-center gap-2 px-4 py-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="invisible h-3 w-3 shrink-0">
+              <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+            </svg>
+            <span class="flex-grow text-sm">${theme}</span> 
+            <span class="flex h-full shrink-0 flex-wrap gap-1">
+            <span class="bg-primary rounded-badge w-2"></span> 
+            <span class="bg-secondary rounded-badge w-2"></span> 
+            <span class="bg-accent rounded-badge w-2"></span> 
+            <span class="bg-neutral rounded-badge w-2"></span>
+            </span>
+          </span>
+        </span>
+      </span>
+    </button>`
+    
+      document.querySelector('[data-output=themes]').innerHTML += code;
+    });
 
     // Initializing the to store the initial state
     app.addToHistory("initialize", "Initialized project with initial page");
@@ -1983,8 +2164,10 @@ const app = {
             // render page previews
             app.renderPagePreviews();
           }
-          // Check if the selected tab is the 'layers' tab
           if (tabName === 'layers') {
+            // Init blocks/components
+            app.renderBlocksDropdown();
+            
             app.updateLayersContent(app.activePage);
             // navigator.clipboard.writeText(document.querySelector("[data-layerscontent]").innerHTML);
           }

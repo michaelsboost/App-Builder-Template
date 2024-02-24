@@ -27,8 +27,6 @@
     <div class="relative flex flex-col md:flex-row-reverse h-screen">
       <!-- canvas container -->
       <div id="canvasContainer" class="relative flex-grow bg-repeat overflow-hidden" style="background-image: url('imgs/bg.svg');">
-        <nav id="breadcrumbs" class="absolute top-0 inset-x-0 p-4 z-10"></nav>
-  
         <!-- preview application here -->
         <div class="absolute inset-0">
           <div id="previewElm" data-canvas class="border border-solid bg-white" style="width: 360px; height: 740px;"></div>
@@ -202,7 +200,7 @@
                 <small>Version <span id="appVersion"></span></small>
               </div>
               <div>
-                <a href="#">
+                <a href="https://github.com/michaelsboost/Polyrise/blob/gh-pages/LICENSE" target="_blank">
                   Open Source License
                 </a>
               </div>
@@ -246,60 +244,17 @@
               <i class="fas fa-plus"></i>
             </button>
           </div>
-          <div data-tabcontent="blocks" class="hidden">
-            <h5 class="capitalize text-3xl">
-              blocks
-            </h5>
-            <!-- blocks content section -->
-            <div data-blockscontent>
-              <!-- display blocks section -->
-              <div class="absolute top-20 bottom-0 inset-x-0 p-4 overflow-auto">
-                <!-- blocks -->
-                <div data-blocks class="grid grid-cols-2 gap-4">
-                  <button class="inline-block bg-gray-800 w-auto px-4 rounded-md" data-block-type="navbar" draggable="true">
-                    navbar
-                  </button>
-                  <!-- Add draggable class and data-block-type attribute to each draggable button -->
-                  <button class="inline-block bg-gray-800 w-auto px-4 rounded-md" data-block-type="grid" draggable="true">
-                    grid
-                  </button>
-                  <button class="inline-block bg-gray-800 w-auto px-4 rounded-md" data-block-type="flexbox" draggable="true">
-                    flexbox
-                  </button>
-                  <button class="inline-block bg-gray-800 w-auto px-4 rounded-md">
-                    paragraph
-                  </button>
-                  <button class="inline-block bg-gray-800 w-auto px-4 rounded-md">
-                    button
-                  </button>
-                  <button class="inline-block bg-gray-800 w-auto px-4 rounded-md">
-                    link
-                  </button>
-                  <button class="inline-block bg-gray-800 w-auto px-4 rounded-md">
-                    image
-                  </button>
-                  <button class="inline-block bg-gray-800 w-auto px-4 rounded-md">
-                    video
-                  </button>
-                  <button class="inline-block bg-gray-800 w-auto px-4 rounded-md">
-                    bullet list
-                  </button>
-                  <button class="inline-block bg-gray-800 w-auto px-4 rounded-md">
-                    numbered list
-                  </button>
-                  <button class="inline-block bg-gray-800 w-auto px-4 rounded-md">
-                    list item
-                  </button>
-                  <button class="inline-block bg-gray-800 w-auto px-4 rounded-md">
-                    dropdown
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
           <div data-tabcontent="layers" class="hidden">
+            <!-- blocks content section -->
+            <details>
+              <summary>
+                Blocks
+              </summary>
+              <div data-blocks class="p-4"></div>
+            </details>
+            
             <!-- design/styles -->
-            <details open>
+            <details>
               <summary>
                 Layers
               </summary>
@@ -307,7 +262,7 @@
             </details>
             
             <!-- design/styles -->
-            <details open>
+            <details>
               <summary>
                 Design
               </summary>
@@ -317,7 +272,7 @@
             </details>
             
             <!-- attributes -->
-            <details open>
+            <details>
               <summary>
                 Attributes
               </summary>
@@ -507,9 +462,25 @@
             <h5 class="capitalize font-normal m-0 mb-2">
               dark mode <input id="darkmode" type="checkbox" role="switch" class="float-right">
             </h5>
-            <h5 class="capitalize font-normal m-0 mb-4">
-              page dark mode <input id="pagedarkmode" type="checkbox" role="switch" class="float-right">
-            </h5>
+            
+            <nav>
+              <h5 class="capitalize font-normal m-0 mb-4">
+                page theme
+              </h5>
+              <div class="dropdown dropdown-end">
+                <div tabindex="0" role="button" class="btn btn-ghost">
+                  <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="h-5 w-5 stroke-current md:hidden">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
+                  </svg>
+                  <svg width="12px" height="12px" class="h-2 w-2 fill-current opacity-60 inline-block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 2048">
+                    <path d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"></path>
+                  </svg>
+                </div>
+                <div tabindex="0" class="dropdown-content z-[1] p-2 shadow-2xl bg-base-200 rounded-box w-52 h-64 overflow-y-auto">
+                  <div class="grid grid-cols-1 gap-3 p-3" data-output="themes"></div>
+                </div>
+              </div>
+            </nav>
   
             <h5 class="capitalize">
               size
@@ -615,18 +586,10 @@
             </li>
             <li>
               <button 
-                name="toggle blocks tab"
-                data-toggletab="blocks" 
-                class="py-0 mt-2 border-none bg-transparent text-current">
-                <i class="text-xl fa-solid fa-trowel-bricks"></i>
-              </button>
-            </li>
-            <li>
-              <button 
                 name="toggle layers tab"
                 data-toggletab="layers" 
                 class="py-0 mt-2 border-none bg-transparent text-current">
-                <i class="text-xl fa-solid fa-layer-group"></i>
+                <i class="text-xl fa-solid fa-trowel-bricks"></i>
               </button>
             </li>
             <li>
