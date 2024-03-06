@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Title needs to be at within the max 580 pixel length -->
+    <title>App Builder Template</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta property="og:type"        content="website" />
+    <meta property="og:title"       content="App Builder Template" />
+    <link rel="shortcut icon" href="img/logo.svg" type="image/x-icon">
+    <!-- Chrome, Firefox OS and Opera -->
+    <meta name="theme-color" content="#ffffff">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#ffffff">
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="App Builder Template">
+    <link rel="apple-touch-icon" href="img/logo.png">
+    <!-- Must contain only 1 css file -->
+    <link rel="stylesheet"    href="css/style.css">
+    <!-- Must contain only 1 javascript file -->
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div class="absolute inset-0">
+      <!-- canvas container -->
+      <div id="canvasContainer" class="absolute inset-0 bg-repeat overflow-hidden bg-gray-800 md:left-80">
+        <div class="absolute inset-0 bg-transparent">
+          <div data-canvas class="absolute inset-0 grid grid-cols-2 gap-4 bg-transparent items-center justify-items-center">
+            <div data-iframecontainer class="relative">
+              <iframe src="https://michaelsboost.com/" frameborder="0" style="width: 360px; height: 740px;"></iframe>
+              <div data-iframeFill class="absolute inset-0"></div>
+            </div>
+            <div data-iframecontainer class="relative">
+              <iframe src="https://michaelsboost.com/kodeWeave" frameborder="0" style="width: 360px; height: 740px;"></iframe>
+              <div data-iframeFill class="absolute inset-0"></div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Bottom canvas navigation -->
+        <div 
+          class="absolute bottom-0 inset-x-0 py-2 pl-2 pr-4 bg-gray-900 text-white">
+          <div 
+            class="flex justify-between">
+            <div>
+              <button 
+                name="Toggle Layers Panel"
+                data-toggletab="layers"
+                class="text-xs p-2 capitalize">
+                <i class="pr-2 fa fa-sitemap"></i>
+                <span>layers</span>
+              </button>
+              <button 
+                name="Toggle Styles Panel"
+                data-toggletab="styles"
+                class="text-xs p-2 capitalize">
+                <i class="pr-2 fa fa-palette"></i>
+                <span>styles</span>
+              </button>
+              <button 
+                name="Toggle Timeline Panel"
+                data-toggletab="timeline"
+                class="text-xs p-2 capitalize">
+                <i class="pr-2 fa fa-timeline"></i>
+                <span>timeline</span>
+              </button>
+            </div>
+            
+            <div>
+              <button 
+                data-zoom="true"
+                name="Toggle zooming and panning"
+                class="text-xs py-2 pr-2">
+                <i class="fa fa-light fa-magnifying-glass-plus"></i>
+              </button>
+              <button 
+                name="Add pages or blocks or data to the canvas"
+                class="text-xs py-2 pl-2">
+                <i class="fa fa-plus"></i>
+              </button>
+            </div>
+          </div>
+          
+          <div id="tabsNav" 
+            class="overflow-auto" 
+            style="max-height: 40vh;">
+            <div 
+              data-tabcontent="layers"
+              class="hidden"></div>
+            <div 
+              data-tabcontent="styles"
+              class="hidden">
+              <!-- position -->
+              <div class="collapse collapse-plus capitalize">
+                <input type="checkbox" /> 
+                <div class="collapse-title text-xs">
+                  position
+                </div>
+                <div class="collapse-content"> 
+                  hello
+                </div>
+              </div>
+              
+              <!-- size -->
+              <div class="collapse collapse-plus capitalize">
+                <input type="checkbox" /> 
+                <div class="collapse-title text-xs">
+                  size
+                </div>
+                <div class="collapse-content"> 
+                  hello
+                </div>
+              </div>
+              
+              <!-- layout -->
+              <div class="collapse collapse-plus capitalize">
+                <input type="checkbox" /> 
+                <div class="collapse-title text-xs">
+                  layout
+                </div>
+                <div class="collapse-content"> 
+                  hello
+                </div>
+              </div>
+              
+              <!-- overlays -->
+              <div class="collapse collapse-plus capitalize">
+                <input type="checkbox" /> 
+                <div class="collapse-title text-xs">
+                  overlays
+                </div>
+                <div class="collapse-content"> 
+                  hello
+                </div>
+              </div>
+                
+              <!-- styles -->
+              <div class="collapse collapse-plus capitalize">
+                <input type="checkbox" /> 
+                <div class="collapse-title text-xs">
+                  styles
+                </div>
+                <div class="collapse-content"> 
+                  hello
+                </div>
+              </div>
+              
+              <!-- text -->
+              <div class="collapse collapse-plus capitalize">
+                <input type="checkbox" /> 
+                <div class="collapse-title text-xs">
+                  text
+                </div>
+                <div class="collapse-content"> 
+                  hello
+                </div>
+              </div>
+              
+              <!-- video -->
+              <div class="collapse collapse-plus capitalize">
+                <input type="checkbox" /> 
+                <div class="collapse-title text-xs">
+                  video
+                </div>
+                <div class="collapse-content"> 
+                  hello
+                </div>
+              </div>
+              
+              <!-- image -->
+              <div class="collapse collapse-plus capitalize">
+                <input type="checkbox" /> 
+                <div class="collapse-title text-xs">
+                  image
+                </div>
+                <div class="collapse-content"> 
+                  hello
+                </div>
+              </div>
+              
+              <!-- link -->
+              <div class="collapse collapse-plus capitalize">
+                <input type="checkbox" /> 
+                <div class="collapse-title text-xs">
+                  link
+                </div>
+                <div class="collapse-content"> 
+                  hello
+                </div>
+              </div>
+              
+              <!-- iframe -->
+              <div class="collapse collapse-plus capitalize">
+                <input type="checkbox" /> 
+                <div class="collapse-title text-xs">
+                  iframe
+                </div>
+                <div class="collapse-content"> 
+                  hello
+                </div>
+              </div>
+              
+              <!-- attributes -->
+              <div class="collapse collapse-plus capitalize">
+                <input type="checkbox" /> 
+                <div class="collapse-title text-xs">
+                  attributes
+                </div>
+                <div class="collapse-content"> 
+                  hello
+                </div>
+              </div>
+            </div>
+            <div 
+              data-tabcontent="timeline"
+              class="hidden"></div>
+          </div>
+        </div>
+      </div>
+    
+      <!-- top navbar -->
+      <nav class="absolute top-0 inset-x-0 flex justify-between p-2 text-white bg-gray-900 z-20">
+        <ul class="p-0 block md:hidden">
+          <button 
+            name="toggle menu"
+            class="m-0 bg-transparent border-0 px-4 py-2 rounded-md">
+            <label for="menu">
+              <input type="checkbox" id="menu" class="hidden">
+              <i class="fa fa-bars"></i>
+            </label>
+          </button>
+        </ul>
+        <ul class="p-0">
+          <button 
+            name="add a new page"
+            class="capitalize mx-2 px-2 py-2 bg-transparent border-solid border-white border-0">
+            <i class="fa fa-file"></i>
+          </button>
+          <button 
+            name="toggle data"
+            class="capitalize border-0 mx-2 px-2 py-2 bg-transparent border-solid border-blue-500 border-b text-blue-500">
+            <i class="fa fa-database"></i>
+          </button>
+          <button 
+            name="toggle blocks dialog"
+            class="capitalize border-0 mx-2 px-2 py-2 bg-transparent border-solid border-white border-0">
+            <i class="fa fa-cubes-stacked"></i>
+          </button>
+        </ul>
+        <ul class="p-0">
+          <button 
+            name="open tutorial lessons"
+            class="capitalize border-0 px-4 py-2 rounded-md bg-blue-500 text-white">
+              <i class="pr-2 fa fa-graduation-cap"></i> 
+              <span>
+                lessons
+              </span>
+          </button>
+        </ul>
+      </nav>
+      
+      <!-- Side navigation --> 
+      <nav id="sidenav" class="absolute left-0 top-14 bottom-0 bg-gray-900 text-white w-full md:block md:w-80 p-4 z-10 hidden">
+        <ul id="mainsidenav">
+          <li>
+            <article class="text-center">
+              <a id="appUrl" target="_blank">
+                <img id="appLogo" class="my-4 w-24 m-auto" src="imgs/logo.svg">
+              </a>
+              <div class="text-2xl">
+                About <span id="appName"></span>
+              </div>
+              <div class="my-2 text-xs">
+                Version <span id="appVersion"></span>
+              </div>
+              <div>
+                <a id="appLicense" target="_blank" class="text-sm underline mb-2 text-blue-500">
+                  Open Source License
+                </a>
+              </div>
+            </article>
+          </li>
+          <li class="py-4 px-8">
+            <hr>
+          </li>
+          <li class="hidden">
+            <input type="search" name="search" class="bg-gray-900 border border-blue-500 text-white rounded-full px-6 py-4 mb-4 focus:outline-none w-full" placeholder="Search...">
+          </li>
+          <li>
+            <button 
+              name="initialize new project"
+              class="capitalize p-2 block w-full text-left items-center rounded-md">
+              <i class="w-10 px-2 fa fa-file"></i> 
+              <span>
+                new project
+              </span>
+            </button>
+          </li>
+          <li>
+            <button 
+              name="import project file"
+              class="capitalize p-2 block w-full text-left items-center rounded-md">
+              <i class="w-10 px-2 fa fa-file-export"></i> 
+              <span>
+                import project
+              </span>
+            </button>
+          </li>
+          <li>
+            <button 
+              name="export project file"
+              class="capitalize p-2 block w-full text-left items-center rounded-md">
+              <i class="w-10 px-2 fa fa-file-import"></i> 
+              <span>
+                export project
+              </span>
+            </button>
+          </li>
+          <li>
+            <button 
+              name="export zip file"
+              class="capitalize p-2 block w-full text-left items-center rounded-md">
+              <i class="w-10 px-2 fa fa-save"></i> 
+              <span>
+                export zip
+              </span>
+            </button>
+          </li>
+          <li>
+            <button 
+              name="toggle settings"
+              class="capitalize p-2 block w-full text-left items-center rounded-md">
+              <i class="w-10 px-2 fa fa-cog"></i> 
+              <span>
+                settings
+              </span>
+            </button>
+          </li>
+          <li class="p-4">
+            <hr>
+          </li>
+          <li>
+            <div class="collapse collapse-plus capitalize">
+              <input type="checkbox" /> 
+              <div class="collapse-title">
+                <i class="w-10 pr-2 fa fa-wrench"></i> 
+                <span>
+                  import resources
+                </span>
+              </div>
+              <div class="collapse-content"> 
+                <p>hello</p>
+              </div>
+            </div>
+          </li>
+          <li>
+            <button 
+              name="toggle history stack"
+              class="capitalize p-2 block w-full text-left items-center rounded-md">
+              <i class="w-10 px-2 fa fa-history"></i> 
+              <span>
+                history
+              </span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </body>
+</html>
