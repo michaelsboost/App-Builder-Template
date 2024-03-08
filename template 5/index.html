@@ -26,20 +26,26 @@
   <body>
     <div class="absolute inset-0">
       <!-- canvas container -->
-      <div id="canvasContainer" class="absolute inset-0 bg-repeat overflow-hidden bg-gray-800 md:left-80">
+      <div id="canvasContainer" class="absolute inset-0 overflow-hidden bg-gray-800 md:left-80">
         <div class="absolute inset-0 bg-transparent">
-          <div data-canvas class="absolute inset-0 grid grid-cols-2 gap-4 bg-transparent items-center justify-items-center">
-            <div data-iframecontainer class="relative">
-              <iframe src="https://michaelsboost.com/" frameborder="0" style="width: 360px; height: 740px;"></iframe>
-              <div data-iframeFill class="absolute inset-0"></div>
+          <div id="iframeCanvas" data-topNavContent="iframe" class="absolute inset-0 overflow-hidden">
+            <div id="previewElm" style="width: 360px; height: 740px;">
+              <iframe 
+                id="preview"
+                class="w-full h-full"
+                src="https://michaelsboost.com/" 
+                sandbox="allow-scripts allow-same-origin allow-downloads allow-forms allow-modals allow-pointer-lock allow-popups"></iframe>
             </div>
-            <div data-iframecontainer class="relative">
-              <iframe src="https://michaelsboost.com/kodeWeave" frameborder="0" style="width: 360px; height: 740px;"></iframe>
-              <div data-iframeFill class="absolute inset-0"></div>
-            </div>
+            <div id="fill" class="absolute inset-0"></div>
+          </div>
+          <div data-topNavContent="data" class="absolute inset-0 overflow-hidden">
+            
+          </div>
+          <div data-topNavContent="blocks" class="absolute inset-0 overflow-hidden">
+            
           </div>
         </div>
-        
+      
         <!-- Bottom canvas navigation -->
         <div 
           class="absolute bottom-0 inset-x-0 py-2 pl-2 pr-4 bg-gray-900 text-white">
@@ -47,9 +53,18 @@
             class="flex justify-between">
             <div>
               <button 
+                name="Toggle Pages Panel"
+                data-toggletab="pages"
+                class="text-xs p-2 capitalize">
+                
+                <i class="pr-2 fa fa-file"></i>
+                <span>pages</span>
+              </button>
+              <button 
                 name="Toggle Layers Panel"
                 data-toggletab="layers"
                 class="text-xs p-2 capitalize">
+                
                 <i class="pr-2 fa fa-sitemap"></i>
                 <span>layers</span>
               </button>
@@ -57,6 +72,7 @@
                 name="Toggle Styles Panel"
                 data-toggletab="styles"
                 class="text-xs p-2 capitalize">
+                
                 <i class="pr-2 fa fa-palette"></i>
                 <span>styles</span>
               </button>
@@ -64,6 +80,7 @@
                 name="Toggle Timeline Panel"
                 data-toggletab="timeline"
                 class="text-xs p-2 capitalize">
+                
                 <i class="pr-2 fa fa-timeline"></i>
                 <span>timeline</span>
               </button>
@@ -88,37 +105,360 @@
             class="overflow-auto" 
             style="max-height: 40vh;">
             <div 
+              data-tabcontent="pages"
+              class="hidden">
+              <!-- meta data -->
+              <div class="collapse collapse-plus">
+                <input type="checkbox" /> 
+                <div class="collapse-title text-xs">
+                  index.html
+                </div>
+                <div class="collapse-content text-xs capitalize"> 
+                  <ul>
+                    <li class="pb-4">
+                      <div class="mb-2">
+                        filename:
+                      </div>
+                      <input 
+                        class="p-2 rounded-md bg-gray-800 w-full"
+                        type="text" placeholder="index.html">
+                    </li>
+                    <li class="py-4">
+                      <div class="mb-2">
+                        page title:
+                      </div>
+                      <input 
+                        class="p-2 rounded-md bg-gray-800 w-full"
+                        type="text" placeholder="Page title">
+                    </li>
+                    <li class="py-4">
+                      <div class="my-2">
+                        Page description
+                      </div>
+                      <textarea name="Page description"
+                        placeholder="Page description"
+                        class="p-2 rounded-md bg-gray-800 w-full resize-vertical h-56"></textarea>
+                    </li>
+                    <li class="py-4">
+                      <div class="my-2">
+                        HTML before closing head tag:
+                      </div>
+                      <textarea name="HTML before closing head tag"
+                        placeholder="HTML before closing </head> tag"
+                        class="p-2 rounded-md bg-gray-800 w-full resize-vertical h-56"></textarea>
+                    </li>
+                    <li class="py-4 grid grid-cols-2 gap-4">
+                      <button class="p-4 bg-blue-500 border border-gray-600 rounded-md">
+                        <i class="fa fa-clone"></i>
+                      </button>
+                      <button class="p-4 bg-red-400 border border-gray-600 rounded-md">
+                        <i class="fa fa-trash"></i>
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div 
               data-tabcontent="layers"
-              class="hidden"></div>
+              class="hidden">
+              <div data-layerscontent>
+                <ul class="rounded-md mb-0" id="block_367">
+                    <nav class="flex justify-between items-center p-0 h-12 pr-2 mb-1">
+                        <li class="text-white text-xs">
+                          <button class="inline-block w-auto rounded-none m-0 ml-2 pl-4 bg-transparent border-none" style="display: inline-block;">
+                            <i class="fa fa-caret-down"></i>
+                          </button>
+                          <button class="inline-block w-auto rounded-none m-0 ml-2 px-0 bg-transparent border-none text-white text-xs">
+                            box
+                          </button>
+                        </li>
+                        <ul>
+                            <li class="text-white text-xs">
+                                <div class="dropdown dropdown-end">
+                                  <button tabindex="0" class="inline-block w-auto rounded-none m-0 py-1 px-3 border-none bg-transparent">
+                                    <i class="fa fa-ellipsis-vertical"></i>
+                                  </button>
+                                    <ul tabindex="0" class="dropdown-content z-[1] menu menu-horizontal p-2 shadow bg-base-100 rounded-box w-64 text-center">
+                                        <li class="p-0 m-auto">
+                                          <button class="m-0 p-2 border-0 bg-transparent text-current text-sm">
+                                            <i class="fa fa-font"></i>
+                                          </button>
+                                        </li>
+                                        <li class="p-0 m-auto">
+                                          <button class="m-0 p-2 border-0 bg-transparent text-current text-sm">
+                                            <i class="fa fa-copy"></i>
+                                          </button>
+                                        </li>
+                                        <li class="p-0 m-auto">
+                                          <button class="m-0 p-2 border-0 bg-transparent text-current text-sm">
+                                            <i class="fa fa-paste"></i>
+                                          </button>
+                                        </li>
+                                        <li class="p-0 m-auto">
+                                          <button class="m-0 p-2 border-0 bg-transparent text-current text-sm">
+                                            <i class="fa fa-clone"></i>
+                                          </button>
+                                        </li>
+                                        <li class="p-0 m-auto">
+                                          <button class="m-0 p-2 border-0 bg-transparent text-current text-sm">
+                                            <i class="fa fa-trash"></i>
+                                          </button>
+                                        </li>
+                                        <li class="p-0 m-auto">
+                                          <button class="m-0 p-2 border-0 bg-transparent text-current text-sm">
+                                            <i class="fa fa-eye"></i>
+                                          </button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </nav>
+                    <ul class="rounded-md mb-0" id="block_546">
+                        <nav class="flex justify-between items-center p-0 h-12 pr-2 mb-1">
+                            <li class="text-white text-xs"><button class="inline-block w-auto rounded-none m-0 ml-2 pl-4 bg-transparent border-none" style="display: none;"></button><button class="inline-block w-auto rounded-none m-0 ml-2 px-0 bg-transparent border-none text-white text-xs">image</button></li>
+                            <ul>
+                                <li class="text-white text-xs">
+                                    <div class="dropdown dropdown-end"><button tabindex="0" class="inline-block w-auto rounded-none m-0 py-1 px-3 border-none bg-transparent"><i class="fa fa-ellipsis-vertical"></i></button>
+                                        <ul tabindex="0" class="dropdown-content z-[1] menu menu-horizontal p-2 shadow bg-base-100 rounded-box w-64 text-center">
+                                            <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-font"></i></button></li>
+                                            <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-copy"></i></button></li>
+                                            <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-paste"></i></button></li>
+                                            <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-clone"></i></button></li>
+                                            <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-trash"></i></button></li>
+                                            <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-eye"></i></button></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </nav>
+                    </ul>
+                    <ul class="rounded-md mb-0" id="block_786">
+                        <nav class="flex justify-between items-center p-0 h-12 pr-2 mb-1">
+                            <li class="text-white text-xs"><button class="inline-block w-auto rounded-none m-0 ml-2 pl-4 bg-transparent border-none" style="display: inline-block;"><i class="fa fa-caret-down"></i></button><button class="inline-block w-auto rounded-none m-0 ml-2 px-0 bg-transparent border-none text-white text-xs">box</button></li>
+                            <ul>
+                                <li class="text-white text-xs">
+                                    <div class="dropdown dropdown-end"><button tabindex="0" class="inline-block w-auto rounded-none m-0 py-1 px-3 border-none bg-transparent"><i class="fa fa-ellipsis-vertical"></i></button>
+                                        <ul tabindex="0" class="dropdown-content z-[1] menu menu-horizontal p-2 shadow bg-base-100 rounded-box w-64 text-center">
+                                            <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-font"></i></button></li>
+                                            <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-copy"></i></button></li>
+                                            <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-paste"></i></button></li>
+                                            <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-clone"></i></button></li>
+                                            <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-trash"></i></button></li>
+                                            <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-eye"></i></button></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </nav>
+                        <ul class="rounded-md mb-0" id="block_71">
+                            <nav class="flex justify-between items-center p-0 h-12 pr-2 mb-1">
+                                <li class="text-white text-xs"><button class="inline-block w-auto rounded-none m-0 ml-2 pl-4 bg-transparent border-none" style="display: none;"></button><button class="inline-block w-auto rounded-none m-0 ml-2 px-0 bg-transparent border-none text-white text-xs">box</button></li>
+                                <ul>
+                                    <li class="text-white text-xs">
+                                        <div class="dropdown dropdown-end"><button tabindex="0" class="inline-block w-auto rounded-none m-0 py-1 px-3 border-none bg-transparent"><i class="fa fa-ellipsis-vertical"></i></button>
+                                            <ul tabindex="0" class="dropdown-content z-[1] menu menu-horizontal p-2 shadow bg-base-100 rounded-box w-64 text-center">
+                                                <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-font"></i></button></li>
+                                                <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-copy"></i></button></li>
+                                                <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-paste"></i></button></li>
+                                                <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-clone"></i></button></li>
+                                                <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-trash"></i></button></li>
+                                                <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-eye"></i></button></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </ul>
+                        <ul class="rounded-md mb-0" id="block_357">
+                            <nav class="flex justify-between items-center p-0 h-12 pr-2 mb-1">
+                                <li class="text-white text-xs"><button class="inline-block w-auto rounded-none m-0 ml-2 pl-4 bg-transparent border-none" style="display: none;"></button><button class="inline-block w-auto rounded-none m-0 ml-2 px-0 bg-transparent border-none text-white text-xs">paragraph</button></li>
+                                <ul>
+                                    <li class="text-white text-xs">
+                                        <div class="dropdown dropdown-end"><button tabindex="0" class="inline-block w-auto rounded-none m-0 py-1 px-3 border-none bg-transparent"><i class="fa fa-ellipsis-vertical"></i></button>
+                                            <ul tabindex="0" class="dropdown-content z-[1] menu menu-horizontal p-2 shadow bg-base-100 rounded-box w-64 text-center">
+                                                <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-font"></i></button></li>
+                                                <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-copy"></i></button></li>
+                                                <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-paste"></i></button></li>
+                                                <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-clone"></i></button></li>
+                                                <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-trash"></i></button></li>
+                                                <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-eye"></i></button></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </ul>
+                    </ul>
+                    <ul class="rounded-md mb-0" id="block_854">
+                        <nav class="flex justify-between items-center p-0 h-12 pr-2 mb-1">
+                            <li class="text-white text-xs"><button class="inline-block w-auto rounded-none m-0 ml-2 pl-4 bg-transparent border-none" style="display: inline-block;"><i class="fa fa-caret-down"></i></button><button class="inline-block w-auto rounded-none m-0 ml-2 px-0 bg-transparent border-none text-white text-xs">box</button></li>
+                            <ul>
+                                <li class="text-white text-xs">
+                                    <div class="dropdown dropdown-end"><button tabindex="0" class="inline-block w-auto rounded-none m-0 py-1 px-3 border-none bg-transparent"><i class="fa fa-ellipsis-vertical"></i></button>
+                                        <ul tabindex="0" class="dropdown-content z-[1] menu menu-horizontal p-2 shadow bg-base-100 rounded-box w-64 text-center">
+                                            <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-font"></i></button></li>
+                                            <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-copy"></i></button></li>
+                                            <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-paste"></i></button></li>
+                                            <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-clone"></i></button></li>
+                                            <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-trash"></i></button></li>
+                                            <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-eye"></i></button></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </nav>
+                        <ul class="rounded-md mb-0" id="block_82">
+                            <nav class="flex justify-between items-center p-0 h-12 pr-2 mb-1">
+                                <li class="text-white text-xs"><button class="inline-block w-auto rounded-none m-0 ml-2 pl-4 bg-transparent border-none" style="display: none;"></button><button class="inline-block w-auto rounded-none m-0 ml-2 px-0 bg-transparent border-none text-white text-xs">span</button></li>
+                                <ul>
+                                    <li class="text-white text-xs">
+                                        <div class="dropdown dropdown-end"><button tabindex="0" class="inline-block w-auto rounded-none m-0 py-1 px-3 border-none bg-transparent"><i class="fa fa-ellipsis-vertical"></i></button>
+                                            <ul tabindex="0" class="dropdown-content z-[1] menu menu-horizontal p-2 shadow bg-base-100 rounded-box w-64 text-center">
+                                                <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-font"></i></button></li>
+                                                <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-copy"></i></button></li>
+                                                <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-paste"></i></button></li>
+                                                <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-clone"></i></button></li>
+                                                <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-trash"></i></button></li>
+                                                <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-eye"></i></button></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </ul>
+                        <ul class="rounded-md mb-0" id="block_29">
+                            <nav class="flex justify-between items-center p-0 h-12 pr-2 mb-1">
+                                <li class="text-white text-xs"><button class="inline-block w-auto rounded-none m-0 ml-2 pl-4 bg-transparent border-none" style="display: none;"></button><button class="inline-block w-auto rounded-none m-0 ml-2 px-0 bg-transparent border-none text-white text-xs">span</button></li>
+                                <ul>
+                                    <li class="text-white text-xs">
+                                        <div class="dropdown dropdown-end"><button tabindex="0" class="inline-block w-auto rounded-none m-0 py-1 px-3 border-none bg-transparent"><i class="fa fa-ellipsis-vertical"></i></button>
+                                            <ul tabindex="0" class="dropdown-content z-[1] menu menu-horizontal p-2 shadow bg-base-100 rounded-box w-64 text-center">
+                                                <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-font"></i></button></li>
+                                                <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-copy"></i></button></li>
+                                                <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-paste"></i></button></li>
+                                                <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-clone"></i></button></li>
+                                                <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-trash"></i></button></li>
+                                                <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-eye"></i></button></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </ul>
+                        <ul class="rounded-md mb-0" id="block_713">
+                            <nav class="flex justify-between items-center p-0 h-12 pr-2 mb-1">
+                                <li class="text-white text-xs"><button class="inline-block w-auto rounded-none m-0 ml-2 pl-4 bg-transparent border-none" style="display: none;"></button><button class="inline-block w-auto rounded-none m-0 ml-2 px-0 bg-transparent border-none text-white text-xs">span</button></li>
+                                <ul>
+                                    <li class="text-white text-xs">
+                                        <div class="dropdown dropdown-end"><button tabindex="0" class="inline-block w-auto rounded-none m-0 py-1 px-3 border-none bg-transparent"><i class="fa fa-ellipsis-vertical"></i></button>
+                                            <ul tabindex="0" class="dropdown-content z-[1] menu menu-horizontal p-2 shadow bg-base-100 rounded-box w-64 text-center">
+                                                <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-font"></i></button></li>
+                                                <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-copy"></i></button></li>
+                                                <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-paste"></i></button></li>
+                                                <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-clone"></i></button></li>
+                                                <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-trash"></i></button></li>
+                                                <li class="p-0 m-auto"><button class="m-0 p-2 border-0 bg-transparent text-current text-sm"><i class="fa fa-eye"></i></button></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </ul>
+                    </ul>
+                </ul>
+            </div>
+            </div>
             <div 
               data-tabcontent="styles"
-              class="hidden">
+              class="text-xs hidden">
               <!-- position -->
               <div class="collapse collapse-plus capitalize">
                 <input type="checkbox" /> 
-                <div class="collapse-title text-xs">
+                <div class="collapse-title">
                   position
                 </div>
-                <div class="collapse-content"> 
-                  hello
+                <div class="collapse-content px-4"> 
+                  <div class="grid grid-cols-3 gap-2">
+                    <span>&nbsp;</span>
+                    <input type="number" class="p-3 rounded-md bg-gray-800">
+                    <span>&nbsp;</span>
+                    <input type="number" class="p-3 rounded-md bg-gray-800">
+                    <span>&nbsp;</span>
+                    <input type="number" class="p-3 rounded-md bg-gray-800">
+                    <span>&nbsp;</span>
+                    <input type="number" class="p-3 rounded-md bg-gray-800">
+                    <span>&nbsp;</span>
+                  </div>
+                  <div class="capitalize grid grid-cols-2 py-2 gap-2 items-center">
+                    <span>
+                      Type
+                    </span>
+                    <span>
+                      <select id="position" class="capitalize w-full p-3 rounded-md bg-gray-800">
+                        <option value=""></option>
+                        <option value="absolute">absolute</option>
+                        <option value="relative">relative</option>
+                        <option value="fixed">fixed</option>
+                        <option value="sticky">sticky</option>
+                      </select>
+                    </span>
+                  </div>
                 </div>
               </div>
               
               <!-- size -->
               <div class="collapse collapse-plus capitalize">
                 <input type="checkbox" /> 
-                <div class="collapse-title text-xs">
+                <div class="collapse-title">
                   size
                 </div>
-                <div class="collapse-content"> 
-                  hello
+                <div class="collapse-content px-4"> 
+                  <div class="grid grid-cols-3 pt-2 gap-2 items-center capitalize">
+                    <span>
+                      width
+                    </span>
+                    <input type="text" class="p-3 rounded-md bg-gray-800" value="auto">
+                    <select id="elmWidth" class="capitalize w-full p-3 rounded-md bg-gray-800">
+                      <option value="fit">fit</option>
+                      <option value="full">full</option>
+                    </select>
+                  </div>
+                  <div class="grid grid-cols-3 pt-2 gap-2 items-center capitalize">
+                    <span>
+                      height
+                    </span>
+                    <input type="text" class="p-3 rounded-md bg-gray-800" value="auto">
+                    <select id="elmWidth" class="capitalize w-full p-3 rounded-md bg-gray-800">
+                      <option value="fit">fit</option>
+                      <option value="full">full</option>
+                    </select>
+                  </div>
+                  <div class="grid grid-cols-2 pt-2 gap-2 items-center capitalize">
+                    <div>
+                      grow
+                    </div>
+                    <div role="tablist" class="tabs tabs-boxed">
+                      <a role="tab" class="tab">
+                        <i class="fa fa-solid fa-arrows-left-right"></i>
+                      </a>
+                      <a role="tab" class="tab tab-active">
+                        
+                        <i class="fa fa-solid fa-arrows-up-down"></i>
+                      </a>
+                      <a role="tab" class="tab">
+                        <i class="fa fa-solid fa-maximize"></i>
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </div>
               
               <!-- layout -->
               <div class="collapse collapse-plus capitalize">
                 <input type="checkbox" /> 
-                <div class="collapse-title text-xs">
+                <div class="collapse-title">
                   layout
                 </div>
                 <div class="collapse-content"> 
@@ -129,7 +469,7 @@
               <!-- overlays -->
               <div class="collapse collapse-plus capitalize">
                 <input type="checkbox" /> 
-                <div class="collapse-title text-xs">
+                <div class="collapse-title">
                   overlays
                 </div>
                 <div class="collapse-content"> 
@@ -140,7 +480,7 @@
               <!-- styles -->
               <div class="collapse collapse-plus capitalize">
                 <input type="checkbox" /> 
-                <div class="collapse-title text-xs">
+                <div class="collapse-title">
                   styles
                 </div>
                 <div class="collapse-content"> 
@@ -151,7 +491,7 @@
               <!-- text -->
               <div class="collapse collapse-plus capitalize">
                 <input type="checkbox" /> 
-                <div class="collapse-title text-xs">
+                <div class="collapse-title">
                   text
                 </div>
                 <div class="collapse-content"> 
@@ -162,7 +502,7 @@
               <!-- video -->
               <div class="collapse collapse-plus capitalize">
                 <input type="checkbox" /> 
-                <div class="collapse-title text-xs">
+                <div class="collapse-title">
                   video
                 </div>
                 <div class="collapse-content"> 
@@ -173,7 +513,7 @@
               <!-- image -->
               <div class="collapse collapse-plus capitalize">
                 <input type="checkbox" /> 
-                <div class="collapse-title text-xs">
+                <div class="collapse-title">
                   image
                 </div>
                 <div class="collapse-content"> 
@@ -184,7 +524,7 @@
               <!-- link -->
               <div class="collapse collapse-plus capitalize">
                 <input type="checkbox" /> 
-                <div class="collapse-title text-xs">
+                <div class="collapse-title">
                   link
                 </div>
                 <div class="collapse-content"> 
@@ -195,7 +535,7 @@
               <!-- iframe -->
               <div class="collapse collapse-plus capitalize">
                 <input type="checkbox" /> 
-                <div class="collapse-title text-xs">
+                <div class="collapse-title">
                   iframe
                 </div>
                 <div class="collapse-content"> 
@@ -206,7 +546,7 @@
               <!-- attributes -->
               <div class="collapse collapse-plus capitalize">
                 <input type="checkbox" /> 
-                <div class="collapse-title text-xs">
+                <div class="collapse-title">
                   attributes
                 </div>
                 <div class="collapse-content"> 
@@ -217,6 +557,61 @@
             <div 
               data-tabcontent="timeline"
               class="hidden"></div>
+          </div>
+        </div>
+        
+        <!-- top run preview navigation bar for file name, type as well as changing view sizes -->
+        <div 
+          id="iframenav"
+          class="absolute top-14 inset-x-0 bg-black text-white">
+          <div 
+            class="flex justify-between items-center">
+            <li class="list-none">
+              <button 
+                name="page file name"
+                class="inline-block w-auto rounded-none m-0 ml-2 px-0 bg-transparent border-none text-white text-xs">
+                index.html
+              </button>
+            </li>
+            <ul>
+              <li>
+                <button 
+                  id="mobilep"
+                  name="preview site for phones in portrait"
+                  class="m-0 p-2 border-0 bg-transparent text-current text-sm">
+
+                  <i class="fa fa-mobile"></i>
+                </button>
+                <button 
+                  id="mobilel"
+                  name="preview site for phones in landscape"
+                  class="m-0 p-2 border-0 bg-transparent text-current text-sm">
+                
+                  <i class="fa fa-mobile transform -rotate-90"></i>
+                </button>
+                <button 
+                  name="preview site for tablets in portrait"
+                  id="tabletp"
+                  class="m-0 p-2 border-0 bg-transparent text-current text-sm">
+                
+                  <i class="fa fa-tablet"></i>
+                </button>
+                <button 
+                  name="preview site for tablets in landscape"
+                  id="tabletl"
+                  class="m-0 p-2 border-0 bg-transparent text-current text-sm">
+                
+                  <i class="fa fa-tablet transform -rotate-90"></i>
+                </button>
+                <button 
+                  name="preview site for desktops"
+                  id="desktopsize"
+                  class="m-0 p-2 border-0 bg-transparent text-current text-sm">
+                  
+                  <i class="fa fa-desktop"></i>
+                </button>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
@@ -233,19 +628,22 @@
             </label>
           </button>
         </ul>
-        <ul class="p-0">
+        <ul id="topnav" class="p-0">
           <button 
-            name="add a new page"
-            class="capitalize mx-2 px-2 py-2 bg-transparent border-solid border-white border-0">
-            <i class="fa fa-file"></i>
+            name="preview page"
+            data-openTop="iframe"
+            class="capitalize border-0 mx-2 px-2 py-2 bg-transparent border-solid border-blue-500 border-b text-blue-500">
+            <i class="fa fa-play"></i>
           </button>
           <button 
             name="toggle data"
-            class="capitalize border-0 mx-2 px-2 py-2 bg-transparent border-solid border-blue-500 border-b text-blue-500">
+            data-openTop="data"
+            class="capitalize border-0 mx-2 px-2 py-2 bg-transparent border-solid border-white border-0">
             <i class="fa fa-database"></i>
           </button>
           <button 
             name="toggle blocks dialog"
+            data-openTop="blocks"
             class="capitalize border-0 mx-2 px-2 py-2 bg-transparent border-solid border-white border-0">
             <i class="fa fa-cubes-stacked"></i>
           </button>
@@ -263,10 +661,10 @@
       </nav>
       
       <!-- Side navigation --> 
-      <nav id="sidenav" class="absolute left-0 top-14 bottom-0 bg-gray-900 text-white w-full md:block md:w-80 p-4 z-10 hidden">
-        <ul id="mainsidenav">
+      <nav id="sidenav" class="absolute left-0 top-14 bottom-0 bg-gray-900 text-white w-full md:block md:w-80 p-4 z-10 overflow-y-auto hidden">
+        <ul id="mainsidenav" class="px-2">
           <li>
-            <article class="text-center">
+            <div class="text-center">
               <a id="appUrl" target="_blank">
                 <img id="appLogo" class="my-4 w-24 m-auto" src="imgs/logo.svg">
               </a>
@@ -281,9 +679,9 @@
                   Open Source License
                 </a>
               </div>
-            </article>
+            </div>
           </li>
-          <li class="py-4 px-8">
+          <li class="py-4 px-2">
             <hr>
           </li>
           <li class="hidden">
@@ -292,7 +690,7 @@
           <li>
             <button 
               name="initialize new project"
-              class="capitalize p-2 block w-full text-left items-center rounded-md">
+              class="capitalize py-2 block w-full text-left items-center rounded-md">
               <i class="w-10 px-2 fa fa-file"></i> 
               <span>
                 new project
@@ -302,7 +700,7 @@
           <li>
             <button 
               name="import project file"
-              class="capitalize p-2 block w-full text-left items-center rounded-md">
+              class="capitalize py-2 block w-full text-left items-center rounded-md">
               <i class="w-10 px-2 fa fa-file-export"></i> 
               <span>
                 import project
@@ -312,7 +710,7 @@
           <li>
             <button 
               name="export project file"
-              class="capitalize p-2 block w-full text-left items-center rounded-md">
+              class="capitalize py-2 block w-full text-left items-center rounded-md">
               <i class="w-10 px-2 fa fa-file-import"></i> 
               <span>
                 export project
@@ -322,7 +720,7 @@
           <li>
             <button 
               name="export zip file"
-              class="capitalize p-2 block w-full text-left items-center rounded-md">
+              class="capitalize py-2 block w-full text-left items-center rounded-md">
               <i class="w-10 px-2 fa fa-save"></i> 
               <span>
                 export zip
@@ -331,41 +729,125 @@
           </li>
           <li>
             <button 
-              name="toggle settings"
-              class="capitalize p-2 block w-full text-left items-center rounded-md">
+              name="toggle settings" data-openSide="settings"
+              class="capitalize py-2 block w-full text-left items-center rounded-md">
               <i class="w-10 px-2 fa fa-cog"></i> 
               <span>
                 settings
               </span>
             </button>
           </li>
-          <li class="p-4">
+          <li class="py-4 px-4">
             <hr>
           </li>
           <li>
-            <div class="collapse collapse-plus capitalize">
-              <input type="checkbox" /> 
-              <div class="collapse-title">
-                <i class="w-10 pr-2 fa fa-wrench"></i> 
-                <span>
-                  import resources
-                </span>
-              </div>
-              <div class="collapse-content"> 
-                <p>hello</p>
-              </div>
-            </div>
-          </li>
-          <li>
             <button 
-              name="toggle history stack"
-              class="capitalize p-2 block w-full text-left items-center rounded-md">
+              name="toggle history stack" data-openSide="historyStack"
+              class="capitalize py-2 block w-full text-left items-center rounded-md">
               <i class="w-10 px-2 fa fa-history"></i> 
               <span>
                 history
               </span>
             </button>
           </li>
+        </ul>
+        <ul id="settings" class="px-2 hidden">
+          <li>
+            <button 
+              name="back to main menu" data-closeSide="settings"
+              class="capitalize py-2 block w-full text-left items-center rounded-md">
+              <i class="w-10 px-2 fa fa-arrow-left"></i>
+              <span>
+                back
+              </span>
+            </button>
+          </li>
+          <li class="pt-4 pb-2 px-2 opacity-50">
+            <hr>
+          </li>
+          <li class="py-2 flex justify-between align-center border-b border-gray-600">
+            <span class="py-2">
+              Dark mode
+            </span>
+
+            <div class="form-control">
+              <label class="cursor-pointer label">
+                <input type="checkbox" id="toggleDarkmode" 
+                  class="toggle toggle-primary" checked />
+              </label>
+            </div>
+          </li>
+          <li class="py-2 flex justify-between align-center border-b border-gray-600">
+            <span class="py-2">
+              Console
+            </span>
+
+            <div class="form-control">
+              <label class="cursor-pointer label">
+                <input type="checkbox" id="toggleConsole" 
+                  class="toggle toggle-primary" />
+              </label>
+            </div>
+          </li>
+          <li class="py-4 flex justify-between h-14 align-center border-b border-gray-600">
+            <div class="mb-2">
+              Project logo:
+            </div>
+            <div>
+              <img id="projectLogo" class="h-full" src="" alt="logo">
+            </div>
+          </li>
+          <li class="py-4 border-b border-gray-600">
+            <div class="mb-2">
+              Project name:
+            </div>
+            <input 
+              id="projectName"
+              class="p-2 rounded-md bg-gray-800 w-full"
+              type="text" placeholder="Project name">
+          </li>
+          <li class="py-4 border-b border-gray-600">
+            <div class="my-2">
+              Project version:
+            </div>
+            <input 
+              id="projectVersion"
+              class="p-2 rounded-md bg-gray-800 w-full"
+              type="number" min="0" step="0.1" placeholder="Project version">
+          </li>
+          <li class="py-4 border-b border-gray-600">
+            <div class="my-2">
+              Project url:
+            </div>
+            <input 
+              id="projectUrl"
+              class="p-2 rounded-md bg-gray-800 w-full"
+              type="text" placeholder="Project url">
+          </li>
+          <li class="py-4 border-b border-gray-600">
+            <div class="my-2">
+              HTML before closing head tag:
+            </div>
+            <textarea name="HTML before closing head tag" id="projectMeta"
+              placeholder="HTML before closing </head> tag"
+              class="p-2 rounded-md bg-gray-800 w-full resize-vertical h-56"></textarea>
+          </li>
+        </ul>
+        <ul id="historyStack" class="px-2 hidden">
+          <li>
+            <button 
+              name="back to main menu" data-closeSide="historyStack"
+              class="capitalize py-2 block w-full text-left items-center rounded-md">
+              <i class="w-10 px-2 fa fa-arrow-left"></i>
+              <span>
+                back
+              </span>
+            </button>
+          </li>
+          <li class="pt-4 pb-2 px-2 opacity-50">
+            <hr>
+          </li>
+          <div id="outputHistory"></div>
         </ul>
       </nav>
     </div>
