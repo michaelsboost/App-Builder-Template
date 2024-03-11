@@ -1,521 +1,640 @@
 <!DOCTYPE html>
-<html lang="en-US" data-theme="light">
+<html lang="en" data-theme="light">
   <head>
+    <!-- Title needs to be at within the max 580 pixel length -->
     <title>App Builder Template</title>
-    <meta charset="utf-8" />
-    <meta name="description" content="Just an app builder template!">
-    <meta name="author" content="Michael Schwartz">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="manifest" href="manifest.json">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="BrikzBuildr">
-    <meta name="apple-mobile-web-app-title" content="BrikzBuildr">
+    <meta property="og:type"        content="website" />
+    <meta property="og:title"       content="App Builder Template" />
+    <link rel="shortcut icon" href="img/logo.svg" type="image/x-icon">
+    <!-- Chrome, Firefox OS and Opera -->
+    <meta name="theme-color" content="#ffffff">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#ffffff">
+    <!-- iOS Safari -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="hsl(207, 31%, 11%)">
-    <meta name="msapplication-navbutton-color" content="hsl(207, 31%, 11%)">
-    <meta name="msapplication-starturl" content="./index.html">
-    <link rel="apple-touch-icon" href="imgs/logo.png">
-    <link rel="icon" href="imgs/logo.svg" type="image/x-icon" />
-    <link rel="stylesheet" href="css/style.css">
-    
-    <script src="libraries/panzoom/panzoom.mod.js" defer></script>
-    <script src="libraries/quill/quill.min.js" defer></script>
-    <script src="libraries/jszip/Blob.js" defer></script>
-    <script src="libraries/jszip/FileSaver.js" defer></script>
-    <script src="libraries/jszip/jszip-utils.js" defer></script>
-    <script src="libraries/jszip/jszip.min.js" defer></script>
-    <script src="js/app.js" defer></script>
+    <meta name="apple-mobile-web-app-title" content="App Builder Template">
+    <link rel="apple-touch-icon" href="img/logo.png">
+    <!-- Must contain only 1 css file -->
+    <link rel="stylesheet"    href="css/style.css">
+    <!-- Must contain only 1 javascript file -->
+    <script src="app.js" defer></script>
   </head>
   <body>
-    <!-- side Menus -->
-    <span class="hidden">
-      <input type="checkbox" id="theme">
-    </span>
-    <dialog data-opened="settings" class="cursor-pointer">
-      <article class="absolute inset-y-0 right-0 m-0 p-4 w-full max-w-xl max-h-full rounded-none overflow-auto cursor-default">
-        <button aria-close role="button" class="p-0 w-auto max-h-full rounded-full border-0 float-right text-current bg-transparent">
-          <i class="fa fa-times"></i>
-        </button>
-
-        <h5 class="capitalize text-3xl">
-          settings
-        </h5>
-
-        <div class="hidden">
-          <input id="import"     type="file" accept="application/json" onchange="loadFile(this)">
-          <input id="importlogo" type="file" accept="image/png, image/jpeg, image/svg+xml" onchange="loadLogo(this)">
+    <div class="relative flex flex-col md:flex-row-reverse h-screen">
+      <!-- canvas container -->
+      <div id="canvasContainer" class="relative flex-grow bg-repeat overflow-hidden" style="background-image: url('imgs/bg.svg');">
+        <!-- preview application here -->
+        <div class="absolute inset-0">
+          <div id="previewElm" data-canvas class="border border-solid bg-white" style="width: 360px; height: 740px;"></div>
+          <div id="fill" class="absolute inset-0 
+            "></div>
         </div>
-
-        <h5 class="capitalize mt-10">
-          meta
-
-          <label for="importlogo" class="cursor-pointer float-right">
-            <img id="logo" class="h-10" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgoKPHN2ZwogICB3aWR0aD0iNTEyIgogICBoZWlnaHQ9IjUxMiIKICAgdmlld0JveD0iMCAwIDEzNS40NjY2NyAxMzUuNDY2NjciCiAgIHZlcnNpb249IjEuMSIKICAgaWQ9InN2ZzUiCiAgIGlua3NjYXBlOmV4cG9ydC1maWxlbmFtZT0iaW1hZ2Uuc3ZnIgogICBpbmtzY2FwZTpleHBvcnQteGRwaT0iOTYiCiAgIGlua3NjYXBlOmV4cG9ydC15ZHBpPSI5NiIKICAgeG1sbnM6aW5rc2NhcGU9Imh0dHA6Ly93d3cuaW5rc2NhcGUub3JnL25hbWVzcGFjZXMvaW5rc2NhcGUiCiAgIHhtbG5zOnNvZGlwb2RpPSJodHRwOi8vc29kaXBvZGkuc291cmNlZm9yZ2UubmV0L0RURC9zb2RpcG9kaS0wLmR0ZCIKICAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICB4bWxuczpzdmc9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8c29kaXBvZGk6bmFtZWR2aWV3CiAgICAgaWQ9Im5hbWVkdmlldzciCiAgICAgcGFnZWNvbG9yPSIjNTA1MDUwIgogICAgIGJvcmRlcmNvbG9yPSIjZmZmZmZmIgogICAgIGJvcmRlcm9wYWNpdHk9IjEiCiAgICAgaW5rc2NhcGU6c2hvd3BhZ2VzaGFkb3c9IjAiCiAgICAgaW5rc2NhcGU6cGFnZW9wYWNpdHk9IjAiCiAgICAgaW5rc2NhcGU6cGFnZWNoZWNrZXJib2FyZD0iMSIKICAgICBpbmtzY2FwZTpkZXNrY29sb3I9IiM1MDUwNTAiCiAgICAgaW5rc2NhcGU6ZG9jdW1lbnQtdW5pdHM9Im1tIgogICAgIHNob3dncmlkPSJmYWxzZSIgLz4KICA8ZGVmcwogICAgIGlkPSJkZWZzMiIgLz4KICA8ZwogICAgIGlua3NjYXBlOmxhYmVsPSJMYXllciAxIgogICAgIGlua3NjYXBlOmdyb3VwbW9kZT0ibGF5ZXIiCiAgICAgaWQ9ImxheWVyMSI+CiAgICA8Y2lyY2xlCiAgICAgICBzdHlsZT0iZmlsbDojY2NjY2NjO2ZpbGwtb3BhY2l0eTowLjk4MDQ2O3N0cm9rZS13aWR0aDoxLjAxMjM1O3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZCIKICAgICAgIGlkPSJwYXRoNzM0IgogICAgICAgY3g9IjY3LjczMzMzIgogICAgICAgY3k9IjUwLjc5OTk5NSIKICAgICAgIHI9IjMzLjUyNjQ5MyIgLz4KICAgIDxwYXRoCiAgICAgICBpZD0icmVjdDc4OC0zIgogICAgICAgc3R5bGU9ImZpbGw6I2NjY2NjYztmaWxsLW9wYWNpdHk6MC45ODA0NjtzdHJva2Utd2lkdGg6MC43MjM3ODc7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kIgogICAgICAgZD0iTSAzMy44NjY2NjcsMTAxLjYgQyAxNS4xMDQ1NTEsMTAxLjYgMCwxMTYuNzA0NTUgMCwxMzUuNDY2NjcgSCAxMzUuNDY2NjcgQyAxMzUuNDY2NjcsMTE2LjcwNDU1IDEyMC4zNjIxMiwxMDEuNiAxMDEuNiwxMDEuNiBaIiAvPgogIDwvZz4KPC9zdmc+Cg==">
-          </label>
-        </h5>
-
-        <input    id="appname"   type="text"   placeholder="Application Name"      onkeyup="app.updateStorage()" onchange="app.updateStorage()">
-        <input    id="title"   type="text"   placeholder="Title..."      onkeyup="app.updateStorage()" onchange="app.updateStorage()">
-        <textarea id="description"           placeholder="Description..."           onkeyup="app.updateStorage()" onchange="app.updateStorage()" class="h-40 resize-none"></textarea>
-        <input    id="version" type="number" placeholder="0.1" min="0.1" step="0.1" onkeyup="app.updateStorage()" onchange="app.updateStorage()">
-        <input    id="author"  type="text"   placeholder="author name"              onkeyup="app.updateStorage()" onchange="app.updateStorage()">
-        <input    id="website" type="text"   placeholder="https://yourwebsite.com/" onkeyup="app.updateStorage()" onchange="app.updateStorage()">
-        <textarea id="googleanalytics"       placeholder="Paste your Google Analytics code snippet here or paste any other code that you want to have on every page immediately after the opening <body> tag." onkeyup="app.updateStorage()" onchange="app.updateStorage()" class="h-40 resize-none"></textarea>
-
-        <h5 class="capitalize">
-          scratchpad
-        </h5>
-        <textarea id="scratchpad"            placeholder="Type something..."        onkeyup="app.updateStorage()" onchange="app.updateStorage()" class="h-40 resize-none"></textarea>
-
-        <div class="grid grid-cols-2 justify-between capitalize">
-
-          <span>
-            console
-          </span>
-
-          <div class="mb-4">
-            <label for="toggleconsole" class="float-right">
-              <input type="checkbox" id="toggleconsole" name="switch" role="switch" onchange="app.toggleConsole()" checked>
-            </label>
-          </div>
-
-          <span>
-            font awesome
-          </span>
-
-          <div class="mb-4">
-            <label for="fa" class="float-right">
-              <input type="checkbox" id="fa" name="switch" role="switch">
-            </label>
-          </div>
-
-          <span>
-            chartjs
-          </span>
-
-          <div class="mb-4">
-            <label for="charts" class="float-right">
-              <input type="checkbox" id="charts" name="switch" role="switch">
-            </label>
-          </div>
-        </div>
-
-        <nav class="flex justify-around mt-2 leading-9 text-center">
-          <button class="cursor-pointer w-auto p-0 m-0 bg-transparent border-none text-current" onclick="app.newProject()">
-            <i class="fa fa-file-text text-2xl mb-2"></i>
-
-            <div class="text-xs">
-              new project
-            </div>
-          </button>
-          <label for="import" class="cursor-pointer">
-            <span>
-              <i class="fa fa-file-import text-2xl"></i>
-
-              <div class="text-xs">
-                import json
-              </div>
-            </span>
-          </label>
-          <button class="cursor-pointer w-auto p-0 m-0 bg-transparent border-none text-current" onclick="app.exportJSON()">
-            <i class="fa fa-file-export text-2xl mb-2"></i>
-
-            <div class="text-xs">
-              save json
-            </div>
-          </button>
-          <button class="cursor-pointer w-auto p-0 m-0 bg-transparent border-none text-current" onclick="app.exportZip()">
-            <i class="fa fa-download text-2xl mb-2"></i>
-
-            <div class="text-xs">
-              export zip
-            </div>
-          </button>
-          <a href="https://michaelsboost.com/donate/" target="_blank" class="text-red-500">
-            <i class="fa fa-heart text-2xl"></i>
-
-            <div class="text-xs">
-              donate
-            </div>
-          </a>
-        </nav>
-      </article>
-    </dialog>
-    <dialog data-opened="about" class="cursor-pointer">
-      <article class="w-2/3 text-center cursor-default">
-        <div class="mb-2">
-          <a href="https://michaelsboost.com/donate/" target="_blank" role="button" class="border-none bg-transparent text-red-500">
-            <i class="fa fa-heart text-3xl"></i>
-          </a>
-        </div>
-        <p>
-          <img class="w-52" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgoKPHN2ZwogICB3aWR0aD0iNTEyIgogICBoZWlnaHQ9IjUxMiIKICAgdmlld0JveD0iMCAwIDEzNS40NjY2NyAxMzUuNDY2NjciCiAgIHZlcnNpb249IjEuMSIKICAgaWQ9InN2ZzUiCiAgIGlua3NjYXBlOmV4cG9ydC1maWxlbmFtZT0iaW1hZ2Uuc3ZnIgogICBpbmtzY2FwZTpleHBvcnQteGRwaT0iOTYiCiAgIGlua3NjYXBlOmV4cG9ydC15ZHBpPSI5NiIKICAgeG1sbnM6aW5rc2NhcGU9Imh0dHA6Ly93d3cuaW5rc2NhcGUub3JnL25hbWVzcGFjZXMvaW5rc2NhcGUiCiAgIHhtbG5zOnNvZGlwb2RpPSJodHRwOi8vc29kaXBvZGkuc291cmNlZm9yZ2UubmV0L0RURC9zb2RpcG9kaS0wLmR0ZCIKICAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICB4bWxuczpzdmc9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8c29kaXBvZGk6bmFtZWR2aWV3CiAgICAgaWQ9Im5hbWVkdmlldzciCiAgICAgcGFnZWNvbG9yPSIjNTA1MDUwIgogICAgIGJvcmRlcmNvbG9yPSIjZmZmZmZmIgogICAgIGJvcmRlcm9wYWNpdHk9IjEiCiAgICAgaW5rc2NhcGU6c2hvd3BhZ2VzaGFkb3c9IjAiCiAgICAgaW5rc2NhcGU6cGFnZW9wYWNpdHk9IjAiCiAgICAgaW5rc2NhcGU6cGFnZWNoZWNrZXJib2FyZD0iMSIKICAgICBpbmtzY2FwZTpkZXNrY29sb3I9IiM1MDUwNTAiCiAgICAgaW5rc2NhcGU6ZG9jdW1lbnQtdW5pdHM9Im1tIgogICAgIHNob3dncmlkPSJmYWxzZSIgLz4KICA8ZGVmcwogICAgIGlkPSJkZWZzMiIgLz4KICA8ZwogICAgIGlua3NjYXBlOmxhYmVsPSJMYXllciAxIgogICAgIGlua3NjYXBlOmdyb3VwbW9kZT0ibGF5ZXIiCiAgICAgaWQ9ImxheWVyMSI+CiAgICA8Y2lyY2xlCiAgICAgICBzdHlsZT0iZmlsbDojY2NjY2NjO2ZpbGwtb3BhY2l0eTowLjk4MDQ2O3N0cm9rZS13aWR0aDoxLjAxMjM1O3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZCIKICAgICAgIGlkPSJwYXRoNzM0IgogICAgICAgY3g9IjY3LjczMzMzIgogICAgICAgY3k9IjUwLjc5OTk5NSIKICAgICAgIHI9IjMzLjUyNjQ5MyIgLz4KICAgIDxwYXRoCiAgICAgICBpZD0icmVjdDc4OC0zIgogICAgICAgc3R5bGU9ImZpbGw6I2NjY2NjYztmaWxsLW9wYWNpdHk6MC45ODA0NjtzdHJva2Utd2lkdGg6MC43MjM3ODc7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kIgogICAgICAgZD0iTSAzMy44NjY2NjcsMTAxLjYgQyAxNS4xMDQ1NTEsMTAxLjYgMCwxMTYuNzA0NTUgMCwxMzUuNDY2NjcgSCAxMzUuNDY2NjcgQyAxMzUuNDY2NjcsMTE2LjcwNDU1IDEyMC4zNjIxMiwxMDEuNiAxMDEuNiwxMDEuNiBaIiAvPgogIDwvZz4KPC9zdmc+Cg==">
-        </p>
-        <div class="mt-8 text-2xl">
-          About App Builder Template
-        </div>
-        <div class="my-2">
-          <small>Version 0.0.1</small>
-        </div>
-        <div>
-          <a href="#">
-            Open Source License
-          </a>
-        </div>
-      </article>
-    </dialog>
-    
-    <!-- canvas container -->
-    <div class="absolute bottom-1/2 top-0 w-full md:w-1/2 md:bottom-0 md:left-1/2 p-0 overflow-hidden bg-repeat" style="background-image: url('imgs/bg.svg');">
-
-      <!-- top navbar -->
-      <nav class="absolute inset-x-0 pt-0 pl-3 pr-2 z-10">
-        <ul class="flex md:hidden">
-          <a data-open="about" class="cursor-pointer py-0 my-0 border-none bg-transparent text-current">
-            <img class="h-10" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgoKPHN2ZwogICB3aWR0aD0iNTEyIgogICBoZWlnaHQ9IjUxMiIKICAgdmlld0JveD0iMCAwIDEzNS40NjY2NyAxMzUuNDY2NjciCiAgIHZlcnNpb249IjEuMSIKICAgaWQ9InN2ZzUiCiAgIGlua3NjYXBlOmV4cG9ydC1maWxlbmFtZT0iaW1hZ2Uuc3ZnIgogICBpbmtzY2FwZTpleHBvcnQteGRwaT0iOTYiCiAgIGlua3NjYXBlOmV4cG9ydC15ZHBpPSI5NiIKICAgeG1sbnM6aW5rc2NhcGU9Imh0dHA6Ly93d3cuaW5rc2NhcGUub3JnL25hbWVzcGFjZXMvaW5rc2NhcGUiCiAgIHhtbG5zOnNvZGlwb2RpPSJodHRwOi8vc29kaXBvZGkuc291cmNlZm9yZ2UubmV0L0RURC9zb2RpcG9kaS0wLmR0ZCIKICAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICB4bWxuczpzdmc9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8c29kaXBvZGk6bmFtZWR2aWV3CiAgICAgaWQ9Im5hbWVkdmlldzciCiAgICAgcGFnZWNvbG9yPSIjNTA1MDUwIgogICAgIGJvcmRlcmNvbG9yPSIjZmZmZmZmIgogICAgIGJvcmRlcm9wYWNpdHk9IjEiCiAgICAgaW5rc2NhcGU6c2hvd3BhZ2VzaGFkb3c9IjAiCiAgICAgaW5rc2NhcGU6cGFnZW9wYWNpdHk9IjAiCiAgICAgaW5rc2NhcGU6cGFnZWNoZWNrZXJib2FyZD0iMSIKICAgICBpbmtzY2FwZTpkZXNrY29sb3I9IiM1MDUwNTAiCiAgICAgaW5rc2NhcGU6ZG9jdW1lbnQtdW5pdHM9Im1tIgogICAgIHNob3dncmlkPSJmYWxzZSIgLz4KICA8ZGVmcwogICAgIGlkPSJkZWZzMiIgLz4KICA8ZwogICAgIGlua3NjYXBlOmxhYmVsPSJMYXllciAxIgogICAgIGlua3NjYXBlOmdyb3VwbW9kZT0ibGF5ZXIiCiAgICAgaWQ9ImxheWVyMSI+CiAgICA8Y2lyY2xlCiAgICAgICBzdHlsZT0iZmlsbDojY2NjY2NjO2ZpbGwtb3BhY2l0eTowLjk4MDQ2O3N0cm9rZS13aWR0aDoxLjAxMjM1O3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZCIKICAgICAgIGlkPSJwYXRoNzM0IgogICAgICAgY3g9IjY3LjczMzMzIgogICAgICAgY3k9IjUwLjc5OTk5NSIKICAgICAgIHI9IjMzLjUyNjQ5MyIgLz4KICAgIDxwYXRoCiAgICAgICBpZD0icmVjdDc4OC0zIgogICAgICAgc3R5bGU9ImZpbGw6I2NjY2NjYztmaWxsLW9wYWNpdHk6MC45ODA0NjtzdHJva2Utd2lkdGg6MC43MjM3ODc7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kIgogICAgICAgZD0iTSAzMy44NjY2NjcsMTAxLjYgQyAxNS4xMDQ1NTEsMTAxLjYgMCwxMTYuNzA0NTUgMCwxMzUuNDY2NjcgSCAxMzUuNDY2NjcgQyAxMzUuNDY2NjcsMTE2LjcwNDU1IDEyMC4zNjIxMiwxMDEuNiAxMDEuNiwxMDEuNiBaIiAvPgogIDwvZz4KPC9zdmc+Cg==">
-          </a>
-        </ul>
-        <ul class="h-12 justify-evenly w-full">
-          <li>
-            <button data-zoom="true" class="py-0 my-0 border-none bg-transparent text-current">
-              <i class="fa fa-light fa-magnifying-glass-plus"></i>
-            </button>
-          </li>
-          <li>
-            <button onclick="location.reload()" class="py-0 my-0 border-none bg-transparent text-current">
-              <i class="fa fa-rotate"></i>
-            </button>
-          </li>
-          <li>
-            <button id="rotateCanvas" class="py-0 my-0 border-none bg-transparent text-current">
-              <i class="fa fa fa-rotate-right"></i>
-            </button>
-          </li>
-          <li>
-            <button data-device="mobile" class="py-0 my-0 border-none bg-transparent text-current">
-              <i class="fa fa-mobile"></i>
-            </button>
-          </li>
-          <li>
-            <label for="theme" role="button" class="py-0 my-0 border-none bg-transparent text-current">
-              <i class="fa fa-sun"></i>
-            </label>
-          </li>
-          <li>
-            <button data-open="settings" class="py-0 my-0 border-none bg-transparent text-current">
-              <i class="fa fa-cog"></i>
-            </button>
-          </li>
-        </ul>
-      </nav>
-
-      <!-- preview application here -->
-      <div id="previewElm" data-canvas data-theme="light" class="border border-solid" style="width: 360px; height: 740px;"></div>
-      <div id="fill" class="absolute inset-0"></div>
-    </div>
-
-    <!-- treeview container -->
-    <div class="absolute bottom-0 top-1/2 w-full md:w-1/2 md:top-0 overflow-hidden">
-      <dialog data-opened="functions" class="absolute inset-0">
-        <article class="absolute inset-0 m-0 p-4 m-auto max-w-full max-h-full rounded-none overflow-auto">
-          <button aria-close="" role="button" class="p-0 w-auto max-h-full rounded-full border-0 float-right text-current bg-transparent">
-            <i class="fa fa-times"></i>
-          </button>
-  
-          <h5 class="capitalize text-3xl">
-            functions
-          </h5>
-          
-          <h5 class="capitalize m-0 font-normal">
-            functions
-          </h5>
-          <figure class="pt-4 mb-0">
-  
-          </figure>
-          <button class="capitalize">
-            build a function
-          </button>
-  
-        </article>
-      </dialog>
-      <dialog data-opened="elmSettings" class="absolute inset-0">
-        <article class="absolute inset-0 m-0 p-4 m-auto max-w-full max-h-full rounded-none overflow-auto">
-          <button aria-close="" role="button" class="p-0 w-auto max-h-full rounded-full border-0 float-right text-current bg-transparent">
-            <i class="fa fa-times"></i>
-          </button>
-  
-          <h5 class="capitalize text-3xl">
-            <span>element</span> settings
-          </h5>
-          
-          <h5 class="capitalize m-0 font-normal">
-            reuse styles
-          </h5>
-          <figure class="pt-4 mb-0">
-            <div class="text-center">
-              <span class="opacity-50">empty</span>
-            </div>
-          </figure>
-  
-          <nav>
-            <ul>
-              <li>
-                <h5 class="font-normal m-0">
-                  <span class="capitalize">
-                    styles
-                  </span>
-                </h5>
-              </li>
-            </ul>
-            <ul>
-              <li>
-                <a href="javascript:void(0)" class="ml-1 p-1 uppercase text-xs">
-                  cheat sheet 
-                  <i class="fa fa-up-right-from-square"></i>
-                </a>
-  
-                <button class="w-auto inline-block bg-transparent text-current border-none">
-                  <i class="fa fa-plus"></i>
-                </button>
-              </li>
-            </ul>
-          </nav>
-          <input type="text" placeholder="tailwind css classes are used for styling">
-          
-          <h5 class="capitalize m-0 font-normal">
-            actions
-          </h5>
-          <figure class="pt-4 mb-0">
-  
-          </figure>
-          <button class="capitalize">
-            add action
-          </button>
-          <button class="capitalize text-blue-500 bg-transparent">
-            clone element
-          </button>
-          <button class="capitalize text-red-500 bg-transparent border-red-500">
-            delete element
-          </button>
-          <button class="capitalize text-red-500 bg-transparent border-red-500">
-            delete children
-          </button>
-  
-        </article>
-      </dialog>
-
-      <div data-treeview class="treeview absolute inset-0 p-x-4 pt-4 pb-4 md:pt-16">
-        <ul>
-          <li>
-            <div>
-              <nav>
-                <button data-open="elmSettings">
-                  <i class="fa fa-cog"></i>
-                </button>
-              </nav>
-
-              <div>header</div>
-
-              <nav>
-                <button>
-                  <i class="fa fa-plus"></i>
-                </button>
-              </nav>
-            </div>
-          </li>
-          <li>
-            <div>
-              <nav>
-                <button data-open="elmSettings">
-                  <i class="fa fa-cog"></i>
-                </button>
-              </nav>
-
-              <div>main</div>
-
-              <nav>
-                <button>
-                  <i class="fa fa-plus"></i>
-                </button>
-              </nav>
-            </div>
-            <ul>
-              <li>
-                <div>
-                  <nav>
-                    <button data-open="elmSettings">
-                      <i class="fa fa-cog"></i>
-                    </button>
-                  </nav>
-    
-                  <div>div</div>
-    
-                  <nav>
-                    <button>
-                      <i class="fa fa-plus"></i>
-                    </button>
-                  </nav>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <nav>
-                    <button data-open="elmSettings">
-                      <i class="fa fa-cog"></i>
-                    </button>
-                  </nav>
-    
-                  <div>div</div>
-    
-                  <nav>
-                    <button>
-                      <i class="fa fa-plus"></i>
-                    </button>
-                  </nav>
-                </div>
-                <ul>
-                  <li>
-                    <div>
-                      <nav>
-                        <button data-open="elmSettings">
-                          <i class="fa fa-cog"></i>
-                        </button>
-                      </nav>
-        
-                      <div>div</div>
-        
-                      <nav>
-                        <button>
-                          <i class="fa fa-plus"></i>
-                        </button>
-                      </nav>
-                    </div>
-                  </li>
-                  <li>
-                    <div>
-                      <nav>
-                        <button data-open="elmSettings">
-                          <i class="fa fa-cog"></i>
-                        </button>
-                      </nav>
-        
-                      <div>div</div>
-        
-                      <nav>
-                        <button>
-                          <i class="fa fa-plus"></i>
-                        </button>
-                      </nav>
-                    </div>
-                  </li>
-                  <li>
-                    <div>
-                      <nav>
-                        <button data-open="elmSettings">
-                          <i class="fa fa-cog"></i>
-                        </button>
-                      </nav>
-        
-                      <div>div</div>
-        
-                      <nav>
-                        <button>
-                          <i class="fa fa-plus"></i>
-                        </button>
-                      </nav>
-                    </div>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <div>
-                  <nav>
-                    <button data-open="elmSettings">
-                      <i class="fa fa-cog"></i>
-                    </button>
-                  </nav>
-    
-                  <div>div</div>
-    
-                  <nav>
-                    <button>
-                      <i class="fa fa-plus"></i>
-                    </button>
-                  </nav>
-                </div>
-              </li>
-            </ul>
-          </li>
-          <li>
-            <div>
-              <nav>
-                <button data-open="elmSettings">
-                  <i class="fa fa-cog"></i>
-                </button>
-              </nav>
-
-              <div>footer</div>
-
-              <nav>
-                <button>
-                  <i class="fa fa-plus"></i>
-                </button>
-              </nav>
-            </div>
-          </li>
-        </ul>
       </div>
-
-      <!-- top navbar -->
-      <nav class="absolute inset-x-0 pt-2 pl-4 pr-2">
-        <ul class="hidden md:block">
-          <a data-open="about" class="cursor-pointer py-0 my-0 border-none bg-transparent text-current">
-            <img class="h-10" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgoKPHN2ZwogICB3aWR0aD0iNTEyIgogICBoZWlnaHQ9IjUxMiIKICAgdmlld0JveD0iMCAwIDEzNS40NjY2NyAxMzUuNDY2NjciCiAgIHZlcnNpb249IjEuMSIKICAgaWQ9InN2ZzUiCiAgIGlua3NjYXBlOmV4cG9ydC1maWxlbmFtZT0iaW1hZ2Uuc3ZnIgogICBpbmtzY2FwZTpleHBvcnQteGRwaT0iOTYiCiAgIGlua3NjYXBlOmV4cG9ydC15ZHBpPSI5NiIKICAgeG1sbnM6aW5rc2NhcGU9Imh0dHA6Ly93d3cuaW5rc2NhcGUub3JnL25hbWVzcGFjZXMvaW5rc2NhcGUiCiAgIHhtbG5zOnNvZGlwb2RpPSJodHRwOi8vc29kaXBvZGkuc291cmNlZm9yZ2UubmV0L0RURC9zb2RpcG9kaS0wLmR0ZCIKICAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICB4bWxuczpzdmc9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8c29kaXBvZGk6bmFtZWR2aWV3CiAgICAgaWQ9Im5hbWVkdmlldzciCiAgICAgcGFnZWNvbG9yPSIjNTA1MDUwIgogICAgIGJvcmRlcmNvbG9yPSIjZmZmZmZmIgogICAgIGJvcmRlcm9wYWNpdHk9IjEiCiAgICAgaW5rc2NhcGU6c2hvd3BhZ2VzaGFkb3c9IjAiCiAgICAgaW5rc2NhcGU6cGFnZW9wYWNpdHk9IjAiCiAgICAgaW5rc2NhcGU6cGFnZWNoZWNrZXJib2FyZD0iMSIKICAgICBpbmtzY2FwZTpkZXNrY29sb3I9IiM1MDUwNTAiCiAgICAgaW5rc2NhcGU6ZG9jdW1lbnQtdW5pdHM9Im1tIgogICAgIHNob3dncmlkPSJmYWxzZSIgLz4KICA8ZGVmcwogICAgIGlkPSJkZWZzMiIgLz4KICA8ZwogICAgIGlua3NjYXBlOmxhYmVsPSJMYXllciAxIgogICAgIGlua3NjYXBlOmdyb3VwbW9kZT0ibGF5ZXIiCiAgICAgaWQ9ImxheWVyMSI+CiAgICA8Y2lyY2xlCiAgICAgICBzdHlsZT0iZmlsbDojY2NjY2NjO2ZpbGwtb3BhY2l0eTowLjk4MDQ2O3N0cm9rZS13aWR0aDoxLjAxMjM1O3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZCIKICAgICAgIGlkPSJwYXRoNzM0IgogICAgICAgY3g9IjY3LjczMzMzIgogICAgICAgY3k9IjUwLjc5OTk5NSIKICAgICAgIHI9IjMzLjUyNjQ5MyIgLz4KICAgIDxwYXRoCiAgICAgICBpZD0icmVjdDc4OC0zIgogICAgICAgc3R5bGU9ImZpbGw6I2NjY2NjYztmaWxsLW9wYWNpdHk6MC45ODA0NjtzdHJva2Utd2lkdGg6MC43MjM3ODc7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kIgogICAgICAgZD0iTSAzMy44NjY2NjcsMTAxLjYgQyAxNS4xMDQ1NTEsMTAxLjYgMCwxMTYuNzA0NTUgMCwxMzUuNDY2NjcgSCAxMzUuNDY2NjcgQyAxMzUuNDY2NjcsMTE2LjcwNDU1IDEyMC4zNjIxMiwxMDEuNiAxMDEuNiwxMDEuNiBaIiAvPgogIDwvZz4KPC9zdmc+Cg==">
-          </a>
-        </ul>
-      </nav>
+      
+      <!-- editor container -->
+      <div id="editorContainer" class="relative flex-grow overflow-auto z-10">
+        <!-- rich text navigation -->
+        <nav id="wysiwyg" class="absolute top-0 inset-x-0 md:left-20 md:right-8 z-10 flex items-center justify-center hidden">
+          <ul class="flex px-4 overflow-x-auto overflow-y-hidden">
+            <!-- Button for making text bold -->
+            <li>
+              <button 
+                onclick="app.applyTextStyle('bold');"
+                name="Bold"
+                class="py-0 my-0 border-none bg-transparent text-current"
+              >
+                <i class="fas fa-bold"></i>
+              </button>
+            </li>
+          
+            <!-- Button for making text italic -->
+            <li>
+              <button 
+                onclick="app.applyTextStyle('italic');" 
+                name="Italic"
+                class="py-0 my-0 border-none bg-transparent text-current"
+              >
+                <i class="fas fa-italic"></i>
+              </button>
+            </li>
+          
+            <!-- Button for making text underlined -->
+            <li>
+              <button 
+                onclick="app.applyTextStyle('underline');" 
+                name="Underline"
+                class="py-0 my-0 border-none bg-transparent text-current"
+              >
+                <i class="fas fa-underline"></i>
+              </button>
+            </li>
+          
+            <!-- Button for making text strikethrough -->
+            <li>
+              <button 
+                onclick="app.applyTextStyle('strike');" 
+                name="Strikethrough"
+                class="py-0 my-0 border-none bg-transparent text-current"
+              >
+                <i class="fas fa-strikethrough"></i>
+              </button>
+            </li>
+          
+            <!-- Button for making text highlighted -->
+            <li>
+              <button 
+                onclick="app.applyTextStyle('mark');" 
+                name="Highlight"
+                class="py-0 my-0 border-none bg-transparent text-current"
+              >
+                <i class="fas fa-highlighter"></i>
+              </button>
+            </li>
+          
+            <!-- Button for making text subscript -->
+            <li>
+              <button 
+                onclick="app.applyTextStyle('sub');" 
+                name="Subscript"
+                class="py-0 my-0 border-none bg-transparent text-current"
+              >
+                <i class="fas fa-subscript"></i>
+              </button>
+            </li>
+          
+            <!-- Button for making text superscript -->
+            <li>
+              <button 
+                onclick="app.applyTextStyle('sup');" 
+                name="Superscript"
+                class="py-0 my-0 border-none bg-transparent text-current"
+              >
+                <i class="fas fa-superscript"></i>
+              </button>
+            </li>
+          
+            <!-- Button for inserting horizontal rule -->
+            <li>
+              <button 
+                onclick="app.applyTextStyle('hr');" 
+                name="Horizontal Rule"
+                class="py-0 my-0 border-none bg-transparent text-current"
+              >
+                <i class="fas fa-minus"></i>
+              </button>
+            </li>
+          
+            <!-- Button for inserting unordered list -->
+            <li>
+              <button 
+                onclick="app.applyTextStyle('ul');" 
+                name="Unordered List"
+                class="py-0 my-0 border-none bg-transparent text-current"
+              >
+                <i class="fas fa-list-ul"></i>
+              </button>
+            </li>
+          
+            <!-- Button for inserting ordered list -->
+            <li>
+              <button 
+                onclick="app.applyTextStyle('ol');" 
+                name="Ordered List"
+                class="py-0 my-0 border-none bg-transparent text-current"
+              >
+                <i class="fas fa-list-ol"></i>
+              </button>
+            </li>
+          
+            <!-- Button for making text keyboard input -->
+            <li>
+              <button 
+                onclick="app.applyTextStyle('kbd');" 
+                name="Keyboard Input"
+                class="py-0 my-0 border-none bg-transparent text-current"
+              >
+                <kbd>X</kbd>
+              </button>
+            </li>
+          </ul>
+        </nav>
         
-      <!-- bottom navbar -->
-      <nav class="absolute bottom-0 inset-x-0 px-2 block">
-        <ul class="justify-evenly">
-          <li>
-            <button data-open="data" class="py-0 my-0 border-none bg-transparent text-current">
-              <i class="fa fa-database"></i>
+        <!-- tabs -->
+        <div id="tabsNav" class="absolute top-0 inset-x-0 bottom-16 p-4 overflow-auto md:left-16 md:bottom-0">
+          <div data-tabcontent="random" class="h-full grid items-center place-items-center">
+            <div class="w-3/4">
+              <h4 class="mb-0 text-center">Build me a...</h4>
+              <h1 class="mb-0">
+                <select name="categories" id="categories" class="capitalize">
+                  <option value="blog">blog</option>
+                  <option value="camera app">camera app</option>
+                  <option value="course">course</option>
+                  <option value="messenger">messenger</option>
+                  <option value="podcast">podcast</option>
+                  <option value="portfolio">portfolio</option>
+                  <option value="social network">social network</option>
+                  <option value="store">store</option>
+                  <option value="timeline">timeline</option>
+                  <option value="video streaming">video streaming</option>
+                </select>
+              </h1>
+              
+              <button 
+                name="Generate a template"
+                class="inline-block h-full">
+                Build
+              </button>
+            </div>
+          </div>
+          <div data-tabcontent="menu" class="h-full overflow-auto hidden">
+            <article class="text-center cursor-default shadow-none m-0">
+              <img class="w-24" src="imgs/logo.svg">
+              <div class="mt-8 text-2xl">
+                About <span id="appName"></span>
+              </div>
+              <div class="my-2">
+                <small>Version <span id="appVersion"></span></small>
+              </div>
+              <div>
+                <a href="https://github.com/michaelsboost/Polyrise/blob/gh-pages/LICENSE" target="_blank">
+                  Open Source License
+                </a>
+              </div>
+            </article>
+            <div class="grid grid-cols-2 gap-4">
+              <button 
+                name="import the json project"
+                onclick="document.getElementById('import').click()">
+              
+                <i class="text-xl fa fa-file-import"></i>
+              </button>
+              <button 
+                name="export the json project"
+                onclick="app.exportProjectFile()">
+              
+                <i class="text-xl fa fa-file-export"></i>
+              </button>
+              <button 
+                name="share layout on codepen"
+                onclick="app.shareProject()">
+              
+                <i class="text-xl fa fa-share"></i>
+              </button>
+              <button 
+                name="export zip"
+                onclick="app.exportZip()">
+              
+                <i class="text-xl fa fa-download"></i>
+              </button>
+            </div>
+          </div>
+          <div data-tabcontent="pages" class="hidden">
+            <div class="absolute inset-0 p-4 overflow-auto">
+              <div data-pagecontent class="grid grid-cols-2 gap-x-4 gap-y-32"></div>
+            </div>
+            
+            <button 
+              name="Add a page"
+              class="inline-block rounded-full absolute bottom-0 right-4 w-auto" 
+              onclick="app.addPage()">
+              <i class="fas fa-plus"></i>
             </button>
-          </li>
-          <li>
-            <button data-open="functions" class="py-0 my-0 border-none bg-transparent text-current">
-              <i class="fa fa-bolt-lightning"></i>
-            </button>
-          </li>
-          <li>
-            <button data-open="help" class="py-0 my-0 border-none bg-transparent text-current">
-              <i class="fa fa-question"></i>
-            </button>
-          </li>
-          <li>
-            <button onclick="app.shareProject()" class="py-0 my-0 border-none bg-transparent text-current">
-              <i class="fa fa-share"></i>
-            </button>
-          </li>
-          <li>
-            <button data-add class="py-0 my-0 border-none bg-transparent text-current">
+          </div>
+          <div data-tabcontent="layers" class="hidden">
+            <!-- blocks content section -->
+            <details>
+              <summary>
+                Blocks
+              </summary>
+              <div data-blocks class="p-4"></div>
+            </details>
+            
+            <!-- design/styles -->
+            <details>
+              <summary>
+                Layers
+              </summary>
+              <div data-layerscontent></div>
+            </details>
+            
+            <!-- design/styles -->
+            <details>
+              <summary>
+                Design
+              </summary>
+              <div data-design class="grid grid-cols-2 gap-4">
+                
+              </div>
+            </details>
+            
+            <!-- attributes -->
+            <details>
+              <summary>
+                Attributes
+              </summary>
+              <div data-renderAttributes></div>
+            </details>
+          </div>
+          <div data-tabcontent="assets" class="hidden">
+            <nav class="absolute top-0 inset-x-0 mx-4">
+              <ul class="w-full flex justify-center border-0 border-b border-gray-500 border-solid">
+                <li>
+                  <button 
+                    name="Show image assets"
+                    onclick="app.showAssetTab(this)"
+                    class="text-blue-500 bg-transparent border-0">
+                    Images
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    name="Show video assets"
+                    onclick="app.showAssetTab(this)"
+                    class="text-current bg-transparent border-0">
+                    Videos
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    name="Show audio assets"
+                    onclick="app.showAssetTab(this)"
+                    class="text-current bg-transparent border-0">
+                    Audios
+                  </button>
+                </li>
+              </ul>
+            </nav>
+  
+            <div data-assetscontent class="absolute top-20 inset-x-0 bottom-0 overflow-auto grid grid-cols-2 p-4"></div>
+  
+            <input id="importasset" class="hidden" type="file" multiple accept="image/*, audio/*, video/*" onchange="app.importAssets(this)">
+            
+            <button 
+              name="Import an asset"
+              class="w-auto rounded-full absolute bottom-0 mb-1 right-4" 
+              onclick="importasset.click()">
               <i class="fa fa-plus"></i>
             </button>
-          </li>
-        </ul>
-      </nav>
+          </div>
+          <div data-tabcontent="data" class="hidden">
+            <div data-datacontent class="absolute inset-x-0 top-0 bottom-20 overflow-auto p-4">
+              <details>
+                <summary>Books</summary>
+                <table>
+                  <thead>
+                    <tr>
+                      <td>Data field</td>
+                      <td>Data type</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Example "Title"</td>
+                      <td>
+                        <select>
+                          <option value="text">text</option>
+                          <option value="number">number</option>
+                          <option value="numeric range">numeric range</option>
+                          <option value="date">date</option>
+                          <option value="date range">date range</option>
+                          <option value="yes / no">yes / no</option>
+                          <option value="file">file</option>
+                          <option value="image">image</option>
+                          <option value="geographical address">geographical address</option>
+                          <option value="color">color</option>
+                        </select>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+  
+                <!-- Add data field -->
+                <button>
+                  <i class="fa fa-plus"></i>
+                </button>
+                
+                <!-- Delete data field -->
+                <button 
+                  name="Delete a data field"
+                  class="bg-red-400 border-red-400">
+                  <i class="fa fa-trash"></i>
+                </button>
+                <br>
+                <details>
+                  <summary>
+                    Preview:
+                  </summary>
+                  <p id="outputtable"></p>
+                </details>
+              </details>
+              <details>
+                <summary>
+                  Code:
+                </summary>
+                <textarea id="jsonvalue" onfocus="this.select(true)"></textarea>
+              </details>
+    
+              <!-- option for if this new field has multiple entries -->
+              <nav>
+                <ul>
+                  <li>
+                    This field is a list (multiple entries):
+                  </li>
+                </ul>
+                <ul>
+                  <li>
+                    <input type="checkbox">
+                  </li>
+                </ul>
+              </nav>
+              
+              <!-- Add data button -->
+              <button 
+                name="Add a data table"
+                id="addDataBtn" 
+                class="bg-green-500">
+                <i class="fa fa-plus"></i>
+              </button>
+              
+              <!-- Delete data table -->
+              <button 
+                name="Delete a data table"
+                class="bg-red-400 border-red-400">
+                <i class="fa fa-trash"></i>
+              </button>
+            </div>
+          </div>
+          <div data-tabcontent="history" class="hidden">
+            <div data-historystack class="absolute top-0 inset-x-0 bottom-20 overflow-auto p-4"></div>
+            <nav class="absolute bottom-0 inset-x-0 px-4 flex-row-reverse justify-between items-center">
+                <button 
+                  name="Erase history stack" 
+                  class="inline-block w-auto bg-red-500 border-red-500" 
+                  onclick="app.clearHistory()">
+                  <i class="fa fa-eraser"></i>
+                </button>
+            </nav>
+          </div>
+          <div data-tabcontent="metadata" class="hidden">
+            <h5 class="capitalize text-3xl">
+              metadata
+            </h5>
+  
+            <h5 class="capitalize">
+              meta
+    
+              <label for="importlogo" class="cursor-pointer float-right">
+                <img id="logo" class="h-5" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjxzdmcKICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgogICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIgogICB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiCiAgIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICAgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiCiAgIHZpZXdCb3g9IjAgMCA1MTEuOTk5OTkgNTExLjk5OTk5IgogICBoZWlnaHQ9IjUxMiIKICAgd2lkdGg9IjUxMiIKICAgdmVyc2lvbj0iMS4xIgogICBpZD0ic3ZnNDE5MCI+CiAgPG1ldGFkYXRhCiAgICAgaWQ9Im1ldGFkYXRhNDE5NiI+CiAgICA8cmRmOlJERj4KICAgICAgPGNjOldvcmsKICAgICAgICAgcmRmOmFib3V0PSIiPgogICAgICAgIDxkYzpmb3JtYXQ+aW1hZ2Uvc3ZnK3htbDwvZGM6Zm9ybWF0PgogICAgICAgIDxkYzp0eXBlCiAgICAgICAgICAgcmRmOnJlc291cmNlPSJodHRwOi8vcHVybC5vcmcvZGMvZGNtaXR5cGUvU3RpbGxJbWFnZSIgLz4KICAgICAgICA8ZGM6dGl0bGU+PC9kYzp0aXRsZT4KICAgICAgPC9jYzpXb3JrPgogICAgPC9yZGY6UkRGPgogIDwvbWV0YWRhdGE+CiAgPGRlZnMKICAgICBpZD0iZGVmczQxOTQiPgogICAgPGxpbmVhckdyYWRpZW50CiAgICAgICBpZD0ibGluZWFyR3JhZGllbnQ0Mjc2Ij4KICAgICAgPHN0b3AKICAgICAgICAgaWQ9InN0b3A0Mjc4IgogICAgICAgICBvZmZzZXQ9IjAiCiAgICAgICAgIHN0eWxlPSJzdG9wLWNvbG9yOiNmZDVkOTI7c3RvcC1vcGFjaXR5OjEiIC8+CiAgICAgIDxzdG9wCiAgICAgICAgIGlkPSJzdG9wNDI4MCIKICAgICAgICAgb2Zmc2V0PSIxIgogICAgICAgICBzdHlsZT0ic3RvcC1jb2xvcjojZmYwMDAwO3N0b3Atb3BhY2l0eToxIiAvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudAogICAgICAgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiCiAgICAgICB5Mj0iMjU3LjMxMjUiCiAgICAgICB4Mj0iMC4xMzQwNDE2NSIKICAgICAgIHkxPSIyNTcuMzEyNSIKICAgICAgIHgxPSI1MTEuNzE4NzUiCiAgICAgICBpZD0ibGluZWFyR3JhZGllbnQ0MjgyIgogICAgICAgeGxpbms6aHJlZj0iI2xpbmVhckdyYWRpZW50NDI3NiIgLz4KICA8L2RlZnM+CiAgPGcKICAgICBpZD0iZzQyODQiPgogICAgPGNpcmNsZQogICAgICAgc3R5bGU9Im9wYWNpdHk6MTtmaWxsOnVybCgjbGluZWFyR3JhZGllbnQ0MjgyKTtmaWxsLW9wYWNpdHk6MTtzdHJva2U6bm9uZTtzdHJva2Utd2lkdGg6MTI7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kO3N0cm9rZS1taXRlcmxpbWl0OjQ7c3Ryb2tlLWRhc2hhcnJheTo3MiwgNzI7c3Ryb2tlLWRhc2hvZmZzZXQ6MDtzdHJva2Utb3BhY2l0eToxIgogICAgICAgaWQ9InBhdGg0MjcwIgogICAgICAgY3g9IjI1NiIKICAgICAgIGN5PSIyNTYiCiAgICAgICByPSIyNTYiIC8+CiAgICA8cGF0aAogICAgICAgc3R5bGU9Im9wYWNpdHk6MTtmaWxsOiNmZmZmZmY7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlOm5vbmU7c3Ryb2tlLXdpZHRoOjEyO3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZDtzdHJva2UtbWl0ZXJsaW1pdDo0O3N0cm9rZS1kYXNoYXJyYXk6NzIsIDcyO3N0cm9rZS1kYXNob2Zmc2V0OjA7c3Ryb2tlLW9wYWNpdHk6MSIKICAgICAgIGQ9Im0gMjUxLjA2MDY4LDU4LjY3ODI3MiBjIC00LjU2MDMyLDAuMDcwMzUgLTIwLjc2MDYxLDIuMDQxOTQ1IC0yOS4yOTc5MiwzLjY1NTk4NCAtMjguMzQzOTEsNS4zNTg2MiAtNjYuODgwODEsMjIuNjE5ODE0IC03My4wMzY5OSwzMi43MTkwNjEgLTEuODk3NTUsMy4xMTI5MzUgLTEuOTQ2MTYsNy4xNDcwMTMgLTEuOTQ2MTYsMTYwLjgxNzAyMyAwLDE1Mi4yNTg4IDAuMDY3MSwxNTcuNzI0NjQgMS44OTk5OCwxNjAuNzMxMjEgNS4yMDU5OSw4LjUzOTg5IDM2LjcyMDAzLDIzLjcwOTM0IDYzLjQ1MTMzLDMwLjU0MTM0IDkuNzY1NzIsMi40OTU5MyAzNC4zMzUwOSw2LjM0NDggMzguNTA3NTQsNi4wMzE2OSAyLjAwMzg4LC0wLjE1MDM2IDIuMDMyMDMsLTAuOTc0NjkgMi4yODkyMSwtNzMuMDkzMjQgMC4xNDU1OCwtNDAuODM3NTkgMC42NTY0MywtNzMuMzM0MTQgMS4xNjEwOSwtNzMuODM4OTYgMS4zNzc1MSwtMS4zNzc5NSA3LjM0NzM5LDEuODg0NzMgMTAuMzU3NTIsNS42NjIxNSAxLjQ2MjAyLDEuODM0NjggMTMuNzk3NTUsMjAuNjU1MjggMjcuNDE3NzQsNDEuODE5NDMgNTEuNDQ0NTIsNzkuOTM4NDcgNTAuNDY1MTEsNzguNDc3OTggNTMuMzA0OTQsNzkuMTkwOTQgMy4zMjQ3OCwwLjgzNDc0IDEyLjU2NzA4LC0zLjc4OTQ3IDI3LjU3NjA2LC0xMy43ODU4MyAxNC4yNDMzOCwtOS40ODY0NiAyMy44ODU1LC0xNy43ODMxIDM0LjgxOTcyLC0yOS45NjcxNyAxMS4yOTUwMiwtMTIuNTg2MTUgMTQuODMwMzksLTE3LjQxNzg1IDE0LjgzMDM5LC0yMC4yNTMwOCAwLC0xLjIyMDA5IC0xNC45NzA2LC0yNC41NDAzMyAtMzMuNDAxMzMsLTUyLjAyODQ2IC0xOC4zNzA1NywtMjcuMzk4MzcgLTM0LjEwMTA3LC01MS4xNjg3NiAtMzQuOTU4MjgsLTUyLjgyNjk2IC0wLjg1NzIzLC0xLjY1ODIgLTEuNTU2OTMsLTQuMDczMzUgLTEuNTU2OTMsLTUuMzY1MTkgMCwtMS4zMjEyMyAxMi40ODk1OSwtMjIuMjk0ODcgMjguNTQ1ODQsLTQ3Ljk0MzUyIDQ0LjQ4MzE1LC03MS4wNTg1NiA0MS45MzgzMywtNjYuMjkxNzggMzguODMwODEsLTcyLjg0MjQ3IC0yLjU1NzU1LC01LjM5MTM2IC0xNS4zNjI2MiwtMTkuNjU4MDkgLTI2LjEzMTI5LC0yOS4xMTU4NyAtMTEuNDU0NTksLTEwLjA2MDE5MSAtMzUuMDY0MTMsLTI1Ljk1MDI3NiAtMzkuOTA2MTIsLTI2Ljg1ODkzNCAtMi45NDE1NCwtMC41NTIwMSAtMy45NzUxOSwtMC4yNDY3ODggLTUuOTE3NjYsMS43NDIyMDEgLTEuMjk1NjQsMS4zMjY2NDggLTIwLjM1MDEyLDMyLjM0ODMwMyAtNDIuMzQwNDgsNjguOTM1NzIzIC0yMS45OTAzNiwzNi41ODc0IC00MS4wNjUzOSw2Ny45OTE2NyAtNDIuMzg2NjUsNjkuNzg3MDIgLTIuNjE5NTQsMy41NTkzNyAtNi43MzI4MSw2LjA5MzA2IC04LjczNDYzLDUuMzc4MzggLTAuOTk5NDcsLTAuMzU2ODMgLTEuMjY2NjUsLTE4LjE3MDM1IC0xLjI2NjY1LC04NC40NDM5NCAwLC00OS41MTMxOTYgLTAuMzc4NjQsLTg0LjIxOTIyNiAtMC45MjM2LC04NC41NTYxMzggLTAuMTE5ODQsLTAuMDc0MSAtMC41MzYwMSwtMC4xMDI0NDYgLTEuMTg3NDgsLTAuMDkyMzggeiIKICAgICAgIGlkPSJwYXRoNDI2MCIgLz4KICA8L2c+Cjwvc3ZnPgo=">
+              </label>
+            </h5>
+  
+            <input    id="projectname" type="text"   placeholder="Project Name">
+            <input    id="projectTitle"   type="text"   placeholder="Title..." value="An attractive title">
+            <textarea id="description"           placeholder="Description..." class="h-40 resize-none">The most attractive description ever!</textarea>
+            <input    id="projectVersion" type="number" placeholder="0.1" min="0.1" step="0.1" value="1">
+            <input    id="author"  type="text"   placeholder="author name" value="John Doe">
+            <input    id="website" type="text"   placeholder="https://yourwebsite.com/" value="https://michaelsboost.com/">
+            <textarea id="analytics"       placeholder="Paste your Google Analytics code snippet here or paste any other code that you want to have on every page immediately after the opening <body> tag." class="h-40 resize-none"></textarea>
+          </div>
+          <div data-tabcontent="settings" class="hidden">
+            <h5 class="capitalize text-3xl">
+              settings
+            </h5>
+    
+            <div class="hidden">
+              <input 
+                id="import"
+                type="file"
+                accept="application/json"
+                onchange="app.loadFile(this)">
+    
+              <input 
+                id="importlogo" 
+                type="file" 
+                accept="image/png, image/jpeg, image/svg+xml" 
+                onchange="app.loadLogo(this)">
+            </div>
+  
+            <h5 class="capitalize font-normal m-0 mb-2">
+              dark mode <input id="darkmode" type="checkbox" role="switch" class="float-right">
+            </h5>
+            
+            <nav>
+              <h5 class="capitalize font-normal m-0 mb-4">
+                page theme
+              </h5>
+              <div class="dropdown dropdown-end">
+                <div tabindex="0" role="button" class="btn btn-ghost">
+                  <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="h-5 w-5 stroke-current md:hidden">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
+                  </svg>
+                  <svg width="12px" height="12px" class="h-2 w-2 fill-current opacity-60 inline-block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 2048">
+                    <path d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"></path>
+                  </svg>
+                </div>
+                <div tabindex="0" class="dropdown-content z-[1] p-2 shadow-2xl bg-base-200 rounded-box w-52 h-64 overflow-y-auto">
+                  <div class="grid grid-cols-1 gap-3 p-3" data-output="themes"></div>
+                </div>
+              </div>
+            </nav>
+  
+            <h5 class="capitalize">
+              size
+            </h5>
+            <div class="grid grid-cols-2 gap-4">
+              <button id="mobilep" name="mobile portrait preset size">
+                <i class="fa fa-mobile"></i>
+              </button>
+              <button id="tabletp" name="tablet portrait preset size">
+                <i class="fa fa-tablet"></i>
+              </button>
+            </div>
+            <div class="grid grid-cols-3 gap-4">
+              <button id="mobilel" name="mobile landscape preset size">
+                <i class="fa fa-mobile transform -rotate-90"></i>
+              </button>
+              <button id="tabletl" name="tablet landscape preset size">
+                <i class="fa fa-tablet transform -rotate-90"></i>
+              </button>
+              <button id="desktopsize" name="mobile portrait preset size">
+                <i class="fa fa-desktop"></i>
+              </button>
+            </div>
+  
+            <input id="viewx" type="number" placeholder="width">
+            <input id="viewy" type="number" placeholder="height">
+  
+    
+            <h5 class="capitalize">
+              scratchpad
+            </h5>
+            <textarea id="scratchpad"            placeholder="Type something..." class="h-40 resize-none"></textarea>
+            
+            <div class="grid grid-cols-2 justify-between capitalize">
+  
+              <span>
+                live render
+              </span>
+    
+              <div class="mb-4">
+                <label for="liverender" class="float-right">
+                  <input type="checkbox" id="liverender" name="switch" role="switch">
+                </label>
+              </div>
+  
+              <span>
+                console
+              </span>
+    
+              <div class="mb-4">
+                <label for="toggleconsole" class="float-right">
+                  <input type="checkbox" id="toggleconsole" name="switch" role="switch">
+                </label>
+              </div>
+    
+              <span>
+                progressive web app
+              </span>
+    
+              <div class="mb-4">
+                <label for="pwa" class="float-right">
+                  <input type="checkbox" id="pwa" name="switch" role="switch">
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- navbar -->
+        <nav class="z-10 absolute bottom-0 inset-x-0 md:inset-x-auto md:left-2 md:inset-y-0 justify-between overflow-auto">
+          <ul class="md:flex-col md:overflow-y-auto md:overflow-x-hidden">
+            <li>
+              <button 
+                name="toggle menu"
+                data-toggletab="menu" 
+                class="py-0 mt-2 md:m-0 border-none bg-transparent text-current">
+                <i class="text-xl fa fa-bars"></i>
+              </button>
+            </li>
+            <li>
+              <button 
+                name="toggle app generator"
+                data-toggletab="random" 
+                class="py-0 mt-2 md:m-0 border-none bg-transparent text-current text-blue-500">
+                <i class="text-xl fa fa-compass-drafting"></i>
+              </button>
+            </li>
+            <li>
+              <button 
+                name="toggle zooming and panning"
+                data-zoom="true" 
+                class="py-0 mt-2 md:m-0 border-none bg-transparent text-current">
+                <i class="text-xl fa fa-light fa-magnifying-glass-plus"></i>
+              </button>
+            </li>
+            <li>
+              <button 
+                name="toggle pages tab"
+                data-toggletab="pages" 
+                class="py-0 mt-2 border-none bg-transparent text-current">
+                <i class="text-xl fa fa-file"></i>
+              </button>
+            </li>
+            <li>
+              <button 
+                name="toggle layers tab"
+                data-toggletab="layers" 
+                class="py-0 mt-2 border-none bg-transparent text-current">
+                <i class="text-xl fa-solid fa-trowel-bricks"></i>
+              </button>
+            </li>
+            <li>
+              <button 
+                name="toggle assets tab"
+                data-toggletab="assets" 
+                class="py-0 mt-2 border-none bg-transparent text-current">
+                <i class="text-xl fa fa-photo-film"></i>
+              </button>
+            </li>
+            <li>
+              <button 
+                name="toggle data tab"
+                data-toggletab="data" 
+                class="py-0 mt-2 border-none bg-transparent text-current">
+                <i class="text-xl fa fa-database"></i>
+              </button>
+            </li>
+            <li>
+              <button 
+                name="toggle the history stack tab"
+                data-toggletab="history" 
+                class="py-0 mt-2 border-none bg-transparent text-current">
+                <i class="text-xl fa fa-history"></i>
+              </button>
+            </li>
+            <li>
+              <button 
+                name="toggle metadata tab"
+                data-toggletab="metadata" 
+                class="py-0 mt-2 border-none bg-transparent text-current">
+                <i class="text-xl fa fa-solid fa-tachograph-digital"></i>
+              </button>
+            </li>
+            <li>
+              <button 
+                name="toggle settings"
+                data-toggletab="settings" 
+                class="py-0 mt-2 md:m-0 border-none bg-transparent text-current">
+                <i class="text-xl fa fa-cog"></i>
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </div>
-
-    <!-- <script>
-      // service worker for progressive web app
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('./sw.js');
-        });
-      }
-    </script> -->
   </body>
 </html>

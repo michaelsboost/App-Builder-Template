@@ -1,8 +1,7 @@
 /* imports */
-@import url("../libraries/pico/pico.classless.min.css");
-@import url("../libraries/daisyui/daisyui-mod.css");
-@import url("../libraries/tailwind/tailwind-mod.min.css");
 @import url("../libraries/font-awesome/css/all.min.css");
+@import url("../libraries/daisyui/daisyui.css");
+@import url("../libraries/tailwind/tailwind.min.css");
 
 /* canvas/preview */
 [data-canvas] {

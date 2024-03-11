@@ -1,42 +1,15 @@
 /* imports */
-@import url('../libraries/pico/pico.classless.min.css');
-@import url('../libraries/tailwind/tailwind-mod.min.css');
-@import url('../libraries/font-awesome/css/all.min.css');
+@import url("../libraries/pico/pico.classless.min.css");
+@import url("../libraries/daisyui/daisyui-mod.css");
+@import url("../libraries/tailwind/tailwind-mod.min.css");
+@import url("../libraries/font-awesome/css/all.min.css");
 
-/* treeview */
-.treeview ul li {
-  display: flex;
+/* canvas/preview */
+[data-canvas] {
+  background-color: hsl(0, 0%, 100%);
 }
-.treeview nav {
-  display: block;
-}
-.treeview nav input[type=checkbox] {
-  margin: .9rem;
-  border-color: hsl(0, 0%, 100%);
-  background-color: transparent;
-}
-.treeview nav button {
-  display: inline-block;
-  background-color: transparent;
+[data-canvas] iframe {
+  width: 100%;
+  height: 100%;
   border: 0;
-  width: auto;
-  border-radius: 99999;
-  margin: .1rem;
-}
-.treeview ul li > div {
-  padding: 0;
-  text-align: center;
-  color: hsl(0, 0%, 100%);
-  border-radius: 99999rem;
-  background-color: hsl(217, 91%, 60%);
-}
-/* .treeview ul li > div {
-  display: grid;
-  align-items: center;
-  justify-items: center;
-} */
-.treeview ul li > div {
-  display: flex;
-  align-items: center;
-  justify-items: center;
 }

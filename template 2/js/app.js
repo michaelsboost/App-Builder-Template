@@ -1,9 +1,10 @@
 // project json
 let appJSON = {
-  name: 'An attractive title',
+  name: 'AppName',
+  title: 'An attractive title',
   description: 'The most attractive description ever!',
   version: '0.1',
-  author: 'Michael Schwartz',
+  author: 'BrikzBuildr',
   website: '',
   scratchpad: '',
   analytics: '',
@@ -51,133 +52,6 @@ const app = {
     id: [],
     data: []
   },
-
-  // zooming and panning function
-  initZoomPan: () => {
-    // variables
-    const userDevice    = document.querySelector('[data-device]');
-    let canvas          = document.querySelector('[data-canvas]');
-    let canvasH         = parseFloat(canvas.clientHeight);
-    let canvasW         = parseFloat(canvas.clientWidth / 2);
-  
-    // init panzoom
-    let instance = panzoom(canvas, {
-      bounds: true,
-      boundsPadding: 0.1
-    });
-  
-    centerCanvas = () => {
-      canvasW = parseFloat(canvas.clientWidth);
-      canvasH = parseFloat(canvas.clientHeight);
-  
-      // ratio for zoom
-      let zoomRatio = 0.75;
-    
-      // to center the canvas horizontally we first need to...
-      // get half the body & canvas's width
-      let bodyW   = parseFloat(document.body.clientWidth / 2);
-      canvasW     = parseFloat(canvas.clientWidth / 2);
-      // then add them together
-      let initialXPos = parseFloat(parseFloat(bodyW) - parseFloat(canvasW) * zoomRatio);
-    
-      // to center the canvas vertically we first need to...
-      // get the size of both the body and the canvas
-      let bodyH   = parseFloat(document.body.clientHeight / 2);
-      canvasH     = parseFloat(canvas.clientHeight / 2);
-      canvasH     = canvasH / 4.5;
-      // then add them together
-      let initialYPos = parseFloat(parseFloat(canvasH) - parseFloat(bodyH) * zoomRatio);
-    
-      // set initial zoom
-      instance.zoomAbs(
-        initialXPos, // initial x position
-        initialYPos, // initial y position
-        zoomRatio // initial zoom
-      );
-      instance.moveTo(initialXPos, initialYPos);
-      return false;
-    };
-    centerCanvas();
-  
-    // enable disable zoom/pan
-    const zoomIcon = document.querySelector('[data-zoom]');
-    zoomIcon.onclick = () => {
-      if (zoomIcon.getAttribute('data-zoom') === 'true') {
-        canvas.selection = false;
-        instance.pause();
-        zoomIcon.innerHTML = '<i class="fa fa-light fa-magnifying-glass-minus"></i>';
-        zoomIcon.setAttribute('data-zoom', false);
-        fill.classList.add('hidden');
-      } else {
-        canvas.selection = true;
-        instance.resume();
-        zoomIcon.innerHTML = '<i class="fa fa-light fa-magnifying-glass-plus"></i>';
-        zoomIcon.setAttribute('data-zoom', true);
-        fill.classList.remove('hidden');
-      }
-    };
-  
-    // rotate canvas
-    rotateCanvas.onclick = () => {
-      canvasW = parseFloat(canvas.clientWidth);
-      canvasH = parseFloat(canvas.clientHeight);
-  
-      canvas.style.width  = canvasH + 'px';
-      canvas.style.height = canvasW + 'px';
-      centerCanvas();
-    };
-
-    // reset canvas dimentions and center it
-    resetCanvas = (w, h) => {
-      canvasW = w;
-      canvasH = h;
-
-      if (canvasW > canvasH) {
-        // landscape
-        canvas.style.width  = canvasW + 'px';
-        canvas.style.height = canvasH + 'px';
-        centerCanvas();
-        return false;
-      }
-    
-      canvas.style.width  = canvasH + 'px';
-      canvas.style.height = canvasW + 'px';
-      centerCanvas();
-    };
-  
-    // toggle between mobile and desktop view
-    userDevice.onclick = () => {
-      if (userDevice.getAttribute('data-device') === 'mobile') {
-        userDevice.setAttribute('data-device', 'tablet');
-        userDevice.innerHTML = '<i class="fa fa-tablet"></i>';
-        
-        // reset canvas dimensions and center it
-        // dimensions of iPad Mini used
-        resetCanvas(1024, 768);
-        return false;
-      }
-      
-      if (userDevice.getAttribute('data-device') === 'tablet') {
-        userDevice.setAttribute('data-device', 'desktop');
-        userDevice.innerHTML = '<i class="fa fa-desktop"></i>';
-  
-        // reset canvas dimensions and center it
-        // 2012 macbook pro dimensions used
-        resetCanvas(1440, 834);
-        return false;
-      }
-
-      if (userDevice.getAttribute('data-device') === 'desktop') {
-        userDevice.setAttribute('data-device', 'mobile');
-        userDevice.innerHTML = '<i class="fa fa-mobile"></i>';
-  
-        // reset canvas dimensions and center it
-        // dimensions of Galaxy S8+ used
-        resetCanvas(360, 740);
-        return false;
-      }
-    };
-  },
     
   // toggle console
   toggleConsole: () => {
@@ -205,7 +79,7 @@ const app = {
     let htmlCode  = `<!DOCTYPE html>
 <html data-theme="${darkorlight}">
   <head>
-    <title>${appJSON.name}</title>
+    <title>${appJSON.title}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="${appJSON.description}">
@@ -370,7 +244,7 @@ const app = {
     // convert create logo image sizes for manifest.json
     let imageArr = ['192', '256', '384', '512', logo.width];
     for (let i of imageArr) {
-      embedImage(logo.src, i);
+      app.embedImage(logo.src, i);
     }
 
     // join font awesome library into users new project
@@ -444,8 +318,8 @@ const app = {
         "display":      "standalone",
         "start_url":    "./index.html",
         "lang":         "en-US",
-        "name":         "${appJSON.name}",
-        "short_name":   "${appJSON.name}",
+        "name":         "${appJSON.name.toString().trim()}",
+        "short_name":   "${appJSON.name.toString().trim()}",
         "description" : "${appJSON.description}",
         "icons": [
           {
@@ -524,7 +398,7 @@ ${cssImport}
       zip.file("index.html", `<!DOCTYPE html>
 <html lang="en-US" ${picotheme}>
 <head>
-  <title>${appJSON.name}</title>
+  <title>${appJSON.title}</title>
   <meta charset="utf-8">
   <meta name="description" content="${appJSON.description}">
   <meta name="author" content="${appJSON.author}">
@@ -532,8 +406,8 @@ ${cssImport}
   <link rel="manifest" href="manifest.json">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="application-name" content="${appJSON.name}">
-  <meta name="apple-mobile-web-app-title" content="${appJSON.name}">
+  <meta name="application-name" content="${appJSON.name.toString().trim()}">
+  <meta name="apple-mobile-web-app-title" content="${appJSON.title}">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="hsl(207, 31%, 11%)">
@@ -557,7 +431,7 @@ ${htmlEditor.getValue()}
   </script>
 </body>
 </html>`);
-      zip.file("README.md", `${appJSON.name}
+      zip.file("README.md", `${appJSON.name.toString().trim()}
 ===================
 
 ${appJSON.description}
@@ -574,7 +448,7 @@ MIT
 
 This app was created and exported with [kodeWeave](https://michaelsboost.github.io/kodeWeave/)`);
       zip.file("package.json", `{
-"name": "${appJSON.name}",
+"name": "${appJSON.name.toString().toLowerCase().trim()}",
 "version": "${appJSON.version}",
 "description": "${appJSON.description}",
 "main": "index.js",
@@ -605,7 +479,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.`);
 
-      zip.file("sw.js", `let cacheName    = "${appJSON.name}";
+      zip.file("sw.js", `let cacheName    = "${appJSON.name.toString().trim()}";
 let filesToCache = [
   "./",
   ${cssortailwind},
@@ -2682,7 +2556,7 @@ let filesToCache = [
 ];
 
 /* Start the service worker and cache all of the app's content */
-self.addEventListener(install = (e) => {
+self.addEventListener('install', function(e) {
   e.waitUntil(
     caches.open(cacheName).then(function(cache) {
       return cache.addAll(filesToCache);
@@ -2692,7 +2566,7 @@ self.addEventListener(install = (e) => {
 });
 
 /* Serve cached content when offline */
-self.addEventListener(fetch = (e) => {
+self.addEventListener('fetch', function(e) {
   e.respondWith(
     caches.match(e.request).then(function(response) {
       return response || fetch(e.request);
@@ -2714,104 +2588,138 @@ self.addEventListener(fetch = (e) => {
   // initalize application function
   init: () => {
     // init zooming and panning
-    app.initZoomPan();
-
-    // display starter ui
-    document.querySelector('[data-body]').innerHTML = appJSON.html;
-
-    // init preview
-    app.updatePreview();
-
-    // treeview
-    const main      = document.querySelector('[data-body]');
-    initTreeview = () => {
-      const treeview  = document.querySelector('[data-treeview]');
-      let treeBtns    = treeview.querySelectorAll('button');
-      let treeListCSS = 'list-none flex';
-      let treeBtnCSS  = 'inline-block w-auto rounded-full';
-
-      // getDecendantNodes = (node, all = []) => {
-      //   all = [...node.childNodes];
-      //   for (const child of all) {
-      //     console.log(child, all);
-      //     getDecendantNodes(child, all);
-      //     return all;
-      //   }
-      // };
-      // getDecendantNodes(main);
-      
-      // getDecendantElements = (node, all = []) => {
-      //   let list = document.createElement('ul');
-      //   all = [...node.children];
-
-      //   for (const child of all) {
-      //     // return early if it's just a text nodeType
-      //     if (child.tagName.toLowerCase() == '#text') return;
-          
-      //     console.log(child);
-      //     let listItem = document.createElement('li');
-      //     listItem.textContent = child.tagName.toLowerCase();
-      //     list.appendChild(listItem);
-
-      //     // if no children, return early to skip code below
-      //     if (!child.children) return;
-
-      //     // process decendants next
-      //     let childList = document.createElement('li');
-      //     getDecendantElements(child, all);
-      //     list.appendChild(childList);
-      //   }
-
-      //   // when list is fully formatted append it to the container
-      //   treeview.prepend(list);
-      // };
-      // getDecendantElements(main);
-    };
+    // variables
+    const canvas        = document.querySelector('[data-canvas]');
+    const treeview      = document.querySelector('[data-treeview]');
+    const userDevice    = document.querySelector('[data-device]');
+    let canvasH         = parseFloat(canvas.clientHeight);
+    let canvasW         = parseFloat(canvas.clientWidth / 2);
+  
+    // init panzoom
+    let instance  = panzoom(canvas, {
+      bounds: true,
+      boundsPadding: 0.1
+    });
+    let instance2 = panzoom(treeview, {
+      bounds: true,
+      boundsPadding: 0.1
+    });
+  
+    centerCanvas = () => {
+      canvasW = parseFloat(canvas.clientWidth);
+      canvasH = parseFloat(canvas.clientHeight);
+  
+      // ratio for zoom
+      let zoomRatio = 0.75;
     
-    // handle selections for the editor
-    document.onselectionchange = () => {
-      // detect active the element the cursor is on only in a contenteditable element
-      if (document.activeElement.closest('[contenteditable')) {
-        let activeElm = document.getSelection().getRangeAt(0).startContainer.parentElement;
-        if (document.querySelector('[data-selected]')) {
-          document.querySelector('[data-selected]').removeAttribute('data-selected');
-        }
-        activeElm.setAttribute('data-selected', true);
-
-        // show wysiwyg editor
-        document.querySelector('[data-richtext]').classList.remove('hidden');
-        console.log(activeElm.tagName.toString());
-
-        // detect active selection
-        // remove selection with removeAllRanges()
-        // select text with addRange()
-        let selection = document.getSelection().toString();
-        // console.log(selection);
-
-        // detect if content editable is changed
-        // document.querySelector('[data-body][contenteditable]').oninput = () => {
-        //   console.log('content editable change invoked');
-        // };
+      // to center the canvas horizontally we first need to...
+      // get half the body & canvas's width
+      let bodyW   = parseFloat(canvas.parentElement.clientWidth / 2);
+      canvasW     = parseFloat(canvas.clientWidth / 2);
+      // then add them together
+      let initialXPos = parseFloat(parseFloat(bodyW) - parseFloat(canvasW) * zoomRatio);
+    
+      // to center the canvas vertically we first need to...
+      // get the size of both the body and the canvas
+      let bodyH   = parseFloat(canvas.parentElement.parentElement.clientHeight / 2);
+      canvasH     = parseFloat(canvas.clientHeight / 2);
+      canvasH     = canvasH / 4.5;
+      // then add them together
+      let initialYPos = parseFloat(parseFloat(canvasH) - parseFloat(bodyH) * zoomRatio);
+    
+      // set initial zoom
+      instance.zoomAbs(
+        initialXPos, // initial x position
+        initialYPos, // initial y position
+        zoomRatio // initial zoom
+      );
+      instance.moveTo(initialXPos, initialYPos);
+      return false;
+    };
+    centerCanvas();
+  
+    // enable disable zoom/pan
+    const zoomIcon = document.querySelector('[data-zoom]');
+    zoomIcon.onclick = () => {
+      if (zoomIcon.getAttribute('data-zoom') === 'true') {
+        canvas.selection = false;
+        instance.pause();
+        zoomIcon.innerHTML = '<i class="fa fa-light fa-magnifying-glass-minus"></i>';
+        zoomIcon.setAttribute('data-zoom', false);
+        fill.classList.add('hidden');
       } else {
-        // document.querySelector('[data-richtext]').classList.add('hidden');
-        document.querySelector('[data-selected]').removeAttribute('data-selected');
+        canvas.selection = true;
+        instance.resume();
+        zoomIcon.innerHTML = '<i class="fa fa-light fa-magnifying-glass-plus"></i>';
+        zoomIcon.setAttribute('data-zoom', true);
+        fill.classList.remove('hidden');
+      }
+    };
+  
+    // rotate canvas
+    rotateCanvas.onclick = () => {
+      canvasW = parseFloat(canvas.clientWidth);
+      canvasH = parseFloat(canvas.clientHeight);
+  
+      canvas.style.width  = canvasH + 'px';
+      canvas.style.height = canvasW + 'px';
+      centerCanvas();
+    };
+
+    // reset canvas dimentions and center it
+    resetCanvas = (w, h) => {
+      canvasW = w;
+      canvasH = h;
+
+      if (canvasW > canvasH) {
+        // landscape
+        canvas.style.width  = canvasW + 'px';
+        canvas.style.height = canvasH + 'px';
+        centerCanvas();
+        return false;
+      }
+    
+      canvas.style.width  = canvasH + 'px';
+      canvas.style.height = canvasW + 'px';
+      centerCanvas();
+    };
+  
+    // toggle between mobile and desktop view
+    userDevice.onclick = () => {
+      if (userDevice.getAttribute('data-device') === 'mobile') {
+        userDevice.setAttribute('data-device', 'tablet');
+        userDevice.innerHTML = '<i class="fa fa-tablet"></i>';
+        
+        // reset canvas dimensions and center it
+        // dimensions of iPad Mini used
+        resetCanvas(1024, 768);
+        return false;
+      }
+      
+      if (userDevice.getAttribute('data-device') === 'tablet') {
+        userDevice.setAttribute('data-device', 'desktop');
+        userDevice.innerHTML = '<i class="fa fa-desktop"></i>';
+  
+        // reset canvas dimensions and center it
+        // 2012 macbook pro dimensions used
+        resetCanvas(1440, 834);
+        return false;
+      }
+
+      if (userDevice.getAttribute('data-device') === 'desktop') {
+        userDevice.setAttribute('data-device', 'mobile');
+        userDevice.innerHTML = '<i class="fa fa-mobile"></i>';
+  
+        // reset canvas dimensions and center it
+        // dimensions of Galaxy S8+ used
+        resetCanvas(360, 740);
+        return false;
       }
     };
 
-    // show hide toolbar icons for rich text editor
-    document.querySelector('[data-edit]').onclick = () => {
-      document.querySelector('[data-treeicons]').classList.add('hidden');
-      document.querySelector('[data-treeview]').classList.add('hidden');
-      document.querySelector('[data-richtext]').classList.remove('hidden');
-      document.querySelector('[data-body]').classList.remove('hidden');
-    };
-    document.querySelector('[data-sitemap]').onclick = () => {
-      document.querySelector('[data-treeicons]').classList.remove('hidden');
-      document.querySelector('[data-treeview]').classList.remove('hidden');
-      document.querySelector('[data-richtext]').classList.add('hidden');
-      document.querySelector('[data-body]').classList.add('hidden');
-    };
-
+    // init preview
+    app.updatePreview();
+    
     // toggle between light and dark theme
     theme.onchange = () => {
       const elm  = document.querySelector('html[data-theme]');
@@ -2848,12 +2756,26 @@ self.addEventListener(fetch = (e) => {
         let getElm = child.getAttribute('data-open');
         let setElm = document.querySelector(`[data-opened=${getElm}]`);
         (setElm.setAttribute('open', true)) ? setElm.setAttribute('open', false) : setElm.setAttribute('open', true);
+
+        // hide treeview
+        if (getElm === 'functions' || 'elmSettings') {
+          let treeview = document.querySelector('[data-treeview]');
+          treeview.classList.add('hidden');
+          instance2.pause();
+        }
       };
     });
 
     // close visible dialog
     document.querySelectorAll('dialog').forEach((child) => {
-      child.onclick = (e) => {        
+      child.onclick = (e) => {
+        // if this dialog is within the editing section
+        if (child.getAttribute('data-opened') === 'functions' || 'elmSettings') {
+          let treeview = document.querySelector('[data-treeview]');
+          treeview.classList.remove('hidden');
+          instance2.resume();
+        }
+
         // if button is clicked
         if (e.target.tagName.toLowerCase() === 'button' || 'i') {
           if (e.target.hasAttribute('aria-close') || e.target.classList.contains('fa-times') || e.target.classList.contains('fa-angle-left')) {
