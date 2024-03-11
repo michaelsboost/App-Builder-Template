@@ -431,8 +431,10 @@ const app = {
         openTopNav(document.querySelectorAll(`[data-openTop=${e}]`)[i]);
         if (e === "iframe") {
           iframenav.classList.remove('hidden');
+          bottomNav.classList.remove('hidden');
         } else {
           iframenav.classList.add('hidden');
+          bottomNav.classList.add('hidden');
         }
       };
     });
