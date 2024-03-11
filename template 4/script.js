@@ -70,46 +70,193 @@ const app = {
   appVersion: "0.0.1",
   appUrl: "https://github.com/michaelsboost/App-Builder-Template/tree/gh-pages",
   appLicense: "https://github.com/michaelsboost/App-Builder-Template/blob/gh-pages/LICENSE",
+  activePage: 0,
+  libraries: [],
   blocks: [
     {
-      category: "Navbars",
+      category: "Basic",
       items: [
         {
-          name: "Simple Navbar",
-          code: `<nav class="flex justify-between px-4 border-gray-500 border-b">
-  <ul>
-    <li class="m-0">
-      <button class="border-0">
-        <i class="fa fa-bars"></i>
-      </button>
-    </li>
-    <li class="ml-2">
-      <button class="border-0">
-        ${project.projectName}
-      </button>
-    </li>
-  </ul>
-  <ul>
-    <li class="m-0">
-      <button class="border-0">
-        <i class="fa fa-search"></i>
-      </button>
-    </li>
-    <li class="m-0">
-      <button class="border-0">
-        <i class="fa fa-cog"></i>
-      </button>
-    </li>
-  </ul>
-</nav>`,
+          name: "Box",
+          image: "box.svg",
+          code: `<div>hello</div>`,
+        },
+        {
+          name: "Text",
+          image: "text.svg",
+          code: `<span>hello</span>`,
+        },
+        {
+          name: "Image",
+          image: "image.svg",
+          code: `<img src="https://tailwindcss.com/img/card-top.jpg">`,
+        },
+        {
+          name: "Video",
+          image: "video.svg",
+          code: `<video controls>
+          <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+          <source src="https://www.w3schools.com/html/mov_bbb.ogg" type="video/ogg">
+  Your browser does not support the video tag.
+</video>`,
+        },
+        {
+          name: "Audio",
+          image: "audio.svg",
+          code: `<audio controls>
+  <source src="https://www.w3schools.com/html/horse.ogg" type="audio/ogg">
+  <source src="https://www.w3schools.com/html/horse.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>`,
+        },
+        {
+          name: "Button",
+          image: "button.svg",
+          code: `<button>button</button>`,
+        },
+        {
+          name: "Input",
+          image: "textfield.svg",
+          code: `<input type="text">`,
+        },
+        {
+          name: "Select",
+          image: "select.svg",
+          code: `<select>
+  <option value="hello">hello</option>
+</select>`,
+        },
+        {
+          name: "Textarea",
+          image: "textarea.svg",
+          code: `<textarea></textarea>`,
+        },
+        {
+          name: "Custom",
+          image: "custom.svg",
+          code: ``,
         }
       ]
     }
   ],
-  
-  // To keep track of the active page
-  activePage: 0,
 
+  // Function to handle storage and display of library/framework
+  fetchSuggestions: searchText => {
+    fetch(
+      `https://api.cdnjs.com/libraries?search=${searchText}&fields=filename,description,version`
+    )
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then(data => {
+        if (data && data.results && data.results.length > 0) {
+          const libraries = data.results.map(result => result);
+          app.displaySuggestions(libraries);
+        }
+      })
+      .catch(error => {
+        console.error("Error fetching data:", error);
+      });
+  },
+  displaySuggestions: suggestions => {
+    const suggestionsList = document.getElementById("suggestions");
+    suggestionsList.innerHTML = ""; // Clear previous suggestions
+
+    suggestions.forEach(result => {
+      const listItem = document.createElement("li");
+      listItem.className = "list-none";
+      listItem.innerHTML = `<div class="flex justify-between mb-2 font-bold text-1xl">
+            <span>${result.name}</span>
+            <span>${result.version}</span>
+        </div>
+        <div class="text-sm">${result.description}<br><hr></div>`;
+      listItem.onclick = () => {
+        // Add the clicked suggestion to the libraries array
+        const url = result.latest; // Assuming 'latest' holds the URL
+        app.libraries.push(url);
+        // Clear the suggestions list
+        suggestionsList.innerHTML = "";
+        // Display the libraries display
+        app.displayLibrariesArray();
+        searchBox.value = "";
+      };
+      suggestionsList.appendChild(listItem);
+    });
+  },
+  displayLibrariesArray: () => {
+    const librariesArray = app.libraries;
+    let sortLibrariesContainer = document.getElementById("sortLibraries");
+    sortLibrariesContainer.innerHTML = "";
+    const embedArray = (result, index) => {
+      const newNav = document.createElement("nav");
+      newNav.className = "flex justify-between py-2";
+      newNav.setAttribute("data-index", index);
+
+      const newInput = document.createElement("input");
+      newInput.type = "text";
+      newInput.placeholder =
+        "https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js";
+      newInput.setAttribute("data", "library");
+      newInput.className = "w-full p-3 pr-0 rounded-md rounded-r-none bg-gray-800";
+      newInput.value = result;
+      newInput.onkeyup = () => {
+        // Update the value of the librariesArray at the corresponding index
+        librariesArray[index] = newInput.value.trim();
+      };
+
+      const deleteButton = document.createElement("button");
+      deleteButton.className =
+        // "delete-button p-3 bg-red-400 rounded-md rounded-l-none";
+        "delete-button p-3 bg-gray-800 rounded-md rounded-l-none";
+      deleteButton.innerHTML = '<i class="fa fa-trash"></i>';
+      deleteButton.onclick = () => {
+        // Remove the library from the array by its index
+        app.libraries.splice(index, 1);
+        // Re-render the libraries array
+        app.displayLibrariesArray();
+      };
+
+      newNav.appendChild(newInput);
+      newNav.appendChild(deleteButton);
+      sortLibrariesContainer.appendChild(newNav);
+    };
+
+    // Embed each library into a new input field and delete button
+    librariesArray.forEach((input, index) => {
+      embedArray(librariesArray[index], index);
+    });
+
+    // Check if the last input field is empty, and append an additional empty input field if needed
+    if (
+      librariesArray.length === 0 ||
+      librariesArray[librariesArray.length - 1].trim() !== ""
+    ) {
+      embedArray("", librariesArray.length);
+    }
+  },
+
+  // Ajax function to download over http
+  getFile: (url, callback) => {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url);
+    xhr.send();
+
+    xhr.onreadystatechange = data => {
+      if (xhr.readyState !== 4) {
+        return;
+      }
+
+      if (xhr.status === 200) {
+        callback(xhr.responseText);
+      } else {
+        console.warn("request_error");
+      }
+    };
+  },
+  
   // zooming and panning function
 	initZoomPan: () => {
 		// variables
@@ -843,6 +990,29 @@ const app = {
       }
     });
   },
+  
+  // Exports zip file
+  exportZip: () => {
+    let zip = new JSZip();
+    
+    // Iterate over each library
+    app.libraries.forEach(library => {
+      app.getFile(library, data => {
+        // Get the name of the library file from its URL
+        let parts = library.split("/");
+        let name = parts[parts.length - 1];
+  
+        // Add the downloaded file to the zip archive
+        zip.file(name, data);
+  
+        // Check if all files are added, then generate and download the zip file
+        if (Object.keys(zip.files).length === app.libraries.length) {
+          let content = zip.generate({ type: "blob" });
+          saveAs(content, `libraries-${new Date().getFullYear()}.zip`);
+        }
+      });
+    });
+  },
 
   // Initiate function
   init: () => {
@@ -935,6 +1105,76 @@ const app = {
       project.settings.console = toggleconsole.checked;
       app.updatePreview(liverender.checked);
     };
+
+    // displays and handles libraries array
+    app.displayLibrariesArray();
+    const sortLibrariesContainer = document.getElementById("sortLibraries");
+    const searchBox = document.getElementById("searchBox");
+    const suggestionsList = document.getElementById("suggestions");
+    const searchFunc = () => {
+      const searchText = searchBox.value.trim();
+      suggestionsList.innerHTML = "";
+      if (!searchBox.value) {
+        suggestionsList.innerHTML = "";
+        return false;
+      }
+
+      if (searchText.length <= 0) {
+        suggestionsList.innerHTML = "";
+        return false;
+      } else {
+        app.fetchSuggestions(searchText);
+      }
+    };
+    searchBox.onkeyup = () => searchFunc();
+    searchBox.onchange = () => searchFunc();
+    
+    // render blocks to add to canvas
+    const blocksContainer = document.querySelector('[data-blocksContainer]');
+    blocksContainer.innerHTML = "";
+    
+    app.blocks.forEach(block => {
+      const collapse = document.createElement('div');
+      collapse.classList.add('collapse', 'collapse-plus', 'capitalize');
+
+      const input = document.createElement('input');
+      input.setAttribute('type', 'checkbox');
+      input.setAttribute('checked', '');
+      collapse.appendChild(input);
+
+      const collapseTitle = document.createElement('div');
+      collapseTitle.classList.add('collapse-title');
+      collapseTitle.textContent = block.category.toLowerCase();
+      collapse.appendChild(collapseTitle);
+
+      const collapseContent = document.createElement('div');
+      collapseContent.dataset.blocks = block.category.toLowerCase();
+      collapseContent.classList.add('collapse-content', 'grid', 'grid-cols-2', 'lg:grid-cols-4', 'capitalize', 'text-center');
+
+      block.items.forEach(item => {
+        const article = document.createElement('article');
+        article.classList.add('m-4', 'p-4', 'rounded-lg', 'bg-gray-800', 'shadow-lg');
+
+        const imgContainer = document.createElement('div');
+        imgContainer.classList.add('cursor-pointer', 'mb-2');
+
+        const img = document.createElement('img');
+        img.classList.add('w-full', 'rounded-lg');
+        img.src = `imgs/svgs/${item.image}`;
+
+        imgContainer.appendChild(img);
+        article.appendChild(imgContainer);
+
+        const itemName = document.createElement('div');
+        itemName.textContent = item.name.toLowerCase();
+        article.appendChild(itemName);
+
+        collapseContent.appendChild(article);
+      });
+
+      collapse.appendChild(collapseContent);
+      blocksContainer.appendChild(collapse);
+    });
   }
 };
 

@@ -41,77 +41,7 @@
                 <i class="fa fa-times"></i>
               </button>
           </header>
-          <div class="absolute top-24 bottom-4 inset-x-4 overflow-auto font-thin">
-            <!-- basic elements -->
-            <div class="collapse collapse-plus capitalize">
-              <input type="checkbox" checked /> 
-              <div class="collapse-title">
-                basic
-              </div>
-              <div data-blocks="basic" class="collapse-content grid grid-cols-2 lg:grid-cols-4 capitalize text-center">
-                <article class="m-4 p-4 rounded-lg bg-gray-800 shadow-lg">
-                  <div class="cursor-pointer mb-2">
-                    <img class="w-full rounded-lg" src="imgs/svgs/box.svg">
-                  </div>
-                  <div>box</div>
-                </article>
-                <article class="m-4 p-4 rounded-lg bg-gray-800 shadow-lg">
-                  <div class="cursor-pointer mb-2">
-                    <img class="w-full rounded-lg" src="imgs/svgs/text.svg">
-                  </div>
-                  <div>text</div>
-                </article>
-                <article class="m-4 p-4 rounded-lg bg-gray-800 shadow-lg">
-                  <div class="cursor-pointer mb-2">
-                    <img class="w-full rounded-lg" src="imgs/svgs/image.svg">
-                  </div>
-                  <div>image</div>
-                </article>
-                <article class="m-4 p-4 rounded-lg bg-gray-800 shadow-lg">
-                  <div class="cursor-pointer mb-2">
-                    <img class="w-full rounded-lg" src="imgs/svgs/video.svg">
-                  </div>
-                  <div>video</div>
-                </article>
-                <article class="m-4 p-4 rounded-lg bg-gray-800 shadow-lg">
-                  <div class="cursor-pointer mb-2">
-                    <img class="w-full rounded-lg" src="imgs/svgs/audio.svg">
-                  </div>
-                  <div>audio</div>
-                </article>
-                <article class="m-4 p-4 rounded-lg bg-gray-800 shadow-lg">
-                  <div class="cursor-pointer mb-2">
-                    <img class="w-full rounded-lg" src="imgs/svgs/button.svg">
-                  </div>
-                  <div>button</div>
-                </article>
-                <article class="m-4 p-4 rounded-lg bg-gray-800 shadow-lg">
-                  <div class="cursor-pointer mb-2">
-                    <img class="w-full rounded-lg" src="imgs/svgs/textfield.svg">
-                  </div>
-                  <div>input</div>
-                </article>
-                <article class="m-4 p-4 rounded-lg bg-gray-800 shadow-lg">
-                  <div class="cursor-pointer mb-2">
-                    <img class="w-full rounded-lg" src="imgs/svgs/select.svg">
-                  </div>
-                  <div>select</div>
-                </article>
-                <article class="m-4 p-4 rounded-lg bg-gray-800 shadow-lg">
-                  <div class="cursor-pointer mb-2">
-                    <img class="w-full rounded-lg" src="imgs/svgs/textarea.svg">
-                  </div>
-                  <div>textarea</div>
-                </article>
-                <article class="m-4 p-4 rounded-lg bg-gray-800 shadow-lg">
-                  <div class="cursor-pointer mb-2">
-                    <img class="w-full rounded-lg" src="imgs/svgs/custom.svg">
-                  </div>
-                  <div>custom</div>
-                </article>
-              </div>
-            </div>
-
+          <div data-blocksContainer class="absolute top-24 bottom-4 inset-x-4 overflow-auto font-thin">
             <!-- custom elements -->
             <div class="collapse collapse-plus capitalize">
               <input type="checkbox" checked /> 
@@ -780,6 +710,14 @@
                 settings
               </span>
             </button>
+          </li>
+          <li class="py-4 px-2">
+            <hr>
+          </li>
+          <li>
+            <input id="searchBox" class="w-full p-3 rounded-md bg-gray-800" type="search" placeholder="Search for resources (JQuery, Bootstrap, Foundation...)">
+            <ul id="suggestions" class="px-4 capitalize"></ul>
+            <div id="sortLibraries"></div>
           </li>
         </ul>
         <ul id="settings" class="px-2 hidden">
