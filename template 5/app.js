@@ -844,6 +844,20 @@ const app = {
     </div>`;
 
     app.parseStringToHTML(selector, html);
+
+    // Attach event listeners to dynamically created buttons
+    const buttons = selector.querySelectorAll(`button`);
+    buttons.forEach(button => {
+      button.onclick = () => {
+        if (button.querySelector('.fa-times')) {
+          const leftContainer = app.handles.leftContainer;
+          app.hideContainer({
+            container: leftContainer,
+            animateIn: "fade"
+          });
+        }
+      };
+    });
   },
 
   // render blocks to add to canvas
